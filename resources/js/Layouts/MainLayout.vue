@@ -1,0 +1,29 @@
+<script setup>
+    import { Head, Link } from '@inertiajs/vue3';
+</script> 
+<template>
+    <div class="bg-gray-800">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="text-white text-lg font-bold">Logo</div>
+        
+        <!-- Menú de navegación -->
+        <nav class="space-x-4">
+            <Link  :href="route('proyectos.index')" class="text-white hover:text-gray-300">
+                Projectos
+            </Link>
+            <a href="#" class="text-white hover:text-gray-300">Proveedores</a>
+        </nav>
+        </div>
+    </div>
+    </div>
+    <div class="container mx-auto px-4 max-w-screen-xl">
+        
+        <header class="py-4 mb-4">
+            <slot name="header" />
+
+        </header>
+        <slot name="main" />
+    </div>
+</template>
