@@ -53,7 +53,10 @@ class ProjectService
 
     public function getAll()
     {
-        $projects = Project::with('client')->get()->map(function ($project) {
+        $projects = Project::with('client')->paginate(3);
+
+        
+        $projects->getCollection()->transform(function ($project) {
             return [
                 'id' => $project->id,
                 'name' => $project->name,
@@ -66,5 +69,8 @@ class ProjectService
         });
 
         return $projects;
+        
+
+
     }
 }

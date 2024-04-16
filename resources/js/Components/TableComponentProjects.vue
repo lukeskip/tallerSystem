@@ -4,7 +4,7 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr >
-                    <template v-for="(value, key) in items[0]" :key="key">
+                    <template v-for="(value, key) in items.data[0]" :key="key">
                       <th v-if="key !== 'id'"  class="px-6 py-3">
                         {{ labeled(key) }}
                       </th>
@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in items" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr v-for="item in items.data" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <template v-for="(value, key) in item" :key="key">
                       <td v-if="key !== 'id'" class="border px-4 py-2">
                         <template v-if="key=== 'name'">
@@ -24,20 +24,24 @@
                 </tr>
             </tbody>
         </table>
+        <Pagination :pagination="items.links"/>
     </div>
 </template>
 <script>
 import strings from '@/utils/strings';
 import { Head, Link } from '@inertiajs/vue3';
+import Pagination from '@/Components/Pagination.vue'
 export default {
   components: {
     Link,
+    Pagination
   },
+
   props: {
     items: {
-      type: Array,
+      type: Object,
       required: true,
-    },
+    }
   },
   methods: {
     labeled(key) {
@@ -53,8 +57,8 @@ export default {
       }else{
         return value.name
       }
-    }
-
+    },
+   
   },
 };
 

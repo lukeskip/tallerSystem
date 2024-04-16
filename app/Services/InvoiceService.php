@@ -49,7 +49,9 @@ class InvoiceService
     public function getAll()
     {
 
-        $invoices = Invoice::with('project')->get()->map(function ($invoice) {
+        $invoices = Invoice::with('project')->paginate();
+        
+        $invoices->getCollection()->transform(function ($invoice) {
             return [
                 'id' => $invoice->id,
                 'format_date' => $invoice->format_date,

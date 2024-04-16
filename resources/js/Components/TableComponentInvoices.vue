@@ -6,13 +6,13 @@
                 <tr >
                     <template v-for="(value, key) in items[0]" :key="key">
                       <th v-if="key !== 'id'"  class="px-6 py-3">
-                        {{ labeled(key) }}
+                        {{ showLabel(key) }}
                       </th>
                     </template>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in items" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr v-for="item in items.data" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <template v-for="(value, key) in item" :key="key">
                       <td v-if="key !== 'id'" class="border px-4 py-2">
                         <template v-if="key === 'amount'">
@@ -24,42 +24,26 @@
                 </tr>
             </tbody>
         </table>
+        <Pagination :pagination="items.links"/>
     </div>
 </template>
-<script>
-import strings from '@/utils/strings';
+<script setup>
 import { Head, Link } from '@inertiajs/vue3';
-export default {
-  components: {
-    Link,
-  },
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
-  },
-  mounted() {
-    console.log(this.items);
-  },
-  methods: {
-    labeled(key) {
-      if(strings[key]){
-        return strings[key]
-      }else{
-        return key;
-      }
-    },
-    show (value){
+import showLabel from '@/helpers/showLabel';
+import Pagination from '@/Components/Pagination.vue'
+defineProps({
+  items:{
+    type:Object,
+    required:true
+  }
+})
+const show = (value)=>{
       if(typeof value !== "object"){
         return value
       }else{
         return value.name
       }
-    }
-    
-  },
-};
+}
 
 
 

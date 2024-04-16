@@ -21,6 +21,8 @@ class ProjectController extends Controller
         $projects = $this->projectService->getAll();
         return Inertia::render('Projects', [
             'projects' => $projects,
+            'currentPage' => $projects->currentPage(),
+            'totalPages' => $projects->lastPage(), 
             
         ]);
     }

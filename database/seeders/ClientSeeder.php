@@ -17,7 +17,7 @@ class ClientSeeder extends Seeder
         $faker = Faker::create();
 
         // Generar clientes de ejemplo
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             Client::create([
                 'name' => $faker->company,
                 'contact_name' => $faker->name,

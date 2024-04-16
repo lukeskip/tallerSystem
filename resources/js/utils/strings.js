@@ -7,6 +7,8 @@ const strings = {
         label:"Concepto",
         amount:"Monto",
         amount_final:"Monto Final",
-        comission:"Comisión"
+        comission:"Comisión",
+        "Next &raquo;":"Siguiente >",
+        "&laquo; Previous":"< Anterior"
 };
 export default strings;

@@ -13,6 +13,9 @@
             <Link  :href="route('proyectos.index')" class="text-white hover:text-gray-300">
                 Projectos
             </Link>
+            <Link  :href="route('cotizaciones.index')" class="text-white hover:text-gray-300">
+                Cotizaciones
+            </Link>
             <a href="#" class="text-white hover:text-gray-300">Proveedores</a>
         </nav>
         </div>
