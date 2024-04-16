@@ -24,7 +24,26 @@ class InvoiceService
 
     public function getById($id)
     {
-        return Invoice::find($id);
+        $invoice = Invoice::with("invoiceItems")->find($id);
+        if($invoice){
+            return [
+                'id'=>$invoice->id,
+                'client'=>$invoice->project->client->name,
+                'amount'=>$invoice->amount,
+                'invoiceItems'=> $invoice->invoiceItems->map(function ($item) {
+                    return [
+                        "label"=>$item->label,
+                        "description"=>$item->description,
+                        "amount"=>"$".$item->amount,
+                        "comission"=>$item->comission."%",
+                        "amount_total"=>"$".$item->amount_comission
+                    ];
+                }),
+                'format_date'=>$invoice->format_date,
+            ];
+        }else {
+            return null;
+        }
     }
 
     public function getAll()

@@ -6,7 +6,7 @@
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
         <!-- Logo -->
-        <div class="text-white text-lg font-bold">Logo</div>
+        <div class="text-white text-lg font-bold"><Link :href="route('proyectos.index')">Taller 1100</Link></div>
         
         <!-- Menú de navegación -->
         <nav class="space-x-4">

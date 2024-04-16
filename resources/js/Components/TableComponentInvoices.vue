@@ -15,7 +15,10 @@
                 <tr v-for="item in items" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <template v-for="(value, key) in item" :key="key">
                       <td v-if="key !== 'id'" class="border px-4 py-2">
-                        <template v-if="key !== 'id'">{{ show(value) }}</template>
+                        <template v-if="key === 'amount'">
+                          <Link :href="route('cotizaciones.show',item.id)">{{ show(value) }}</Link>
+                        </template>
+                        <template v-else-if="key !== 'id'">{{ show(value) }}</template>
                       </td>
                     </template>
                 </tr>
@@ -27,15 +30,17 @@
 import strings from '@/utils/strings';
 import { Head, Link } from '@inertiajs/vue3';
 export default {
+  components: {
+    Link,
+  },
   props: {
     items: {
       type: Array,
       required: true,
     },
-    type:{
-       type: String,
-       required:true
-    }
+  },
+  mounted() {
+    console.log(this.items);
   },
   methods: {
     labeled(key) {
@@ -52,8 +57,11 @@ export default {
         return value.name
       }
     }
-
+    
   },
 };
+
+
+
 
 </script>

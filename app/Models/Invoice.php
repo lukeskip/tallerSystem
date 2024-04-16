@@ -27,9 +27,9 @@ class Invoice extends Model
         return Carbon::parse($this->created_at)->translatedFormat('D d/m');
     }
 
-    public function getTotalAmountAttribute()
+    public function getAmountAttribute()
     {
-        return $this->invoiceItems->sum('amount');
+        return "$".number_format($this->invoiceItems->sum('amount'),2);
     }
 
     public function invoiceItems()

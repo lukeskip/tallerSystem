@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class InvoiceItem extends Model
 {
     use HasFactory;
+
+    public function getAmountComissionAttribute()
+    {   
+        $comission = $this->comission / 100;
+        $comisionAmount = $comission * $this->amount;
+        $total = $this->amount + $comisionAmount;
+        return number_format($total,2);
+    }
 }

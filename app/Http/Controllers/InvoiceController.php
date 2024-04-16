@@ -44,9 +44,12 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show($id)
     {
-        //
+        $invoice = $this->invoiceService->getById($id);
+        return Inertia::render('InvoiceDetail', [
+            'invoice' => $invoice,
+        ]);
     }
 
     /**

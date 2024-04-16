@@ -30,21 +30,22 @@ class ProjectService
             return [
                 'id' => $project->id,
                 'name' => $project->name,
-                'format_date' => $project->format_date,
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
                 ],
                 'invoices' => $project->invoices->map(function ($invoice) {
                     return [
-                        "total_amount" => $invoice->total_amount,
+                        "id"=>$invoice->id,
+                        "amount" => $invoice->amount,
                         'status'=> $invoice->status,
                         'format_date' => $invoice->format_date
                     ];
                 }),
+                'format_date' => $project->format_date,
             ];
         } else {
-            return null; // O manejar el caso en que no se encuentra el proyecto con el ID dado
+            return null;
         }
        
     }
@@ -55,11 +56,11 @@ class ProjectService
             return [
                 'id' => $project->id,
                 'name' => $project->name,
-                'format_date'=> $project->format_date,
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
                 ],
+                'format_date'=> $project->format_date,
             ];
         });
 
