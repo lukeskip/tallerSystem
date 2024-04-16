@@ -18,7 +18,7 @@
         </template>
         <template #main>
             <div v-if="providers">
-                <TableComponent :items="providers" :root="'proveedores'" :actions="['hola']"/>
+                <TableComponent :items="providers" :root="'proveedores'"/>
             </div>
             <div v-else>
                 <p>No hay proveedores disponibles.</p>
