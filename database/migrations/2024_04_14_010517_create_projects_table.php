@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address')->nullable(); ;
+            $table->string('address')->nullable(); 
+            $table->decimal('comission', 5, 2)->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
