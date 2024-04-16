@@ -70,10 +70,7 @@ class ProjectService
             return [
                 'id' => $project->id,
                 'name' => $project->name,
-                'client' => [
-                    'id' => $project->client->id,
-                    'name' => $project->client->name,
-                ],
+                'client' => $project->client->name,
                 'format_date'=> $project->format_date,
             ];
         });
