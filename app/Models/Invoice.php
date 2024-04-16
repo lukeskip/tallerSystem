@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Client;
 use App\Models\InvoiceItem;
 use Carbon\Carbon;
+use App\Utils\Utils;
 
 class Invoice extends Model
 {
@@ -24,7 +25,7 @@ class Invoice extends Model
 
     public function getFormatDateAttribute()
     {
-        return Carbon::parse($this->created_at)->translatedFormat('D d/m');
+        return Utils::formatDate($this->created_at);
     }
 
     public function getAmountAttribute()

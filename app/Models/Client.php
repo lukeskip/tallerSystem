@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\Project;
+use App\Utils\Utils;
 
 class Client extends Model
 {
@@ -17,7 +18,7 @@ class Client extends Model
 
     public function getFormatDateAttribute()
     {
-        return Carbon::parse($this->created_at)->translatedFormat('D d/m Y');
+        return Utils::formatDate($this->created_at);
     }
 
 }
