@@ -37,7 +37,7 @@
                 </tr>
             </tbody>
         </table>
-        <template v-if="getData(items) && getData(items).length && items.pagination">
+        <template v-if="getData(items).length && items.links">
           <Pagination :pagination="items.links"/>
         </template>
     </div>

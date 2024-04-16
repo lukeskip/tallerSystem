@@ -1,5 +1,4 @@
 <template >
-    
      <div class="flex justify-center" v-if="checkNumberPages(pagination)">
         <ul class="flex space-x-2">
             <li v-for="link in pagination" :key="link.id">
