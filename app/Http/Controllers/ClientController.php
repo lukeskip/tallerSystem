@@ -4,15 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use App\Services\ClientService;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
+    public function __construct(ClientService $clientService)
+    {
+        $this->clientService = $clientService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $clients = $this->clientService->getAll($request);
+        return Inertia::render('Clients', [
+            'clients' => $clients,
+        ]); 
     }
 
     /**

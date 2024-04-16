@@ -54,12 +54,14 @@ class InvoiceService
         $invoices->getCollection()->transform(function ($invoice) {
             return [
                 'id' => $invoice->id,
-                'format_date' => $invoice->format_date,
                 'project' => [
                     'id' => $invoice->project->id,
                     'name' => $invoice->project->name,
                 ],
-                'cliente'=>$invoice->project->client->name
+
+                'client'=>$invoice->project->client->name,
+                'amount'=>$invoice->amount,
+                'format_date' => $invoice->format_date,
             ];
         });
 

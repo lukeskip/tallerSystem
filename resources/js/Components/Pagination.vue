@@ -1,5 +1,6 @@
-<template>
-     <div class="flex justify-center">
+<template >
+    
+     <div class="flex justify-center" v-if="checkNumberPages(pagination)">
         <ul class="flex space-x-2">
             <li v-for="link in pagination" :key="link.id">
                 <template v-if="link.url">
@@ -20,5 +21,11 @@ import showLabel from '@/helpers/showLabel'
             required:true
         }
     });
+
+    const checkNumberPages = (pagination)=>{
+        let activePages = pagination.filter((item)=>item.active);
+        if(activePages > 1) return true;
+        else return false;
+    }
     
 </script>

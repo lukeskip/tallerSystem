@@ -22,6 +22,6 @@ class Project extends Model
 
     public function getFormatDateAttribute()
     {
-        return Carbon::parse($this->created_at)->translatedFormat('D d/m');
+        return Carbon::parse($this->created_at)->translatedFormat('D d/m Y');
     }
 }

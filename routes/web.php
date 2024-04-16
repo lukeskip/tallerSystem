@@ -36,6 +36,7 @@ Route::get('/dashboard', function () {
 Route::resource('/proyectos', ProjectController::class);
 Route::resource('/clientes', ClientController::class);
 Route::resource('/cotizaciones', InvoiceController::class);
+Route::resource('/proveedores', ProvidersController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
