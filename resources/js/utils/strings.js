@@ -10,6 +10,11 @@ const strings = {
         comission:"Comisión",
         "Next &raquo;":"Siguiente >",
         "&laquo; Previous":"< Anterior",
-        pending:"Pendiente"
+        pending:"Pendiente",
+        completed:"Completado",
+        rejected:"Rechazado",
+        address:"Dirección",
+        phone:"Teléfono",
+        contact_name:"Nombre de Contacto",
 };
 export default strings;

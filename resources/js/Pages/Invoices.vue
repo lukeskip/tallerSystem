@@ -13,8 +13,8 @@
 </script>
 
 <template>
+    <Head title="Cotizaciones" />
     <MainLayout >
-       
         <template #header>
             <h1>Cotizaciones</h1>
         </template>

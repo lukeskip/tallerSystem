@@ -19,7 +19,10 @@
             <Link  :href="route('cotizaciones.index')" class="text-white hover:text-gray-300">
                 Cotizaciones
             </Link>
-            <a href="#" class="text-white hover:text-gray-300">Proveedores</a>
+            <Link :href="route('proveedores.index')" class="text-white hover:text-gray-300">
+                Proveedores
+            </Link>
+            
         </nav>
         </div>
     </div>

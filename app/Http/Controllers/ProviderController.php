@@ -4,15 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Provider;
 use Illuminate\Http\Request;
+use App\Services\ProviderService;
+use Inertia\Inertia;
+
 
 class ProviderController extends Controller
 {
+    public function __construct(ProviderService $providerService)
+    {
+        $this->providerService = $providerService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $providers = $this->providerService->getAll($request);
+        return Inertia::render('Providers', [
+            'providers' => $providers,
+        ]);
     }
 
     /**
