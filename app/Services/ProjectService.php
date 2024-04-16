@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services;
-
+use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 
 class ProjectService
@@ -51,10 +51,20 @@ class ProjectService
        
     }
 
-    public function getAll()
+    public function getAll($request = null)
     {
-        $projects = Project::with('client')->paginate();
+       
+        $projects = Project::with('client');
 
+        
+        if ($request &&   $request->input('search')) {
+            $projects->where('name', 'like', '%' . $request->input('search') . '%')
+            ->orWhereHas('client', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('search') . '%');
+            });
+        }
+
+        $projects = $projects->paginate();
         
         $projects->getCollection()->transform(function ($project) {
             return [

@@ -16,9 +16,10 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = $this->projectService->getAll();
+      
+        $projects = $this->projectService->getAll($request);
         return Inertia::render('Projects', [
             'projects' => $projects,
             'currentPage' => $projects->currentPage(),
