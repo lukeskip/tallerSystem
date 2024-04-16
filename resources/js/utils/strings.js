@@ -9,6 +9,7 @@ const strings = {
         amount_final:"Monto Final",
         comission:"Comisión",
         "Next &raquo;":"Siguiente >",
-        "&laquo; Previous":"< Anterior"
+        "&laquo; Previous":"< Anterior",
+        pending:"Pendiente"
 };
 export default strings;

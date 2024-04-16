@@ -14,7 +14,7 @@
         </template>
         <template #main> 
             <h3>Cotizaciones</h3>
-            <TableComponentInvoices :items="project.invoices" />
+            <TableComponentInvoices :items="{data:project.invoices}" />
         </template>
     </MainLayout>
 </template>

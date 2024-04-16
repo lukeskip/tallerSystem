@@ -39,9 +39,9 @@ defineProps({
 })
 const show = (value)=>{
       if(typeof value !== "object"){
-        return value
+        return showLabel(value)
       }else{
-        return value.name
+        return showLabel(value.name)
       }
 }
 
