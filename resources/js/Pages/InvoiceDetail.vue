@@ -1,10 +1,9 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponentInvoicesItems from '../Components/TableComponentInvoicesItems.vue';
+    import TableComponent from '../Components/TableComponent.vue';
 
-    const props = defineProps({ invoice:Object });
-    console.log(props.invoice);
+    const props = defineProps({ invoice:[Object,Array] });
 </script> 
 <template>
     <MainLayout>
@@ -14,7 +13,7 @@
             <h3>{{ invoice.format_date }}</h3>
         </template>
         <template #main> 
-            <TableComponentInvoicesItems :items="invoice.invoiceItems" />
+            <TableComponent :items="invoice.invoiceItems"/>
             <h3>Total: {{ invoice.amount }}</h3>
         </template>
     </MainLayout>

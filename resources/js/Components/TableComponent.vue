@@ -9,27 +9,35 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr >
-                    <template v-for="(value, key) in items.data[0]" :key="key">
+                    <template v-for="(value, key) in  getData(items)[0]" :key="key">
                       <th v-if="key !== 'id'"  class="px-6 py-3">
                         {{ showLabel(key) }}
                       </th>
                     </template>
+                    <template v-if="actions.length">
+                        <th>Acciones</th>
+                    </template>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in items.data" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <template v-for="(value, key) in item" :key="key">
+                <tr v-for="item in getData(items)" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                  <template v-for="(value, key, index) in item" :key="key">
                       <td v-if="key !== 'id'" class="border px-4 py-2">
-                        <template v-if="key=== 'name'">
-                          <Link :href="route('proyectos.show',item.id)">{{ show(value) }}</Link>
+                        <template v-if="index=== 1 && root !== ''">
+                          <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                         </template>
-                        <template v-else-if="key !== 'id'">{{ show(value) }}</template>
+                        <template v-else-if="key !== 'id'">{{ value }}</template>
                       </td>
                     </template>
+                    <td class="border px-4 py-2" v-if="actions.length">
+                        <template v-for="(action,index) in actions" :key="index">
+                            <Link :href="action.url">{{ action.label }}</Link>
+                        </template>
+                    </td>
                 </tr>
             </tbody>
         </table>
-        <template v-if="items && items.data.length                                                        ">
+        <template v-if="getData(items) && getData(items).length && items.pagination">
           <Pagination :pagination="items.links"/>
         </template>
     </div>
@@ -37,23 +45,32 @@
 <script setup>
 import { ref } from 'vue';
 import showLabel from '@/helpers/showLabel';
-import { Head, Link,router } from '@inertiajs/vue3';
+import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
 
 
 defineProps({
-  items: {
+    items: {
       type: Object,
       required: true,
-    }
+    },
+    root: {
+      type: String,
+      default:""
+    },
+    actions: {
+      type: Array,
+      default: []
+    },
 })
 
-const show = (value)=>{
-  if(typeof value !== "object"){
-    return value
+const getData = (data)=>{
+  if(Array.isArray(data)){
+    return data
   }else{
-    return value.name
+    return data.data;
   }
+  
 }
 
 const searchTerm = ref('');

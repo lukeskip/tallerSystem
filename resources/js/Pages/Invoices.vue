@@ -1,7 +1,7 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponentInvoices from '@/Components/TableComponentInvoices.vue';
+    import TableComponent from '@/Components/TableComponent.vue';
 
 
     const props = defineProps({
@@ -19,7 +19,7 @@
             <h1>Cotizaciones</h1>
         </template>
         <template #main>
-            <TableComponentInvoices :items="invoices" />
+            <TableComponent :items="invoices" :root="'cotizaciones'" :actions="[]"/>
         </template>
 
 

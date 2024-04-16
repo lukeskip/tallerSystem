@@ -1,7 +1,7 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponentClients from '../Components/TableComponentClients.vue';
+    import TableComponent from '../Components/TableComponent.vue';
     
     const props = defineProps({
         clients: {
@@ -18,7 +18,7 @@
         </template>
         <template #main>
             <div v-if="clients">
-                <TableComponentClients :items="clients"/>
+                <TableComponent :items="clients" :root="'clientes'" :actions="[]"/>
             </div>
             <div v-else>
                 <p>No hay proyectos disponibles.</p>

@@ -1,7 +1,7 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponentClients from '../Components/TableComponentClients.vue';
+    import TableComponent from '../Components/TableComponent.vue';
     
     const props = defineProps({
         providers: {
@@ -18,7 +18,7 @@
         </template>
         <template #main>
             <div v-if="providers">
-                <TableComponentClients :items="providers"/>
+                <TableComponent :items="providers" :root="'proveedores'" :actions="['hola']"/>
             </div>
             <div v-else>
                 <p>No hay proveedores disponibles.</p>
