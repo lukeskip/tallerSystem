@@ -53,7 +53,7 @@ class ProjectService
 
     public function getAll()
     {
-        $projects = Project::with('client')->paginate(3);
+        $projects = Project::with('client')->paginate();
 
         
         $projects->getCollection()->transform(function ($project) {
