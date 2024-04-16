@@ -1,5 +1,6 @@
 
 <template>
+    
     <div>
       <form @submit.prevent="submitSearch" class="flex items-center space-x-4">
         <input v-model="searchTerm" type="text" placeholder="Buscar..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
@@ -28,14 +29,15 @@
                 </tr>
             </tbody>
         </table>
-        <Pagination :pagination="items.links"/>
+        <template v-if="items && items.data.length                                                        ">
+          <Pagination :pagination="items.links"/>
+        </template>
     </div>
 </template>
 <script setup>
 import { ref } from 'vue';
 import showLabel from '@/helpers/showLabel';
 import { Head, Link,router } from '@inertiajs/vue3';
-import { reactive } from 'vue'
 import Pagination from '@/Components/Pagination.vue'
 
 
