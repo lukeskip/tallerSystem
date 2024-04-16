@@ -30,6 +30,7 @@ class ProjectService
             return [
                 'id' => $project->id,
                 'name' => $project->name,
+                'address' => $project->address,
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
