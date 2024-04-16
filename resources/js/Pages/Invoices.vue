@@ -10,7 +10,6 @@
         },   
     });
 
-    console.log('Facturas:', props.invoices);
 </script>
 
 <template>
