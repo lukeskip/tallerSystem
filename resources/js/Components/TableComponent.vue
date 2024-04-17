@@ -2,7 +2,7 @@
 <template>
     
     <div>
-      <form @submit.prevent="submitSearch" class="flex items-center space-x-4">
+      <form @submit.prevent="submitSearch(root)" class="flex items-center space-x-4">
         <input v-model="searchTerm" type="text" placeholder="Buscar..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300">
         <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Buscar</button>
       </form>
@@ -74,13 +74,11 @@ const getData = (data)=>{
 }
 
 
-
-
 const searchTerm = ref('');
 
-const submitSearch = () => {
+const submitSearch = (root) => {
   // Aquí puedes realizar alguna acción con el término de búsqueda (searchTerm.value)
-  router.get('/proyectos', { search: searchTerm.value })
+  router.get(root, { search: searchTerm.value })
 };
 
 </script>

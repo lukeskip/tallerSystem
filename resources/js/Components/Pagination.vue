@@ -22,9 +22,13 @@ import showLabel from '@/helpers/showLabel'
     });
 
     const checkNumberPages = (pagination)=>{
-        let activePages = pagination.filter((item)=>item.active);
-        if(activePages > 1) return true;
-        else return false;
+        let activePages = pagination.filter((item)=>item.url);
+        console.log(activePages.length);
+        if(activePages.length > 1) {
+            return true
+        }else {
+            return false
+        };
     }
     
 </script>

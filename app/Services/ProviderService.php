@@ -49,7 +49,7 @@ class ProviderService
             $providers->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
-        $providers = $providers->paginate();
+        $providers = $providers->paginate(5);
 
         $providers->getCollection()->transform(function ($provider) {
             return [
