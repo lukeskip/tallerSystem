@@ -1,14 +1,17 @@
 <template>
     <template v-if="action ==='delete'">
-        <button @click="confirmDelete(id)">Borrar</button>
+        <button @click="confirmDelete(id)">
+            <img class="icon" src="@/assets/img/trash.svg" alt="">
+        </button>
     </template>
     <template v-else-if="action ==='edit'">
-        <button @click="handleEdit(id)">Editar</button>
+        <button @click="handleEdit(id)">
+            <img class="icon" src="@/assets/img/edit.svg" alt="">
+        </button>
     </template>
 </template>
 <script setup>
     import { router } from '@inertiajs/vue3';
-    import { defineProps } from 'vue';
   
 
     defineProps({
