@@ -19,7 +19,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = $this->invoiceService->getAll();
-        return Inertia::render('Invoices', [
+        return Inertia::render('Invoice/Invoices', [
             'invoices' => $invoices,
             
         ]);
@@ -47,7 +47,7 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = $this->invoiceService->getById($id);
-        return Inertia::render('InvoiceDetail', [
+        return Inertia::render('Invoice/InvoiceDetail', [
             'invoice' => $invoice,
         ]);
     }

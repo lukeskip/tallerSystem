@@ -1,27 +1,28 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponent from '../Components/TableComponent.vue';
+    import TableComponent from '@/Components/TableComponent.vue';
     
     const props = defineProps({
-        providers: {
+        projects: {
             type: Object,
         },   
     });
+
 </script>
 
 <template>
-    <Head title="Proveedores" />
+    <Head title="Proyectos" />
     <MainLayout>
         <template #header>
-            <h1 class="text-xl font-bold">Proveedores</h1>
+            <h1 class="text-xl font-bold">Proyectos</h1>
         </template>
         <template #main>
-            <div v-if="providers">
-                <TableComponent :items="providers" :root="'proveedores'"/>
+            <div v-if="projects">
+                <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']"/>
             </div>
             <div v-else>
-                <p>No hay proveedores disponibles.</p>
+                <p>No hay proyectos disponibles.</p>
             </div>
         </template>
 

@@ -20,7 +20,7 @@ class ProviderController extends Controller
     public function index(Request $request)
     {
         $providers = $this->providerService->getAll($request);
-        return Inertia::render('Providers', [
+        return Inertia::render('Provider/Providers', [
             'providers' => $providers,
         ]);
     }

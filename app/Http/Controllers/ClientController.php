@@ -19,7 +19,7 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $clients = $this->clientService->getAll($request);
-        return Inertia::render('Clients', [
+        return Inertia::render('Client/Clients', [
             'clients' => $clients,
         ]); 
     }

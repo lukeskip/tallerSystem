@@ -20,7 +20,7 @@ class ProjectController extends Controller
     {
       
         $projects = $this->projectService->getAll($request);
-        return Inertia::render('Projects', [
+        return Inertia::render('Project/Projects', [
             'projects' => $projects,            
         ]);
     }
@@ -47,7 +47,7 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = $this->projectService->getById($id);
-        return Inertia::render('ProjectDetail', [
+        return Inertia::render('Project/ProjectDetail', [
             'project' => $project,
             
         ]);
