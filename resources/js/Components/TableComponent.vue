@@ -30,9 +30,9 @@
                       </td>
                     </template>
                     <td class="border px-4 py-2" v-if="actions.length">
-                        <template v-for="(action,index) in actions" :key="index">
-                            <Link :href="action.url">{{ action.label }}</Link>
-                        </template>
+      
+                      <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id"/>
+                      
                     </td>
                 </tr>
             </tbody>
@@ -47,6 +47,7 @@ import { ref } from 'vue';
 import showLabel from '@/helpers/showLabel';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
+import ActionButton from '@/Components/ActionButton.vue'
 
 
 defineProps({
@@ -70,8 +71,10 @@ const getData = (data)=>{
   }else{
     return data.data;
   }
-  
 }
+
+
+
 
 const searchTerm = ref('');
 

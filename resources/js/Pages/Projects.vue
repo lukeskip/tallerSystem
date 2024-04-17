@@ -19,7 +19,7 @@
         </template>
         <template #main>
             <div v-if="projects">
-                <TableComponent :items="projects" :root="'proyectos'" :actions="['hola']"/>
+                <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']"/>
             </div>
             <div v-else>
                 <p>No hay proyectos disponibles.</p>
