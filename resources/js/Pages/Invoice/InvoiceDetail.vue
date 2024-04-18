@@ -24,12 +24,19 @@
             <h2>{{ invoice.client }}</h2>
             <h3>{{ invoice.format_date }}</h3>
         </template>
+        <template #submenu>
+            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+                <i class="fa-solid fa-plus"></i>
+                    Concepto
+            </a>
+            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+                <i class="fa-solid fa-trash"></i>
+                    Borrar Cotización
+            </a>
+        </template>
         <template #main> 
             <TableComponent :items="invoice.invoiceItems"/>
             
-            <button @click="toggleModal">
-                abrir
-            </button>
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :providers="providers" :invoiceId="invoice.id" :fieldsRoute="'conceptos/create'" @close="toggleModal()"/>
             </Modal>

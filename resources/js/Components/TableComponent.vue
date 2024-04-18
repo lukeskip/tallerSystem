@@ -45,6 +45,7 @@
         </template>
     </div>
 </template>
+
 <script setup>
 import { ref } from 'vue';
 import showLabel from '@/helpers/showLabel';
@@ -82,7 +83,6 @@ const getData = (data)=>{
 const searchTerm = ref('');
 
 const submitSearch = (root) => {
-  // Aquí puedes realizar alguna acción con el término de búsqueda (searchTerm.value)
   router.get(root, { search: searchTerm.value })
 };
 

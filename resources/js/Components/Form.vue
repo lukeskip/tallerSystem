@@ -16,10 +16,10 @@
             <PrimaryButton class="mx-2">
                 Guardar
             </PrimaryButton>
-            <SecondaryButton class="mx-2">
+            <SecondaryButton class="mx-2" @click="handleSubmit(true)">
                 Guardar y agregar otro
             </SecondaryButton>
-            <SecondaryButton>
+            <SecondaryButton @click="emit('close')">
                 Cancelar
             </SecondaryButton>
        </div>
@@ -66,26 +66,35 @@
         try {
             const response = await axios(`${app_url}/${props.fieldsRoute}`);
             fields.value = response.data;
-            console.log(response.data);
-            fields.value.map(field => {
-                
-                if(field.type === "varchar" || field.type === "longtext" || field.type === 'select'){
-                    formData.value[field.slug]= ref('');
-                }
-
-                if(field.type === "decimal"){
-                    formData.value[field.slug]= ref(0);
-                }
-            });
+            clearFormData();
     
         } catch (error) {
             console.log(error);
         }
     })
 
+    const clearFormData = ()=>{
+        fields.value.map(field => {      
+            if(field.type === "varchar" || field.type === "longtext" || field.type === 'select'){
+                formData.value[field.slug]= ref('');
+            }
 
-    const handleSubmit = ()=>{
-        router.post('/conceptos', formData.value)
-        emit('close');
+            if(field.type === "decimal"){
+                formData.value[field.slug]= ref(0);
+            }
+        });
     }
+
+
+
+    const handleSubmit = (stay = false)=>{
+        router.post('/conceptos', formData.value)
+        if(stay){
+            clearFormData()
+        }else{
+            emit('close');
+        }
+    }
+
+
 </script>

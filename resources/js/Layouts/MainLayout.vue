@@ -29,8 +29,11 @@
     </div>
     <div class="container mx-auto px-4 max-w-screen-xl">
         
-        <header class="py-4 mb-4">
-            <slot name="header" />
+        <header class="py-4 mb-4 grid grid-cols-2 gap-4">
+            <div class="text-left"><slot name="header" /></div>
+            <div>
+                <div class="flex space-x-1 justify-end"><slot name="submenu"/></div>
+            </div>
 
         </header>
         <slot name="main" />
