@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Invoice;
+use App\Models\Provider;
 
 class InvoiceService
 {
@@ -34,9 +35,11 @@ class InvoiceService
                     return [
                         "label"=>$item->label,
                         "description"=>$item->description,
-                        "amount"=>"$".$item->amount,
+                        "units"=>$item->units,
+                        "unit_price"=>"$".$item->unit_price,
+                        "total"=>"$".$item->total,
                         "comission"=>$item->comission."%",
-                        "amount_total"=>"$".$item->amount_comission
+                        "total_comission"=>"$".$item->total_comission,
                     ];
                 }),
                 'format_date'=>$invoice->format_date,
@@ -62,5 +65,21 @@ class InvoiceService
         });
 
         return $invoices;
+    }
+
+    public function getProviders()
+    {
+
+        $providers = Provider::all();
+        
+        $providers->transform(function ($provider) {
+            return [
+                'id' => $provider->id,
+                'name' => $provider->name,
+                'contact_name' => $provider->contact_name,
+            ];
+        });
+
+        return $providers;
     }
 }

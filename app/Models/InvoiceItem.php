@@ -8,13 +8,30 @@ use App\Utils\Utils;
 
 class InvoiceItem extends Model
 {
+    protected $fillable = [
+        'label',
+        'description',
+        'amount',
+        'comission',
+        'provider_id',
+        'invoice_id',
+        'units',
+        'unit_price',
+        'unit_type'
+    ];
     use HasFactory;
 
-    public function getAmountComissionAttribute()
+    public function getTotalComissionAttribute()
     {   
         $comission = $this->comission / 100;
-        $comisionAmount = $comission * $this->amount;
-        $total = $this->amount + $comisionAmount;
+        $comisionAmount = $comission * ($this->unit_price * $this->units);
+        $total = ($this->unit_price * $this->units) + $comisionAmount;
+        return number_format($total,2);
+    }
+    public function getTotalAttribute()
+    {   
+        
+        $total = ($this->unit_price * $this->units) ;
         return number_format($total,2);
     }
 

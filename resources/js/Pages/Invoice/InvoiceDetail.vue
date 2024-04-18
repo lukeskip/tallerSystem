@@ -2,8 +2,19 @@
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
     import TableComponent from '@/Components/TableComponent.vue';
+    import Modal from '@/Components/Modal.vue';
+    import FormInvoiceItem from '@/Components/FormInvoiceItem.vue';
+    import { ref }from 'vue';
 
-    const props = defineProps({ invoice:[Object,Array] });
+    const { props } = defineProps({
+        invoice: { type: [Object, Array], required: true },
+        providers: { type: Array, required: true }
+    });
+
+    const showModal = ref(false);
+    const toggleModal = () => {
+        showModal.value = !showModal.value;
+    };
 </script> 
 <template>
     <Head :title="`Cotización ${invoice.amount}`"/>
@@ -15,6 +26,13 @@
         </template>
         <template #main> 
             <TableComponent :items="invoice.invoiceItems"/>
+            
+            <button @click="toggleModal">
+                abrir
+            </button>
+            <Modal :show="showModal" @close="showModal = false" >
+                <FormInvoiceItem :providers="providers" :invoiceId="invoice.id"/>
+            </Modal>
             <h3>Total: {{ invoice.amount }}</h3>
         </template>
     </MainLayout>

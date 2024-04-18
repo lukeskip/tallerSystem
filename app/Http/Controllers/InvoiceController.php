@@ -45,10 +45,12 @@ class InvoiceController extends Controller
      * Display the specified resource.
      */
     public function show($id)
-    {
+    {   
+        $providers = $this->invoiceService->getProviders();
         $invoice = $this->invoiceService->getById($id);
         return Inertia::render('Invoice/InvoiceDetail', [
             'invoice' => $invoice,
+            'providers'=> $providers
         ]);
     }
 

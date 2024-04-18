@@ -31,8 +31,10 @@ class InvoiceItemSeeder extends Seeder
                     InvoiceItem::create([
                         'label' => $faker->sentence(3),
                         'description' => $faker->paragraph,
-                        'amount' => $faker->randomFloat(2, 10, 1000),
                         'comission' => $faker->randomFloat(2, 0, 100),
+                        'unit_type' => $faker->randomElement(['pieza', 'kg', 'l', 'm']),
+                        'unit_price' => $faker->randomFloat(2, 10, 1000),
+                        'units' => $faker->numberBetween(1, 6),
                         'invoice_id' => $invoice->id,
                     ]);
                 }

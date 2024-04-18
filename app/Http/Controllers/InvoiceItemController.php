@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 use App\Services\InvoiceItemService;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceItemController extends Controller
 {
@@ -32,13 +33,7 @@ class InvoiceItemController extends Controller
      */
     public function create()
     {
-        $data = $request->validate([
-            'description' => 'required|string',
-            'quantity' => 'required|numeric',
-            'price' => 'required|numeric',
-        ]);
 
-        $invoiceItem = $this->invoiceItemService->create($data);
     }
 
     /**
@@ -46,7 +41,24 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'label' => 'required|string',
+            'description' => 'required|string',
+            'comission' => 'required|numeric',
+            'units' => 'required|numeric',
+            'unit_price' => 'required|numeric',
+            'unit_type' => 'required|string',
+            'invoice_id'=> 'required|numeric'
+        ]);
+    
+        if ($validator->fails()) {
+            // Si la validación falla, maneja los errores aquí
+            $errors = $validator->errors()->all();
+            return response()->json(['success' => false, 'errors' => $errors], 422);
+        }
+
+        $invoiceItem = $this->invoiceItemService->create($validator->validated());
+        
     }
 
     /**
@@ -76,8 +88,8 @@ class InvoiceItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(InvoiceItem $invoiceItem)
+    public function destroy($id)
     {
-        //
+        $this->invoiceItemService->delete($id);
     }
 }

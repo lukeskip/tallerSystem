@@ -5,19 +5,21 @@ use App\Models\InvoiceItem;
 
 class InvoiceItemService
 {
-    public function create(array $data)
+    public function create(Array $data)
     {
         return InvoiceItem::create($data);
     }
 
-    public function update(InvoiceItem $invoiceItem, array $data)
+    public function update($id, array $data)
     {
+        $invoiceItem = InvoiceItem::find($id);
         $invoiceItem->update($data);
         return $invoiceItem;    
     }
 
-    public function delete(InvoiceItem $invoiceItem)
+    public function delete($id)
     {
+        $invoiceItem = InvoiceItem::find($id);
         $invoiceItem->delete();
     }
 
