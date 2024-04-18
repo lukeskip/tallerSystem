@@ -5,6 +5,8 @@
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
     import { ref }from 'vue';
+    import Swal from 'sweetalert2'
+
 
     const { props } = defineProps({
         invoice: { type: [Object, Array], required: true },
@@ -15,6 +17,22 @@
     const toggleModal = () => {
         showModal.value = !showModal.value;
     };
+    const deleteHandle = ()=>{
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+});
+    }
 </script> 
 <template>
     <Head :title="`Cotización ${invoice.amount}`"/>
@@ -29,7 +47,7 @@
                 <i class="fa-solid fa-plus"></i>
                     Concepto
             </a>
-            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
                 <i class="fa-solid fa-trash"></i>
                     Borrar Cotización
             </a>

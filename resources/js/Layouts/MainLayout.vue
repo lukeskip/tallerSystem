@@ -1,29 +1,15 @@
 <script setup>
     import { Head, Link } from '@inertiajs/vue3';
+    import Menu from '@/Components/Menu.vue'
 </script> 
 <template>
     <div class="bg-gray-800">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
-        <!-- Logo -->
-        <div class="text-white text-lg font-bold"><Link :href="route('proyectos.index')">Taller 1100</Link></div>
-        
-        <!-- Menú de navegación -->
-        <nav class="space-x-4">
-            <Link  :href="route('proyectos.index')" class="text-white hover:text-gray-300">
-                Projectos
-            </Link>
-            <Link  :href="route('clientes.index')" class="text-white hover:text-gray-300">
-                Clientes
-            </Link>
-            <Link  :href="route('cotizaciones.index')" class="text-white hover:text-gray-300">
-                Cotizaciones
-            </Link>
-            <Link :href="route('proveedores.index')" class="text-white hover:text-gray-300">
-                Proveedores
-            </Link>
+            <!-- Logo -->
+            <div class="text-white text-lg font-bold"><Link :href="route('proyectos.index')">Taller 1100</Link></div>
+            <Menu />
             
-        </nav>
         </div>
     </div>
     </div>
@@ -38,4 +24,9 @@
         </header>
         <slot name="main" />
     </div>
+    <footer class="bg-gray-800 text-white py-4 mt-10">
+        <div class="container mx-auto px-4">
+            <p class="text-center">&copy; 2024 Cheko García. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 </template>
