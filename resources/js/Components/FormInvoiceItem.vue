@@ -64,6 +64,7 @@
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import {ref} from 'vue';
     import { router } from '@inertiajs/vue3';
+    import axios from 'vue-axios';
 
     const props = defineProps({
         invoiceId:{
@@ -97,5 +98,7 @@
             provider_id:provider.value,
             invoice_id: props.invoiceId,
             _token})
+        
+        emit('close');
     }
 </script>

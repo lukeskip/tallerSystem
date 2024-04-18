@@ -3,12 +3,12 @@
     import { Head, Link } from '@inertiajs/vue3';
     import TableComponent from '@/Components/TableComponent.vue';
     import Modal from '@/Components/Modal.vue';
-    import FormInvoiceItem from '@/Components/FormInvoiceItem.vue';
+    import Form from '@/Components/Form.vue';
     import { ref }from 'vue';
 
     const { props } = defineProps({
         invoice: { type: [Object, Array], required: true },
-        providers: { type: Array, required: true }
+        providers: { type: Array, required: true },
     });
 
     const showModal = ref(false);
@@ -31,7 +31,7 @@
                 abrir
             </button>
             <Modal :show="showModal" @close="showModal = false" >
-                <FormInvoiceItem :providers="providers" :invoiceId="invoice.id"/>
+                <Form :providers="providers" :invoiceId="invoice.id" :fieldsRoute="'conceptos/create'" @close="toggleModal()"/>
             </Modal>
             <h3>Total: {{ invoice.amount }}</h3>
         </template>

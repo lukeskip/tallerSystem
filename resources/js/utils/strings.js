@@ -16,5 +16,8 @@ const strings = {
         address:"Dirección",
         phone:"Teléfono",
         contact_name:"Nombre de Contacto",
+        units:"Unidades",
+        unit_price:"Valor Unitario",
+        total_comission:"Total con comisión",
 };
 export default strings;

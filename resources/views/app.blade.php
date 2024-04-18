@@ -16,6 +16,7 @@
         @inertiaHead
         <script>
             window.csrf_token = "{{ csrf_token() }}";
+            window.app_url = "{{ url('/') }}"
         </script>
     </head>
     <body class="font-sans antialiased">

@@ -29,8 +29,14 @@ class Invoice extends Model
     }
 
     public function getAmountAttribute()
-    {
-        return "$".number_format($this->invoiceItems->sum('amount'),2);
+    {   
+        $totalComissions = 0;
+        
+        foreach ($this->invoiceItems as $item) {
+            $totalComissions += floatval(str_replace(',', '', $item->total_comission));
+        }
+        return "$" . number_format($totalComissions, 2);
+        
     }
 
     public function invoiceItems()

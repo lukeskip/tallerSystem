@@ -6,6 +6,8 @@ use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 use App\Services\InvoiceItemService;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+use App\Utils\Utils;
 
 class InvoiceItemController extends Controller
 {
@@ -33,7 +35,9 @@ class InvoiceItemController extends Controller
      */
     public function create()
     {
-
+        
+        $fields = Utils::getFields('invoice_items');
+        return response()->json($fields);
     }
 
     /**
