@@ -17,6 +17,8 @@
     const toggleModal = () => {
         showModal.value = !showModal.value;
     };
+
+    
     const deleteHandle = ()=>{
         Swal.fire({
             title: "Do you want to save the changes?",
@@ -53,7 +55,7 @@
             </a>
         </template>
         <template #main> 
-            <TableComponent :items="invoice.invoiceItems" :root="'conceptos'" :actions="['delete','edit']"/>
+            <TableComponent :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" :parentId="invoice.id"/>
             
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :parentId="['invoice_id',invoice.id]" :route="'conceptos'" @close="toggleModal()"/>

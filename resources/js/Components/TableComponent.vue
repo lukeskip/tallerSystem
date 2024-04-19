@@ -3,7 +3,7 @@
     
     <div>
 
-      <form v-if="root" @submit.prevent="submitSearch(root)" class="flex justify-end space-x-4">
+      <form v-if="root && !inner" @submit.prevent="submitSearch(root)" class="flex justify-end space-x-4">
         <div class="flex mb-2 gap-1">
           <TextInput v-model="searchTerm" />
           <PrimaryButton>
@@ -29,7 +29,7 @@
               <tr v-for="item in getData(items)" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id'" class="border px-4 py-2">
-                      <template v-if="index=== 1 && root !== ''">
+                      <template v-if="index=== 1 && root !== '' && !inner">
                         <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
                       <template v-else-if="key !== 'id'">{{ value }}</template>
@@ -37,7 +37,7 @@
                   </template>
                   <td class="border px-4 py-2" v-if="actions.length">
 
-                    <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id"/>
+                    <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="parentId"/>
                     
                   </td>
               </tr>
@@ -47,6 +47,8 @@
         <Pagination :pagination="items.links"/>
       </template>
     </div>
+
+    
 </template>
 
 <script setup>
@@ -57,6 +59,7 @@ import Pagination from '@/Components/Pagination.vue'
 import ActionButton from '@/Components/ActionButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import Form from '@/Components/Form.vue';
 
 
 defineProps({
@@ -72,6 +75,13 @@ defineProps({
       type: Array,
       default: []
     },
+    parentId:{
+      type:Number
+    },
+    inner:{
+      type:Boolean,
+      default:false,
+    }
 })
 
 const getData = (data)=>{

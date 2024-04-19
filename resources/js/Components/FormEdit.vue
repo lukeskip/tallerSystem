@@ -9,7 +9,7 @@
             
             <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
             
-            <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
+            <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options" :default="formData[field.slug]" />
             <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
         </div>
 
@@ -17,9 +17,6 @@
             <PrimaryButton class="mx-2">
                 Guardar
             </PrimaryButton>
-            <SecondaryButton class="mx-2" @click="handleSubmit(true)">
-                Guardar y agregar otro
-            </SecondaryButton>
             <SecondaryButton @click="emit('close')">
                 Cancelar
             </SecondaryButton>
@@ -41,12 +38,13 @@
 
     const props = defineProps({
         parentId:{
-            type:Array,
+            type:Number,
         },
         toggleModal:{
             type:Function
         },
         route :{type:String,required:true},
+        editId:{type:Number}
     })
 
     const _token = window.csrf_token;
@@ -63,13 +61,30 @@
 
     onMounted(async()=>{
         try {
-            const response = await axios(`${app_url}/${props.route}/create`);
-            fields.value = response.data;
+            const response = await axios(`${app_url}/${props.route}/${props.editId}/edit`);
+            fields.value = response.data.fields;
+            console.log(response.data);
             clearFormData();
+            fillInfo(response.data.invoice);
+    
         } catch (error) {
             console.log(error);
         }
+
+        
     });
+
+    const fillInfo = (fieldsEdit)=>{
+        for (let key in fieldsEdit) {    
+            if(fieldsEdit[key]['type'] === 'number'){
+                formData.value[key]= Number(fieldsEdit[key]['value']);  
+            }else{
+                formData.value[key]= fieldsEdit[key]['value'];
+            }           
+        }
+        console.log(formData.value)
+        
+    }
 
     const clearFormData = ()=>{
         fields.value.map(field => {      
@@ -85,8 +100,9 @@
 
 
     const handleSubmit = async (stay = false)=>{
+        console.log(formData.value);
         try {  
-            const response = await axios.post(`/conceptos`,formData.value);
+            const response = await axios.put(`/conceptos/${props.editId}`,formData.value);
             if(stay){
                 clearFormData()
             }else{
@@ -94,7 +110,7 @@
             }
             router.reload();
         } catch (error) {
-            errors.value = error.response.data.errors;
+            // errors.value = error.response.data.errors;
             console.log(error);
         }
     }

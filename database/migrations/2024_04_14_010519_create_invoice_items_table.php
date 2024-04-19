@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('label');
             $table->longText('description');
             $table->decimal('unit_price', 10, 2);
-            $table->integer('units', 5, 2);
+            $table->decimal('units', 5, 2);
             $table->string('unit_type');
             $table->decimal('comission', 5, 2);
-            $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
+            $table->foreignId('invoice_id')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();
             $table->timestamps();
         });

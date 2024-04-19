@@ -9,11 +9,18 @@
             <i class="fa-solid fa-pen-to-square"></i>
         </button>
     </template>
+
+    <Modal :show="showModal" @close="showModal = false" >
+        <FormEdit :route="root" @close="toggleModal()" :editId="id" :parentId="['invoice_id',parentId]"/>
+    </Modal>
 </template>
 <script setup>
     import { router } from '@inertiajs/vue3';
     import Swal from 'sweetalert2'
-    import strings from '@/utils/strings.js'
+    import strings from '@/utils/strings.js';
+    import Modal from '@/Components/Modal.vue';
+    import FormEdit from '@/Components/FormEdit.vue';
+    import { ref } from 'vue'
   
 
     const props = defineProps({
@@ -28,8 +35,12 @@
         root:{
             type:String,
             required:true
+        },
+        parentId:{
+            type:Number,
         }
     });
+
 
     const handleDelete = (id)=>{
         Swal.fire({
@@ -45,8 +56,15 @@
         });
         
     }
-    const handleEdit = (id)=>{
-        router.get(`/proyectos/${id}/edit`);
+
+    const showModal = ref(false);
+    const toggleModal = () => {
+        showModal.value = !showModal.value;
+    };
+
+    const handleEdit = ()=>{
+        toggleModal();
     }
+
 
 </script>

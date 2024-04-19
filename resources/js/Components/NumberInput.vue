@@ -23,5 +23,7 @@ defineExpose({ focus: () => input.value.focus() });
         v-model="model"
         ref="input"
         type="number"
+        step="0.01"
+        
     />
 </template>

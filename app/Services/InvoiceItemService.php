@@ -2,19 +2,36 @@
 namespace App\Services;
 
 use App\Models\InvoiceItem;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceItemService
 {
-    public function create(Array $data)
+    public function create($request)
     {
-        return InvoiceItem::create($data);
+
+        $validatedData = $this->validateData($request);
+        
+        if($validatedData['status']){
+            return InvoiceItem::create($validatedData['data']);
+        }else{
+            return $validatedData['errors'];
+        }
+        
     }
 
-    public function update($id, array $data)
+    public function update($id, $request)
     {
-        $invoiceItem = InvoiceItem::find($id);
-        $invoiceItem->update($data);
-        return $invoiceItem;    
+        
+        $validatedData = $this->validateData($request);
+        
+        if($validatedData['status']){
+            $invoiceItem = InvoiceItem::find($id);
+            $invoiceItem->update($validatedData['data']);
+            return $invoiceItem;    
+        }else{
+            return $validatedData['errors'];
+        }
+
     }
 
     public function delete($id)
@@ -23,13 +40,57 @@ class InvoiceItemService
         $invoiceItem->delete();
     }
 
-    public function getById($id)
+    public function getById($id,$edit = false)
     {
-        return InvoiceItem::find($id);
-    }
+        $invoice = InvoiceItem::find($id);
+        if($edit && $invoice){
+            return [
+                'label'=> ['value'=>$invoice->label,'type'=>'string'],
+                'description'=> ['value'=>$invoice->description,'type'=>'string'],
+                'unit_price'=> ['value'=>$invoice->unit_price,'type'=>'number'],
+                'unit_type'=> ['value'=>$invoice->unit_type,'type'=>'string'],
+                'units'=> ['value'=>$invoice->units,'type'=>'number'],
+                'comission'=> ['value'=>$invoice->comission,'type'=>'number'],
+                'provider_id'=> ['value'=>$invoice->provider_id,'type'=>'number'],
+            ];
+        }
 
+        return $invoice;
+    }
+    
     public function getAll()
     {
         return InvoiceItem::all();
+    }
+
+    protected function validateData($request){
+        $validator = Validator::make($request->all(), [
+            'label' => 'required|string',
+            'description' => 'required|string',
+            'comission' => 'required|numeric|gt:0',
+            'units' => 'required|numeric',
+            'unit_price' => 'required|numeric|gt:0',
+            'unit_type' => 'required|string',
+            'invoice_id'=> 'required|numeric',
+            'provider_id'=> 'numeric'
+        ]);
+    
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $fieldErrors = [];
+            foreach ($errors->messages() as $field => $messages) {
+                $fieldErrors[$field] = $messages;
+            }
+
+            return ['status'=>false,'error'=>$fieldErrors];
+        }
+
+        $cleanedData = $validator->validated();
+
+        if($cleanedData['provider_id'] === "0" || $cleanedData['provider_id'] === 0){
+            $cleanedData['provider_id']= null;
+        }
+
+        return ['status'=>true,'data'=>$cleanedData];
     }
 }

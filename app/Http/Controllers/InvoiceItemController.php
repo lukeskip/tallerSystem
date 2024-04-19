@@ -45,26 +45,7 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'label' => 'required|string',
-            'description' => 'required|string',
-            'comission' => 'required|numeric|gt:0',
-            'units' => 'required|numeric',
-            'unit_price' => 'required|numeric|gt:0',
-            'unit_type' => 'required|string',
-            'invoice_id'=> 'required|numeric'
-        ]);
-    
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
-            return response()->json(['success' => false, 'errors' => $fieldErrors], 422);
-        }
-
-        $invoiceItem = $this->invoiceItemService->create($validator->validated());
+        $invoiceItem = $this->invoiceItemService->create($request);
         
     }
 
@@ -79,17 +60,20 @@ class InvoiceItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(InvoiceItem $invoiceItem)
+    public function edit($id)
     {
-        //
+        $invoiceItem = $this->invoiceItemService->getById($id,true);
+        $fields = Utils::getFields('invoice_items');
+        
+        return response()->json(["invoice"=>$invoiceItem,"fields"=>$fields]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, InvoiceItem $invoiceItem)
+    public function update(Request $request, $id)
     {
-        //
+        return $this->invoiceItemService->update($id,$request);
     }
 
     /**
