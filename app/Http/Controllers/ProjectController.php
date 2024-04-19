@@ -6,6 +6,7 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Services\ProjectService;
 use Inertia\Inertia;
+use App\Utils\Utils;
 
 class ProjectController extends Controller
 {
@@ -30,7 +31,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        $fields = Utils::getFields('projects');
+        return response()->json($fields);
     }
 
     /**

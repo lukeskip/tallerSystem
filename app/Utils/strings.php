@@ -7,4 +7,7 @@ return [
     'comission'=>'Comisión',
     'unit_type'=>'Tipo de unidad',
     'provider_id'=>'Proveedor',
+    'client_id'=>'Cliente',
+    'name'=>'Nombre',
+    'address'=>'Dirección',
 ];

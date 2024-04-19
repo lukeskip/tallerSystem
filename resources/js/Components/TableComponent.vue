@@ -12,10 +12,19 @@
         </div>
       </form>
 
-      <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <form v-if="inner" @submit.prevent="submitSearchFilter" class="flex justify-end space-x-4">
+        <div class="flex mb-2 gap-1">
+          <TextInput v-model="searchTerm" />
+          <PrimaryButton>
+            Buscar en esta cotización
+          </PrimaryButton>
+        </div>
+      </form>
+
+      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr >
-                  <template v-for="(value, key) in  getData(items)[0]" :key="key">
+                  <template v-for="(value, key) in  itemsRef[0]" :key="key">
                     <th v-if="key !== 'id'"  class="px-6 py-3">
                       {{ showLabel(key) }}
                     </th>
@@ -26,7 +35,7 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="item in getData(items)" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <tr v-for="item in itemsRef" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id'" class="border px-4 py-2">
                       <template v-if="index=== 1 && root !== '' && !inner">
@@ -43,7 +52,10 @@
               </tr>
           </tbody>
       </table>
-      <template v-if="getData(items).length && items.links">
+      <div v-else>
+        <p class="text-xl">No hay información que mostrar</p>
+      </div>
+      <template v-if="itemsRef.length && items.links">
         <Pagination :pagination="items.links"/>
       </template>
     </div>
@@ -52,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import showLabel from '@/helpers/showLabel';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
@@ -60,11 +72,12 @@ import ActionButton from '@/Components/ActionButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Form from '@/Components/Form.vue';
+import filter from '@/helpers/filter'
 
 
-defineProps({
+const props = defineProps({
     items: {
-      type: Object,
+      type: [Array,Object],
       required: true,
     },
     root: {
@@ -82,9 +95,13 @@ defineProps({
       type:Boolean,
       default:false,
     }
-})
+});
 
-const getData = (data)=>{
+
+
+const itemsRef = ref(getData(props.items))
+
+function getData (data){
   if(Array.isArray(data)){
     return data
   }else{
@@ -93,10 +110,14 @@ const getData = (data)=>{
 }
 
 
+
 const searchTerm = ref('');
 
 const submitSearch = (root) => {
   router.get(root, { search: searchTerm.value })
+};
+const submitSearchFilter = () => {
+  itemsRef.value = filter(props.items,"label",searchTerm.value);
 };
 
 </script>

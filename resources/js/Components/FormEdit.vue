@@ -38,7 +38,7 @@
 
     const props = defineProps({
         parentId:{
-            type:Number,
+            type:Array,
         },
         toggleModal:{
             type:Function
@@ -61,9 +61,9 @@
 
     onMounted(async()=>{
         try {
+            
             const response = await axios(`${app_url}/${props.route}/${props.editId}/edit`);
             fields.value = response.data.fields;
-            console.log(response.data);
             clearFormData();
             fillInfo(response.data.invoice);
     
@@ -81,9 +81,7 @@
             }else{
                 formData.value[key]= fieldsEdit[key]['value'];
             }           
-        }
-        console.log(formData.value)
-        
+        }        
     }
 
     const clearFormData = ()=>{

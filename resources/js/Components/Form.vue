@@ -1,30 +1,35 @@
 <template>
-    <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-        <div class="mt-2" v-for="field in fields">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
-                {{ field.label }}
-            </label>
+    <template v-if="fields.length">
+        <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
+            <div class="mt-2"  v-for="field in fields">
+                <label class="block text-gray-700 text-sm font-bold mb-2">
+                    {{ field.label }}
+                </label>
+                
+                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]"/>
+                
+                <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
+                
+                <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
+                <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
+            </div>
             
-            <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]"/>
-            
-            <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
-            
-            <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
-            <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
-        </div>
-
-       <div class="mt-5">
-            <PrimaryButton class="mx-2">
-                Guardar
-            </PrimaryButton>
-            <SecondaryButton class="mx-2" @click="handleSubmit(true)">
-                Guardar y agregar otro
-            </SecondaryButton>
-            <SecondaryButton @click="emit('close')">
-                Cancelar
-            </SecondaryButton>
-       </div>
-    </form>
+            <div class="mt-5">
+                <PrimaryButton class="mx-2">
+                    Guardar
+                </PrimaryButton>
+                <SecondaryButton class="mx-2" @click="handleSubmit(true)">
+                    Guardar y agregar otro
+                </SecondaryButton>
+                <SecondaryButton @click="emit('close')">
+                    Cancelar
+                </SecondaryButton>
+            </div>
+        </form>
+    </template>
+    <template v-else>
+        <p class="text-xl">No hay campos que mostrar</p>
+    </template>
 </template>
 <script setup>
     import TextInput from '@/Components/TextInput.vue';

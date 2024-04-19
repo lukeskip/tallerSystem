@@ -69,8 +69,19 @@ class ClientService
         });
 
         return $clients;
+
+    }
+
+    public function getClients (){
+        $clients = Client::all();
         
+        $clients->transform(function ($provider) {
+            return [
+                'id' => $provider->id,
+                'name' => $provider->name,
+            ];
+        });
 
-
+        return $clients;
     }
 }

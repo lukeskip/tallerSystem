@@ -1,3 +1,38 @@
+<template>
+    <Head :title="`Cotización ${invoice.amount}`"/>
+    <MainLayout>
+        
+        <template #title>
+            Cotización({{ invoice.amount }})
+        </template>
+        <template #subtitle>
+            {{ invoice.client }}
+        </template>
+        <template #subtitle2>
+            {{ invoice.format_date }}
+        </template>
+
+        
+        <template #submenu>
+            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+                <i class="fa-solid fa-plus"></i>
+                    Concepto
+            </a>
+            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
+                <i class="fa-solid fa-trash"></i>
+                    Borrar Cotización
+            </a>
+        </template>
+        <template #main> 
+            <TableComponent :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" :parentId="invoice.id"/>
+            
+            <Modal :show="showModal" @close="showModal = false" >
+                <Form :parentId="['invoice_id',invoice.id]" :route="'conceptos'" @close="toggleModal()"/>
+            </Modal>
+
+        </template>
+    </MainLayout>
+</template>
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
@@ -36,38 +71,3 @@
         });
     }
 </script> 
-<template>
-    <Head :title="`Cotización ${invoice.amount}`"/>
-    <MainLayout>
-        
-        <template #title>
-            Cotización({{ invoice.amount }})
-        </template>
-        <template #subtitle>
-            {{ invoice.client }}
-        </template>
-        <template #subtitle2>
-            {{ invoice.format_date }}
-        </template>
-
-        
-        <template #submenu>
-            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
-                <i class="fa-solid fa-plus"></i>
-                    Concepto
-            </a>
-            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
-                <i class="fa-solid fa-trash"></i>
-                    Borrar Cotización
-            </a>
-        </template>
-        <template #main> 
-            <TableComponent :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" :parentId="invoice.id"/>
-            
-            <Modal :show="showModal" @close="showModal = false" >
-                <Form :parentId="['invoice_id',invoice.id]" :route="'conceptos'" @close="toggleModal()"/>
-            </Modal>
-
-        </template>
-    </MainLayout>
-</template>

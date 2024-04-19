@@ -21,6 +21,7 @@ const strings = {
         total_comission:"Total con comisión",
         required:'Este campo es requerido',
         delete:"Borrar",
-        cancel:"Cancelar"
+        cancel:"Cancelar",
+        client_id:"Client"
 };
 export default strings;

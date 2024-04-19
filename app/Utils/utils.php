@@ -4,6 +4,7 @@ namespace App\Utils;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use App\Services\InvoiceService;
+use App\Services\ClientService;
 
 
 class Utils 
@@ -28,6 +29,10 @@ class Utils
                     $providerService = new InvoiceService();
                     $providers = $providerService->getProviders();
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$providers];
+                }elseif($field === 'client_id'){
+                    $clientService = new ClientService();
+                    $clients = $clientService->getClients();
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$clients];
                 }elseif(in_array($field, $fieldsToHide)){
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'hidden','label'=>null];
                 }else{
