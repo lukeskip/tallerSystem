@@ -3,18 +3,33 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use App\Models\Project;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectService
 {
-    public function create(array $data)
+    public function create($request)
     {
-        return Project::create($data);
+        $validatedData = $this->validateData($request);
+        
+        if($validatedData['status']){
+            return Project::create($validatedData['data']);   
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
+        
     }
 
-    public function update(Project $project, array $data)
+    public function update($id, $request)
     {
-        $project->update($data);
-        return $project;    
+        $validatedData = $this->validateData($request);
+        
+        if($validatedData['status']){
+            $project = Project::find($id);
+            $project->update($validatedData['data']);
+            return $project;    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }  
     }
 
     public function delete($id)
@@ -23,29 +38,39 @@ class ProjectService
         $project->delete();
     }
 
-    public function getById($id)
+    public function getById($id,$edit)
     {
         $project =  Project::with(['client','invoices'])->find($id);
 
         if ($project) {
-            return [
-                'id' => $project->id,
-                'name' => $project->name,
-                'address' => $project->address,
-                'client' => [
-                    'id' => $project->client->id,
-                    'name' => $project->client->name,
-                ],
-                'invoices' => $project->invoices->map(function ($invoice) {
-                    return [
-                        "id"=>$invoice->id,
-                        "amount" => $invoice->amount,
-                        'status'=> $invoice->status,
-                        'format_date' => $invoice->format_date
-                    ];
-                }),
-                'format_date' => $project->format_date,
-            ];
+
+            if($edit){
+                return [
+                    'name'=> ['value'=>$project->name,'type'=>'string'],
+                    'address'=> ['value'=>$project->address,'type'=>'string'],
+                    'comission'=> ['value'=>$project->comission,'type'=>'number'],
+                    'client_id'=> ['value'=>$project->client_id,'type'=>'number'],
+                ];
+            }else{
+                return [
+                    'id' => $project->id,
+                    'name' => $project->name,
+                    'address' => $project->address,
+                    'client' => [
+                        'id' => $project->client->id,
+                        'name' => $project->client->name,
+                    ],
+                    'invoices' => $project->invoices->map(function ($invoice) {
+                        return [
+                            "id"=>$invoice->id,
+                            "amount" => $invoice->amount,
+                            'status'=> $invoice->status,
+                            'format_date' => $invoice->format_date
+                        ];
+                    }),
+                    'format_date' => $project->format_date,
+                ];
+            }
         } else {
             return null;
         }
@@ -55,14 +80,18 @@ class ProjectService
     public function getAll($request = null)
     {
        
-        $projects = Project::with('client');
+        $projects = Project::with('client')->orderBy('id','desc');
 
         
-        if ($request &&   $request->input('search')) {
+        if ($request &&  $request->input('search')) {
             $projects->where('name', 'like', '%' . $request->input('search') . '%')
             ->orWhereHas('client', function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->input('search') . '%');
             });
+        }
+
+        if ($request &&  $request->input('orderBy')) {
+            $projects->orderBy($request->input('orderBy'),'desc');
         }
 
         $projects = $projects->paginate();
@@ -80,5 +109,28 @@ class ProjectService
         
 
 
+    }
+
+    protected function validateData($request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'comission' => 'required|numeric|gt:0',
+            'client_id'=> 'numeric|gt:0'
+        ]);
+    
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $fieldErrors = [];
+            foreach ($errors->messages() as $field => $messages) {
+                $fieldErrors[$field] = $messages;
+            }
+
+            return ['status'=>false,'errors'=>$fieldErrors];
+        }
+
+        $cleanedData = $validator->validated();
+
+        return ['status'=>true,'data'=>$cleanedData];
     }
 }

@@ -15,14 +15,14 @@ class InvoiceItemController extends Controller
 
     public function __construct(InvoiceItemService $invoiceItemService)
     {
-        $this->invoiceItemService = $invoiceItemService;
+        $this->service = $invoiceItemService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $invoiceItems = $this->invoiceItemService->getAll();
+        $invoiceItems = $this->service->getAll();
         
         return Inertia::render('InvoiceItems/Index', [
             'invoiceItems' => $invoiceItems,
@@ -45,7 +45,7 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        return $invoiceItem = $this->invoiceItemService->create($request);
+        return $invoiceItem = $this->service->create($request);
         
     }
 
@@ -62,10 +62,10 @@ class InvoiceItemController extends Controller
      */
     public function edit($id)
     {
-        $invoiceItem = $this->invoiceItemService->getById($id,true);
+        $invoiceItem = $this->service->getById($id,true);
         $fields = Utils::getFields('invoice_items');
         
-        return response()->json(["invoice"=>$invoiceItem,"fields"=>$fields]);
+        return response()->json(["item"=>$invoiceItem,"fields"=>$fields]);
     }
 
     /**
@@ -73,7 +73,7 @@ class InvoiceItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->invoiceItemService->update($id,$request);
+        return $this->service->update($id,$request);
     }
 
     /**
@@ -81,6 +81,6 @@ class InvoiceItemController extends Controller
      */
     public function destroy($id)
     {
-        $this->invoiceItemService->delete($id);
+        $this->service->delete($id);
     }
 }

@@ -64,8 +64,9 @@
             
             const response = await axios(`${app_url}/${props.route}/${props.editId}/edit`);
             fields.value = response.data.fields;
+            console.log(response.data);
             clearFormData();
-            fillInfo(response.data.invoice);
+            fillInfo(response.data.item);
     
         } catch (error) {
             console.log(error);
@@ -75,8 +76,9 @@
     });
 
     const fillInfo = (fieldsEdit)=>{
-        for (let key in fieldsEdit) {    
-            if(fieldsEdit[key]['type'] === 'number'){
+        console.log(fieldsEdit);
+        for (let key in fieldsEdit) {  
+            if(fieldsEdit[key]['type'] === 'number' || fieldsEdit[key]['type']==='select'){
                 formData.value[key]= Number(fieldsEdit[key]['value']);  
             }else{
                 formData.value[key]= fieldsEdit[key]['value'];
@@ -98,17 +100,16 @@
 
 
     const handleSubmit = async (stay = false)=>{
-        console.log(formData.value);
         try {  
-            const response = await axios.put(`/conceptos/${props.editId}`,formData.value);
+            const response = await axios.put(`/${props.route}/${props.editId}`,formData.value);
             if(stay){
                 clearFormData()
             }else{
                 emit('close');
             }
-            router.reload();
+            router.visit(`/${props.route}`);
         } catch (error) {
-            // errors.value = error.response.data.errors;
+            errors.value = error.response.data.errors;
             console.log(error);
         }
     }

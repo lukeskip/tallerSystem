@@ -91,13 +91,13 @@
 
     const handleSubmit = async (stay = false)=>{
         try {  
-            const response = await axios.post(`/conceptos`,formData.value);
+            const response = await axios.post(`/${props.route}`,formData.value);
+            router.visit(`/${props.route}`);
             if(stay){
                 clearFormData()
             }else{
                 emit('close');
             }
-            router.reload();
         } catch (error) {
             errors.value = error.response.data.errors;
             console.log(error);

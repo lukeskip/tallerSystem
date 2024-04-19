@@ -46,7 +46,7 @@
                   </template>
                   <td class="border px-4 py-2" v-if="actions.length">
 
-                    <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="parentId"/>
+                    <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="[parentId,item[parentId]]"/>
                     
                   </td>
               </tr>
@@ -89,7 +89,7 @@ const props = defineProps({
       default: []
     },
     parentId:{
-      type:Number
+      type:String
     },
     inner:{
       type:Boolean,
@@ -108,8 +108,6 @@ function getData (data){
     return data.data;
   }
 }
-
-
 
 const searchTerm = ref('');
 

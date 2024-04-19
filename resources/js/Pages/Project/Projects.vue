@@ -11,15 +11,11 @@
                 <i class="fa-solid fa-plus"></i>
                     Proyecto
             </a>
-            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
-                <i class="fa-solid fa-trash"></i>
-                    Borrar Cotización
-            </a>
         </template>
         
         <template #main>
             <div v-if="projects">
-                <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']"/>
+                <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']" parentId='client_id'/>
             </div>
             <div v-else>
                 <p>No hay proyectos disponibles.</p>

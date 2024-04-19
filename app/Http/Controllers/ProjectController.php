@@ -12,7 +12,7 @@ class ProjectController extends Controller
 {
     public function __construct(ProjectService $projectService)
     {
-        $this->projectService = $projectService;
+        $this->service = $projectService;
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
       
-        $projects = $this->projectService->getAll($request);
+        $projects = $this->service->getAll($request);
         return Inertia::render('Project/Projects', [
             'projects' => $projects,            
         ]);
@@ -40,7 +40,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return  $this->service->create($request);
     }
 
     /**
@@ -48,7 +48,7 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = $this->projectService->getById($id);
+        $project = $this->service->getById($id);
         return Inertia::render('Project/ProjectDetail', [
             'project' => $project,
             
@@ -58,17 +58,20 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit($id)
     {
-        //
+        $item = $this->service->getById($id,true);
+        $fields = Utils::getFields('projects');
+        
+        return response()->json(["item"=>$item,"fields"=>$fields]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, $id)
     {
-        //
+        return $this->service->update($id,$request);
     }
 
     /**
@@ -76,6 +79,6 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        $project = $this->projectService->delete($id);
+        $project = $this->service->delete($id);
     }
 }

@@ -10,6 +10,13 @@ use App\Utils\Utils;
 
 class Project extends Model
 {
+    protected $fillable = [
+        'name',
+        'address',
+        'comission',
+        'client_id',
+    ];
+
     use HasFactory;
 
     public function invoices(){

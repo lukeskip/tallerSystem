@@ -11,7 +11,7 @@
     </template>
 
     <Modal :show="showModal" @close="showModal = false" >
-        <FormEdit :route="root" @close="toggleModal()" :editId="id" :parentId="['invoice_id',parentId]"/>
+        <FormEdit :route="root" @close="toggleModal()" :editId="id" :parentId="parentId"/>
     </Modal>
 </template>
 <script setup>
@@ -37,7 +37,7 @@
             required:true
         },
         parentId:{
-            type:Number,
+            type:Array,
         }
     });
 
