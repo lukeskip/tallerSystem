@@ -8,10 +8,15 @@
 </script> 
 <template>
     <MainLayout>
-        <template #header> 
-            <h1 class="text-xl font-bold">{{ project.name }}</h1>
-            <h2>{{ project.client.name }}</h2>
+
+        <template #title>
+            {{ project.name }}
         </template>
+        <template #subtitle>
+            {{ project.client.name }}
+        </template>
+        
+
         <template #main> 
             <h3>Cotizaciones</h3>
             <TableComponent :items="{data:project.invoices}" :root="'cotizaciones'" :actions="[]"/>

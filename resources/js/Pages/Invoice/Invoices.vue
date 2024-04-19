@@ -15,8 +15,8 @@
 <template>
     <Head title="Cotizaciones" />
     <MainLayout >
-        <template #header>
-            <h1>Cotizaciones</h1>
+        <template #title>
+            Cotizaciones
         </template>
         <template #main>
             <TableComponent :items="invoices" :root="'cotizaciones'" :actions="[]"/>

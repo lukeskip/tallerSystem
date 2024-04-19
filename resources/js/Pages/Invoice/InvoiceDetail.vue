@@ -39,11 +39,18 @@
 <template>
     <Head :title="`Cotización ${invoice.amount}`"/>
     <MainLayout>
-        <template #header> 
-            <h1 class="text-xl font-bold">Cotización({{ invoice.amount }})</h1>
-            <h2>{{ invoice.client }}</h2>
-            <h3>{{ invoice.format_date }}</h3>
+        
+        <template #title>
+            Cotización({{ invoice.amount }})
         </template>
+        <template #subtitle>
+            {{ invoice.client }}
+        </template>
+        <template #subtitle2>
+            {{ invoice.format_date }}
+        </template>
+
+        
         <template #submenu>
             <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
                 <i class="fa-solid fa-plus"></i>

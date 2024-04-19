@@ -14,9 +14,11 @@
 <template>
     <Head title="Proyectos" />
     <MainLayout>
-        <template #header>
-            <h1 class="text-xl font-bold">Proyectos</h1>
+
+        <template #title>
+            Proyectos
         </template>
+        
         <template #main>
             <div v-if="projects">
                 <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']"/>

@@ -13,8 +13,8 @@
 <template>
     <Head title="Proveedores" />
     <MainLayout>
-        <template #header>
-            <h1 class="text-xl font-bold">Proveedores</h1>
+        <template #title>
+            Proveedores
         </template>
         <template #main>
             <div v-if="providers">

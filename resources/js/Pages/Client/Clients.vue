@@ -13,8 +13,8 @@
 <template>
     <Head title="Clientes" />
     <MainLayout>
-        <template #header>
-            <h1 class="text-xl font-bold">Clientes</h1>
+        <template #title>
+          Clientes
         </template>
         <template #main>
             <div v-if="clients">
