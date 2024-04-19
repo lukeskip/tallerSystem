@@ -33,6 +33,7 @@ class InvoiceService
                 'amount'=>$invoice->amount,
                 'invoiceItems'=> $invoice->invoiceItems->map(function ($item) {
                     return [
+                        "id"=>$item->id,
                         "label"=>$item->label,
                         "description"=>$item->description,
                         "units"=>$item->units,

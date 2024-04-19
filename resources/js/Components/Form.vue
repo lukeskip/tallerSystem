@@ -10,8 +10,9 @@
             <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
             
             <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
+            <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
         </div>
-        
+
        <div class="mt-5">
             <PrimaryButton class="mx-2">
                 Guardar
@@ -34,39 +35,39 @@
     import { router } from '@inertiajs/vue3';
     import {ref,onMounted,defineEmits} from 'vue';
     import axios from 'axios';
+    import strings from '@/utils/strings.js'
     
     const emit  = defineEmits(['close']);
 
     const props = defineProps({
-        invoiceId:{
+        parentId:{
             type:Number,
-            required:true
-        },
-        providers:{
-            type:Array,
             required:true
         },
         toggleModal:{
             type:Function
         },
-        fieldsRoute :{type:String,required:true}
+        route :{type:String,required:true}
     })
 
     const _token = window.csrf_token;
     const app_url = window.app_url;
+    const errors = ref([]);
+    const parentReady = props.parentId ? {[props.parentId[0]]:props.parentId[1]} : {};
 
     const fields = ref([]);
     const formData = ref({
-        invoice_id: props.invoiceId,
+        ...parentReady,
         _token
     });
     
 
     onMounted(async()=>{
         try {
-            const response = await axios(`${app_url}/${props.fieldsRoute}`);
+            const response = await axios(`${app_url}/${props.route}/create`);
             fields.value = response.data;
             clearFormData();
+            router.visit(`/${props.route}`);
     
         } catch (error) {
             console.log(error);
@@ -87,12 +88,18 @@
 
 
 
-    const handleSubmit = (stay = false)=>{
-        router.post('/conceptos', formData.value)
-        if(stay){
-            clearFormData()
-        }else{
-            emit('close');
+    const handleSubmit = async (stay = false)=>{
+        try {  
+            const response = await axios.post(`/conceptos`,formData.value);
+            if(stay){
+                clearFormData()
+            }else{
+                emit('close');
+            }
+            router.reload();
+        } catch (error) {
+            errors.value = error.response.data.errors;
+            console.log(error);
         }
     }
 

@@ -26,12 +26,12 @@
             denyButtonText: `Don't save`
         }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-            Swal.fire("Saved!", "", "success");
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
-        }
-});
+            if (result.isConfirmed) {
+                Swal.fire("Saved!", "", "success");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
     }
 </script> 
 <template>
@@ -53,12 +53,12 @@
             </a>
         </template>
         <template #main> 
-            <TableComponent :items="invoice.invoiceItems"/>
+            <TableComponent :items="invoice.invoiceItems" :root="'conceptos'" :actions="['delete','edit']"/>
             
             <Modal :show="showModal" @close="showModal = false" >
-                <Form :providers="providers" :invoiceId="invoice.id" :fieldsRoute="'conceptos/create'" @close="toggleModal()"/>
+                <Form :parentId="['invoice_id',invoice.id]" :route="'conceptos'" @close="toggleModal()"/>
             </Modal>
-            <h3>Total: {{ invoice.amount }}</h3>
+
         </template>
     </MainLayout>
 </template>

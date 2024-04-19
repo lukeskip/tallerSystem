@@ -19,5 +19,8 @@ const strings = {
         units:"Unidades",
         unit_price:"Valor Unitario",
         total_comission:"Total con comisión",
+        required:'Este campo es requerido',
+        delete:"Borrar",
+        cancel:"Cancelar"
 };
 export default strings;

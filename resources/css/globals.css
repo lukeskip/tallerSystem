@@ -3,3 +3,7 @@
     height:auto;
     margin:0 10px;
 }
+
+.mainContainer{
+    min-height: 80vh;
+}

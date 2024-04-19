@@ -48,17 +48,20 @@ class InvoiceItemController extends Controller
         $validator = Validator::make($request->all(), [
             'label' => 'required|string',
             'description' => 'required|string',
-            'comission' => 'required|numeric',
+            'comission' => 'required|numeric|gt:0',
             'units' => 'required|numeric',
-            'unit_price' => 'required|numeric',
+            'unit_price' => 'required|numeric|gt:0',
             'unit_type' => 'required|string',
             'invoice_id'=> 'required|numeric'
         ]);
     
         if ($validator->fails()) {
-            // Si la validación falla, maneja los errores aquí
-            $errors = $validator->errors()->all();
-            return response()->json(['success' => false, 'errors' => $errors], 422);
+            $errors = $validator->errors();
+            $fieldErrors = [];
+            foreach ($errors->messages() as $field => $messages) {
+                $fieldErrors[$field] = $messages;
+            }
+            return response()->json(['success' => false, 'errors' => $fieldErrors], 422);
         }
 
         $invoiceItem = $this->invoiceItemService->create($validator->validated());
