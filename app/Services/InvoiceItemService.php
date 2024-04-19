@@ -14,7 +14,7 @@ class InvoiceItemService
         if($validatedData['status']){
             return InvoiceItem::create($validatedData['data']);
         }else{
-            return $validatedData['errors'];
+            return response()->json(['errors'=>$validatedData['errors']], 422);
         }
         
     }
@@ -29,7 +29,7 @@ class InvoiceItemService
             $invoiceItem->update($validatedData['data']);
             return $invoiceItem;    
         }else{
-            return $validatedData['errors'];
+            return response()->json(['errors'=>$validatedData['errors']], 422);
         }
 
     }
@@ -82,7 +82,7 @@ class InvoiceItemService
                 $fieldErrors[$field] = $messages;
             }
 
-            return ['status'=>false,'error'=>$fieldErrors];
+            return ['status'=>false,'errors'=>$fieldErrors];
         }
 
         $cleanedData = $validator->validated();

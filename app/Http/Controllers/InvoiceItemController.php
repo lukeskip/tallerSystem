@@ -45,7 +45,7 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        $invoiceItem = $this->invoiceItemService->create($request);
+        return $invoiceItem = $this->invoiceItemService->create($request);
         
     }
 
