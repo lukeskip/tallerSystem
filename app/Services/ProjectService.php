@@ -66,6 +66,7 @@ class ProjectService
                     'invoices' => $project->invoices->map(function ($invoice) {
                         return [
                             "id"=>$invoice->id,
+                            "file"=>$invoice->id,
                             "amount" => $invoice->amount,
                             'status'=> $invoice->status,
                             'format_date' => $invoice->format_date

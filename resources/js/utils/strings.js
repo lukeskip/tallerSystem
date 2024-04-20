@@ -26,6 +26,7 @@ const strings = {
         contact_name:"Nombre de contacto",
         phone:"Teléfono",
         email:"Email",
-        category:"Categoría"
+        category:"Categoría",
+        file:"Folio"
 };
 export default strings;

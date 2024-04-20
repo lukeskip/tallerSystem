@@ -94,6 +94,7 @@ class InvoiceService
         $invoices->getCollection()->transform(function ($invoice) {
             return [
                 'id' => $invoice->id,
+                'file' => $invoice->id,
                 'project' => $invoice->project->name,
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
