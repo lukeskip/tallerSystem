@@ -48,10 +48,6 @@
         providers: { type: Array, required: true },
     });
 
-    onMounted(()=>{
-        console.log(props.invoice);
-    })
-
     const showModal = ref(false);
     const toggleModal = () => {
         showModal.value = !showModal.value;
