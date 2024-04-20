@@ -35,8 +35,13 @@ class InvoiceItemController extends Controller
      */
     public function create()
     {
+        if(isset($_GET['parentId'])){
+            $id = $_GET['parentId'];
+        }else{
+            $id = false;
+        }
         
-        $fields = Utils::getFields('invoice_items');
+        $fields = Utils::getFields('invoice_items',$id);
         return response()->json($fields);
     }
 

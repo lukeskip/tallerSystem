@@ -31,6 +31,8 @@ class InvoiceController extends Controller
      */
     public function create()
     {
+
+        
         $fields = Utils::getFields('invoices');
         return response()->json($fields);
     }
@@ -59,7 +61,7 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice)
+    public function edit($id)
     {
         $item = $this->service->getById($id,true);
         $fields = Utils::getFields('projects');

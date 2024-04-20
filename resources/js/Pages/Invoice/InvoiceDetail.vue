@@ -27,7 +27,7 @@
             <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" parentId="invoice_id"/>
             
             <Modal :show="showModal" @close="showModal = false" >
-                <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()"/>
+                <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>
             </Modal>
 
         </template>

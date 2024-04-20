@@ -6,7 +6,7 @@
                     {{ field.label }}
                 </label>
                 
-                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]"/>
+                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
                 
                 <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
                 
@@ -46,7 +46,7 @@
 
     const props = defineProps({
         parentId:{
-            type:Array,
+            type:[String,Number],
         },
         toggleModal:{
             type:Function
@@ -66,9 +66,15 @@
     });
     
 
-    onMounted(async()=>{
+    onMounted(async ()=>{
         try {
-            const response = await axios(`${app_url}/${props.route}/create`);
+            let url = `${app_url}/${props.route}/create`;
+
+            if (props.parentId !== undefined) {
+                url += `?parentId=${props.parentId}`;
+            }
+            const response = await axios(url);
+           
             fields.value = response.data;
             clearFormData();
         } catch (error) {

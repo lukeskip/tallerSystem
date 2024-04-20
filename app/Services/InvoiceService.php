@@ -44,6 +44,17 @@ class InvoiceService
         }      
     }
 
+    public function getItemCategories($id){
+        $invoice = Invoice::find($id);
+        $categories = [];
+        foreach ($invoice->invoiceItems as $item) {
+            if ($item->category && !in_array($item->category, $categories)) {
+                $categories[] = $item->category;
+            }
+        }
+        return $categories;
+    }
+
     public function delete(Invoice $invoice)
     {
         $invoice->delete();

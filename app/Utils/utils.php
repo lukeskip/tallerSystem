@@ -19,7 +19,7 @@ class Utils
         return Carbon::parse($date)->translatedFormat('D d/m Y');
     }
 
-    public static function getFields($table){
+    public static function getFields($table,$id = false){
         $fields = Schema::getColumnListing($table);
         $fieldsEnd = [];
         $fieldsToExclude = ['created_at','updated_at','id','invoice_id'];
@@ -35,11 +35,16 @@ class Utils
                     $clientService = new ClientService();
                     $clients = $clientService->getClients();
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$clients];
+                }elseif($field === 'category' && $table === 'invoice_items' && $id){
+                    $InvoiceService = new InvoiceService();
+                    $categories = $InvoiceService->getItemCategories($id);
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'label'=>Utils::getLabel($field),'autocomplete'=>$categories];
                 }elseif(in_array($field, $fieldsToHide)){
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'hidden','label'=>null];
                 }else{
                     $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'label'=>Utils::getLabel($field)];
                 }
+
             }else{
                 unset($fields[$index]);
             }
