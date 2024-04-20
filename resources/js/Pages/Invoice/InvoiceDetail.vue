@@ -24,7 +24,7 @@
             </a>
         </template>
         <template #main> 
-            <TableComponent :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" parentId="invoice_id"/>
+            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" parentId="invoice_id"/>
             
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()"/>
@@ -36,7 +36,7 @@
 <script setup>
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
-    import TableComponent from '@/Components/TableComponent.vue';
+    import TableComponentInvoiceItems from '@/Components/TableComponentInvoiceItems.vue';
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
     import { ref, onMounted }from 'vue';

@@ -53,27 +53,30 @@ class InvoiceService
     public function getById($id)
     {
         $invoice = Invoice::with(['invoiceItems' => function ($query) {
-            $query->orderBy('category')->orderBy('created_at', 'desc');
+            $query->orderBy('created_at', 'desc');
         }])->find($id);
+
+        $invoiceItems = $invoice->invoiceItems->map(function ($item) {
+            return [
+                "id"=>$item->id,
+                "label"=>$item->label,
+                "description"=>$item->description,
+                "units"=>$item->units,
+                "category"=>$item->category,
+                "unit_price"=>"$".$item->unit_price,
+                "total"=>"$".$item->total,
+                "comission"=>$item->comission."%",
+                "total_comission"=>"$".$item->total_comission,
+            ];
+        });
+        $groupByCategoryItems =  $invoiceItems->groupBy('category');
         
         if($invoice){
             return [
                 'id'=>$invoice->id,
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
-                'invoiceItems'=> $invoice->invoiceItems->map(function ($item) {
-                    return [
-                        "id"=>$item->id,
-                        "label"=>$item->label,
-                        "description"=>$item->description,
-                        "units"=>$item->units,
-                        "category"=>$item->category,
-                        "unit_price"=>"$".$item->unit_price,
-                        "total"=>"$".$item->total,
-                        "comission"=>$item->comission."%",
-                        "total_comission"=>"$".$item->total_comission,
-                    ];
-                }),
+                'invoiceItems'=> $groupByCategoryItems,
                 'format_date'=>$invoice->format_date,
             ];
         }else {
