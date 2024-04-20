@@ -55,6 +55,7 @@ class InvoiceItemService
                 'units'=> ['value'=>$invoice->units,'type'=>'number'],
                 'comission'=> ['value'=>$invoice->comission,'type'=>'number'],
                 'provider_id'=> ['value'=>$invoice->provider_id,'type'=>'number'],
+                'category'=> ['value'=>$invoice->category,'type'=>'string'],
             ];
         }
 
@@ -76,7 +77,8 @@ class InvoiceItemService
             'unit_price' => 'required|numeric|gt:0',
             'unit_type' => 'required|string',
             'provider_id'=> 'numeric',
-            'invoice_id'  => 'nullable'
+            'invoice_id'  => 'nullable',
+            'category'  => 'nullable'
         ]);
     
         if ($validator->fails()) {

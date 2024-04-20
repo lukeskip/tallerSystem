@@ -17,7 +17,8 @@ class InvoiceItem extends Model
         'invoice_id',
         'units',
         'unit_price',
-        'unit_type'
+        'unit_type',
+        'category'
     ];
     use HasFactory;
 

@@ -25,6 +25,7 @@ const strings = {
         client_id:"Client",
         contact_name:"Nombre de contacto",
         phone:"Teléfono",
-        email:"Email"
+        email:"Email",
+        category:"Categoría"
 };
 export default strings;

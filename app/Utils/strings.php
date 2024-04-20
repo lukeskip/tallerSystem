@@ -13,4 +13,5 @@ return [
     'contact_name'=>'Nombre de Contacto',
     'email'=>'Email',
     'phone'=>'Teléfono',
+    'category'=>'Categoría',
 ];

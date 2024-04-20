@@ -53,7 +53,7 @@ class InvoiceService
     public function getById($id)
     {
         $invoice = Invoice::with(['invoiceItems' => function ($query) {
-            $query->orderBy('created_at', 'desc'); 
+            $query->orderBy('category')->orderBy('created_at', 'desc');
         }])->find($id);
         
         if($invoice){
@@ -67,6 +67,7 @@ class InvoiceService
                         "label"=>$item->label,
                         "description"=>$item->description,
                         "units"=>$item->units,
+                        "category"=>$item->category,
                         "unit_price"=>"$".$item->unit_price,
                         "total"=>"$".$item->total,
                         "comission"=>$item->comission."%",
