@@ -6,19 +6,20 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Services\InvoiceService;
 use Inertia\Inertia;
+use App\Utils\Utils;
 
 class InvoiceController extends Controller
 {
     public function __construct(InvoiceService $invoiceService)
     {
-        $this->invoiceService = $invoiceService;
+        $this->service = $invoiceService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $invoices = $this->invoiceService->getAll();
+        $invoices = $this->service->getAll();
         return Inertia::render('Invoice/Invoices', [
             'invoices' => $invoices,
             
@@ -30,7 +31,8 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        $fields = Utils::getFields('invoices');
+        return response()->json($fields);
     }
 
     /**
@@ -38,7 +40,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return  $this->service->create($request);
     }
 
     /**
@@ -46,8 +48,8 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {   
-        $providers = $this->invoiceService->getProviders();
-        $invoice = $this->invoiceService->getById($id);
+        $providers = $this->service->getProviders();
+        $invoice = $this->service->getById($id);
         return Inertia::render('Invoice/InvoiceDetail', [
             'invoice' => $invoice,
             'providers'=> $providers
@@ -59,7 +61,9 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        //
+        $item = $this->service->getById($id,true);
+        $fields = Utils::getFields('projects');
+        return response()->json(["item"=>$item,"fields"=>$fields]);
     }
 
     /**
@@ -73,8 +77,8 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Invoice $invoice)
+    public function destroy($id)
     {
-        //
+        return $invoice = $this->service->delete($id);
     }
 }

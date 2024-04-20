@@ -21,7 +21,8 @@ return new class extends Migration
             $table->decimal('units', 5, 2);
             $table->string('unit_type');
             $table->decimal('comission', 5, 2);
-            $table->foreignId('invoice_id')->onDelete('cascade');
+            $table->string('invoice_id'); 
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();
             $table->timestamps();
         });

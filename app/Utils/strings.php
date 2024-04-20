@@ -10,4 +10,7 @@ return [
     'client_id'=>'Cliente',
     'name'=>'Nombre',
     'address'=>'Dirección',
+    'contact_name'=>'Nombre de Contacto',
+    'email'=>'Email',
+    'phone'=>'Teléfono',
 ];

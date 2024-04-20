@@ -6,19 +6,20 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Services\ClientService;
 use Inertia\Inertia;
+use App\Utils\Utils;
 
 class ClientController extends Controller
 {
     public function __construct(ClientService $clientService)
     {
-        $this->clientService = $clientService;
+        $this->service = $clientService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $clients = $this->clientService->getAll($request);
+        $clients = $this->service->getAll($request);
         return Inertia::render('Client/Clients', [
             'clients' => $clients,
         ]); 
@@ -29,7 +30,8 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $fields = Utils::getFields('clients');
+        return response()->json($fields);
     }
 
     /**
@@ -37,15 +39,19 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return  $this->service->create($request);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Client $client)
+    public function show($id)
     {
-        //
+        $client = $this->service->getById($id);
+        return Inertia::render('Client/ClientDetail', [
+            'client' => $client,
+            
+        ]);
     }
 
     /**
@@ -67,8 +73,11 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        //
+        return $this->service->delete($id);
+        
     }
+
+    
 }

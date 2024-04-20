@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use App\Models\Invoice;
 use App\Models\Project;
+use App\Utils\Utils;
 
 class InvoiceSeeder extends Seeder
 {
@@ -25,7 +26,10 @@ class InvoiceSeeder extends Seeder
             $numberOfInvoices = rand(1, 5); // Generar entre 1 y 5 cotizaciones por cliente
 
             for ($i = 0; $i < $numberOfInvoices; $i++) {
+                $id = Utils::generateInvoiceId();
                 Invoice::create([
+                    'id'=> $id,
+                    'status'=>'pending',
                     'project_id' => $project->id,
                 ]);
             }

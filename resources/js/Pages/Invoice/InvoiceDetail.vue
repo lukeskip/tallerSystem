@@ -3,7 +3,7 @@
     <MainLayout>
         
         <template #title>
-            Cotización({{ invoice.amount }})
+            Cotización {{invoice.id}} ({{ invoice.amount }}) 
         </template>
         <template #subtitle>
             {{ invoice.client }}
@@ -27,7 +27,7 @@
             <TableComponent :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" parentId="invoice_id"/>
             
             <Modal :show="showModal" @close="showModal = false" >
-                <Form :parentId="['invoice_id',invoice.id]" :route="'conceptos'" @close="toggleModal()"/>
+                <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()"/>
             </Modal>
 
         </template>

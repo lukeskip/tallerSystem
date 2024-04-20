@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\InvoiceItem;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class InvoiceItemService
 {
@@ -12,7 +13,8 @@ class InvoiceItemService
         $validatedData = $this->validateData($request);
         
         if($validatedData['status']){
-            return InvoiceItem::create($validatedData['data']);
+            $item =  InvoiceItem::create($validatedData['data']);
+            return response()->json(['redirect'=> 'cotizaciones/'.$item->invoice_id]);
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
         }
@@ -71,7 +73,7 @@ class InvoiceItemService
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'unit_type' => 'required|string',
-            'invoice_id'=> 'required|numeric',
+            'invoice_id'=> 'required|string',
             'provider_id'=> 'numeric'
         ]);
     

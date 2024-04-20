@@ -22,6 +22,9 @@ const strings = {
         required:'Este campo es requerido',
         delete:"Borrar",
         cancel:"Cancelar",
-        client_id:"Client"
+        client_id:"Client",
+        contact_name:"Nombre de contacto",
+        phone:"Teléfono",
+        email:"Email"
 };
 export default strings;

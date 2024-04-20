@@ -27,9 +27,9 @@
             </div>
         </form>
     </template>
-    <template v-else>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else>
         <p class="text-xl">No hay campos que mostrar</p>
-    </template>
+    </div>
 </template>
 <script setup>
     import TextInput from '@/Components/TextInput.vue';
@@ -52,16 +52,16 @@
             type:Function
         },
         route :{type:String,required:true},
+        default:{type:Object}
     })
 
     const _token = window.csrf_token;
     const app_url = window.app_url;
     const errors = ref([]);
-    const parentReady = props.parentId ? {[props.parentId[0]]:props.parentId[1]} : {};
 
     const fields = ref([]);
     const formData = ref({
-        ...parentReady,
+        ...props.default,
         _token
     });
     
@@ -92,10 +92,11 @@
     const handleSubmit = async (stay = false)=>{
         try {  
             const response = await axios.post(`/${props.route}`,formData.value);
-            router.visit(`/${props.route}`);
             if(stay){
                 clearFormData()
+                router.reload();
             }else{
+                router.visit(`/${response.data.redirect}`);
                 emit('close');
             }
         } catch (error) {

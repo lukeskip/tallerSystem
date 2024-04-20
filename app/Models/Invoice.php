@@ -11,6 +11,15 @@ use App\Utils\Utils;
 
 class Invoice extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'id',
+        'project_id',
+        'status',
+    ];
+
     use HasFactory;
 
     public function client()

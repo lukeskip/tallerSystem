@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use App\Services\InvoiceService;
 use App\Services\ClientService;
+use App\Models\Invoice;
 
 
 class Utils 
@@ -21,8 +22,9 @@ class Utils
     public static function getFields($table){
         $fields = Schema::getColumnListing($table);
         $fieldsEnd = [];
-        $fieldsToExclude = ['created_at','updated_at','id'];
-        $fieldsToHide = ['invoice_id'];
+        $fieldsToExclude = ['created_at','updated_at','id','invoice_id'];
+        $fieldsToHide = ['invoice_id','project_id'];
+
         foreach ($fields as $index => $field) {
             if(!in_array($field, $fieldsToExclude)){
                 if($field === 'provider_id'){
@@ -53,5 +55,24 @@ class Utils
         }else{
             return $slug;
         }
+    }
+
+    public static function generateInvoiceId (){
+        $year = date('Y');
+    
+        // Contar el número de facturas en el año actual
+        $count = Invoice::where('id', 'like', "$year%")->count();
+
+        // Generar el siguiente número de factura
+        if ($count > 0) {
+            $nextInvoiceNumber = $count + 1;
+        } else {
+            $nextInvoiceNumber = 1; // Si es la primera factura del año
+        }
+
+        // Formatear el número de factura con ceros a la izquierda si es necesario
+        $nextInvoiceNumberFormatted = str_pad($nextInvoiceNumber, 4, '0', STR_PAD_LEFT);
+
+        return $year . '_' . $nextInvoiceNumberFormatted;
     }
 }

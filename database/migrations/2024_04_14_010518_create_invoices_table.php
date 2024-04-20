@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary(); 
             $table->string('status')->default('pending');
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -10,6 +10,14 @@ use App\Utils\Utils;
 
 class Client extends Model
 {
+    protected $fillable = [
+        'name',
+        'contact_name',
+        'address',
+        'phone',
+        'email',
+    ];
+
     use HasFactory;
 
     public function projects(){

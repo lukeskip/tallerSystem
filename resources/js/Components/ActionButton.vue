@@ -49,7 +49,6 @@
             confirmButtonText: strings.delete,
             cancelButtonText:strings.cancel
         }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 router.delete(route(`${props.root}.destroy`, id));
             }

@@ -4,6 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia; 
 
 class ProjectService
 {
@@ -12,7 +13,8 @@ class ProjectService
         $validatedData = $this->validateData($request);
         
         if($validatedData['status']){
-            return Project::create($validatedData['data']);   
+            $project = Project::create($validatedData['data']); 
+            return response()->json(['redirect'=> 'proyectos/'.$project->id]);  
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
         }
@@ -36,9 +38,10 @@ class ProjectService
     {
         $project = Project::find($id);
         $project->delete();
+        return Inertia::location(route('proyectos.index'));
     }
 
-    public function getById($id,$edit)
+    public function getById($id,$edit=false)
     {
         $project =  Project::with(['client','invoices'])->find($id);
 
