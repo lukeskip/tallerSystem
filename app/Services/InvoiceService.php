@@ -53,7 +53,9 @@ class InvoiceService
     public function getById($id)
     {
         $invoice = Invoice::with(['invoiceItems' => function ($query) {
-            $query->orderBy('created_at', 'desc');
+            $query
+            ->orderBy('category', 'asc')
+            ->orderBy('created_at', 'desc');
         }])->find($id);
 
         $invoiceItems = $invoice->invoiceItems->map(function ($item) {
@@ -69,14 +71,14 @@ class InvoiceService
                 "total_comission"=>"$".$item->total_comission,
             ];
         });
-        $groupByCategoryItems =  $invoiceItems->groupBy('category');
+       
         
         if($invoice){
             return [
                 'id'=>$invoice->id,
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
-                'invoiceItems'=> $groupByCategoryItems,
+                'invoiceItems' => $invoiceItems,
                 'format_date'=>$invoice->format_date,
             ];
         }else {

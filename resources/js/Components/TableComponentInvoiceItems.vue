@@ -21,12 +21,11 @@
         </div>
       </form>
 
-      <table v-if="itemsRef[firstProperty] && itemsRef[firstProperty].length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-       
-        <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr >
-                  <template v-for="(value, key) in  itemsRef[firstProperty][0]" :key="key">
-                    <th v-if="key !== 'id'"  class="px-6 py-3">
+                  <template v-for="(value, key) in  itemsRef[0]" :key="key">
+                    <th v-if="key !== 'id' && key !== 'category'"  class="px-6 py-3">
                       {{ showLabel(key) }}
                     </th>
                   </template>
@@ -34,41 +33,45 @@
                       <th>Acciones</th>
                   </template>
               </tr>
-        </thead>
-        <tbody>
-            <template v-for="(items, category) in itemsRef" :key="category">
-               
-                <tr class="w-full"> <!-- Ajusta el color de fondo según tu preferencia -->
-                    <td class="px-6 py-3 text-center" :colspan="Object.keys(itemsRef[firstProperty][0]).length">
-                    {{ category }}
+          </thead>
+          <tbody>
+            <template v-for="item in itemsRef" :key="item.id">
+              <tr class="w-full" v-if="labelCategory(item.category) && lastCategory !== ''">
+                    <td class="px-6 py-3 text-center w-full capitalize" :colspan="Object.keys(itemsRef[1]).length">
+                      {{ lastCategory }}
                     </td>
-                </tr>
+              </tr>
+              <tr  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <template v-for="(value, key, index) in item" :key="key">
+                    <td v-if="key !== 'id' && key !== 'category'" class="border px-4 py-2">
+                      <template v-if="index=== 1 && root !== '' && !inner">
+                        <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
+                      </template>
+                      <template v-else-if="key !== 'id'">{{ value }}</template>
+                    </td>
+                  </template>
+                  <td class="border px-4 py-2 text-center" v-if="actions.length">
 
-                <tr v-for="item in items" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">  
-                    <template v-for="(value, key, index) in item">
-                        <td v-if="key!=='id'" class="border px-4 py-2">
-                            <template v-if="index=== 1">
-                                <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
-                            </template>
-                            <template v-else>{{ value }}</template>
-                        </td>
-                    </template>
-                    <td class="border px-4 py-2 text-center" v-if="actions.length">
-                        <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="[parentId,item[parentId]]"/>
-                    </td>
-                </tr>
-                
+                    <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="[parentId,item[parentId]]"/>
+                    
+                  </td>
+              </tr>
             </template>
-        </tbody>
-    </table>
-     
+          </tbody>
+      </table>
+      <div v-else>
+        <p class="text-xl">No hay información que mostrar</p>
+      </div>
+      <template v-if="itemsRef.length && items.links">
+        <Pagination :pagination="items.links"/>
+      </template>
     </div>
 
     
 </template>
 
 <script setup>
-import { ref,onUpdated,onMounted } from 'vue';
+import { ref,onUpdated,watch } from 'vue';
 import showLabel from '@/helpers/showLabel';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
@@ -103,19 +106,33 @@ const props = defineProps({
 
 
 
-const itemsRef = ref(props.items);
+const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
-const firstProperty = ref(Object.keys(props.items)[0]);
-
+let lastCategory = '';
 
 onUpdated(()=>{
   if(searchTerm.value === ''){
-    itemsRef.value = props.items;
+    itemsRef.value = getData(props.items);
+    lastCategory = '';
   }
 })
-onMounted(()=>{
-  console.log(props.items[firstProperty.value]);
-})
+
+
+function getData (data){
+  if(Array.isArray(data)){
+    return data
+  }else{
+    return data.data;
+  }
+}
+
+function labelCategory(category) {
+  if (category !== lastCategory) {
+    lastCategory = category;
+    return true;
+  }
+  return false;
+}
 
 
 
