@@ -22,7 +22,7 @@
       </form>
 
       <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead class="sticky top-28 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr >
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
                     <th v-if="key !== 'id' && key !== 'category'"  class="px-6 py-3">

@@ -15,7 +15,7 @@
     </div>
     <div class="container mx-auto px-4 max-w-screen-xl">
         
-        <header class="py-4 mb-4 grid grid-cols-2 gap-4">
+        <header class="sticky top-0 z-50 py-4 mb-4 grid grid-cols-2 gap-4 bg-white">
             <div class="text-left">
                 <h1 class="text-xl font-bold"><slot name="title" /></h1>
                 <h2><slot name="subtitle" /></h2>
