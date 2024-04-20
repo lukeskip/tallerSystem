@@ -52,7 +52,10 @@ class InvoiceService
 
     public function getById($id)
     {
-        $invoice = Invoice::with("invoiceItems")->find($id);
+        $invoice = Invoice::with(['invoiceItems' => function ($query) {
+            $query->orderBy('created_at', 'desc'); 
+        }])->find($id);
+        
         if($invoice){
             return [
                 'id'=>$invoice->id,

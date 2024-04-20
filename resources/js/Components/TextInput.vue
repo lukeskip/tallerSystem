@@ -5,6 +5,12 @@ const model = defineModel({
     type: String,
     required: true,
 });
+const props = defineProps({
+    name: {
+      type: String,
+    },
+    
+});
 
 const input = ref(null);
 
@@ -22,5 +28,6 @@ defineExpose({ focus: () => input.value.focus() });
         class="border-gray-300 w-full focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
         v-model="model"
         ref="input"
+        :name="name"
     />
 </template>

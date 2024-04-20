@@ -107,10 +107,9 @@
                 clearFormData()
             }else{
                 console.log(`/${response.data.redirect}`);
-                router.visit(`/cotizaciones/2024_0029`);
                 emit('close');
             }
-            router.visit(`/${props.route}`);
+            router.reload();
         } catch (error) {
             errors.value = error.response.data.errors;
             console.log(error);

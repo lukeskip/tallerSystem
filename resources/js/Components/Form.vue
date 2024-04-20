@@ -94,11 +94,10 @@
             const response = await axios.post(`/${props.route}`,formData.value);
             if(stay){
                 clearFormData()
-                router.reload();
             }else{
-                router.visit(`/${response.data.redirect}`);
                 emit('close');
             }
+            router.reload({preserveState:false});
         } catch (error) {
             errors.value = error.response.data.errors;
             console.log(error);

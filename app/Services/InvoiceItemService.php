@@ -67,6 +67,7 @@ class InvoiceItemService
     }
 
     protected function validateData($request){
+
         $validator = Validator::make($request->all(), [
             'label' => 'required|string',
             'description' => 'required|string',
@@ -74,7 +75,8 @@ class InvoiceItemService
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'unit_type' => 'required|string',
-            'provider_id'=> 'numeric'
+            'provider_id'=> 'numeric',
+            'invoice_id'  => 'nullable'
         ]);
     
         if ($validator->fails()) {

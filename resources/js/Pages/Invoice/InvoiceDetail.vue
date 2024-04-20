@@ -39,14 +39,18 @@
     import TableComponent from '@/Components/TableComponent.vue';
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
-    import { ref }from 'vue';
+    import { ref, onMounted }from 'vue';
     import Swal from 'sweetalert2'
 
 
-    const { props } = defineProps({
+    const props  = defineProps({
         invoice: { type: [Object, Array], required: true },
         providers: { type: Array, required: true },
     });
+
+    onMounted(()=>{
+        console.log(props.invoice);
+    })
 
     const showModal = ref(false);
     const toggleModal = () => {

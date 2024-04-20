@@ -5,7 +5,7 @@
 
       <form v-if="root && !inner" @submit.prevent="submitSearch(root)" class="flex justify-end space-x-4">
         <div class="flex mb-2 gap-1">
-          <TextInput v-model="searchTerm" />
+          <TextInput v-model="searchTerm" :name="'search'" />
           <PrimaryButton>
             Buscar
           </PrimaryButton>
@@ -14,7 +14,7 @@
 
       <form v-if="inner" @submit.prevent="submitSearchFilter" class="flex justify-end space-x-4">
         <div class="flex mb-2 gap-1">
-          <TextInput v-model="searchTerm" />
+          <TextInput v-model="searchTerm" :name="'search'"/>
           <PrimaryButton>
             Buscar en esta cotización
           </PrimaryButton>
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref,onUpdated } from 'vue';
 import showLabel from '@/helpers/showLabel';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
@@ -99,7 +99,14 @@ const props = defineProps({
 
 
 
-const itemsRef = ref(getData(props.items))
+const itemsRef = ref(getData(props.items));
+const searchTerm = ref('');
+
+onUpdated(()=>{
+  if(searchTerm.value === ''){
+    itemsRef.value = getData(props.items);
+  }
+})
 
 function getData (data){
   if(Array.isArray(data)){
@@ -109,7 +116,7 @@ function getData (data){
   }
 }
 
-const searchTerm = ref('');
+
 
 const submitSearch = (root) => {
   router.get(root, { search: searchTerm.value })
