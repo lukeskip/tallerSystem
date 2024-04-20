@@ -44,17 +44,18 @@
             type:Function
         },
         route :{type:String,required:true},
-        editId:{type:Number}
+        editId:{type:Number},
+        default:{type:Object}
     })
 
     const _token = window.csrf_token;
     const app_url = window.app_url;
     const errors = ref([]);
-    const parentReady = props.parentId ? {[props.parentId[0]]:props.parentId[1]} : {};
+   
 
     const fields = ref([]);
     const formData = ref({
-        ...parentReady,
+        ...props.default,
         _token
     });
     
@@ -105,6 +106,8 @@
             if(stay){
                 clearFormData()
             }else{
+                console.log(`/${response.data.redirect}`);
+                router.visit(`/cotizaciones/2024_0029`);
                 emit('close');
             }
             router.visit(`/${props.route}`);

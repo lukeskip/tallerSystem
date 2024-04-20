@@ -29,7 +29,8 @@ class InvoiceItemService
         if($validatedData['status']){
             $invoiceItem = InvoiceItem::find($id);
             $invoiceItem->update($validatedData['data']);
-            return $invoiceItem;    
+            return response()->json(['redirect'=> 'cotizaciones/'.$invoiceItem->invoice_id]);  
+              
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
         }
@@ -73,7 +74,6 @@ class InvoiceItemService
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'unit_type' => 'required|string',
-            'invoice_id'=> 'required|string',
             'provider_id'=> 'numeric'
         ]);
     

@@ -36,9 +36,9 @@ class InvoiceService
         $validatedData = $this->validateData($request);
         
         if($validatedData['status']){
-            $project = Invoice::find($id);
-            $project->update($validatedData['data']);
-            return $project;    
+            $invoice = Invoice::find($id);
+            $invoice->update($validatedData['data']);
+            return response()->json(['redirect'=> 'invoice/'.$invoice->id]);   
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
         }      
