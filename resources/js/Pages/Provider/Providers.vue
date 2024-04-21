@@ -1,5 +1,5 @@
 <script setup>
-    import MainLayout from '@/Layouts/MainLayout.vue';
+    import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
     import TableComponent from '@/Components/TableComponent.vue';
     
@@ -12,7 +12,7 @@
 
 <template>
     <Head title="Proveedores" />
-    <MainLayout>
+    <AuthenticatedLayout>
         <template #title>
             Proveedores
         </template>
@@ -25,7 +25,7 @@
             </div>
         </template>
 
-    </MainLayout>
+    </AuthenticatedLayout>
 </template>
 <style>
 

@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <AuthenticatedLayout>
 
         <template #title>
             {{ project.name }}
@@ -25,10 +25,10 @@
         </template>
 
         
-    </MainLayout>
+    </AuthenticatedLayout>
 </template>
 <script setup>
-    import MainLayout from '@/Layouts/MainLayout.vue';
+    import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
     import TableComponent from '@/Components/TableComponent.vue';
     import Modal from '@/Components/Modal.vue';

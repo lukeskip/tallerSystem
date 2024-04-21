@@ -6,6 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import menu from '@/menu.js'
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -29,21 +30,11 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
-                                <NavLink :active="route().current('proyectos.index')" :href="route('proyectos.index')">
-                                    <i class="fa-solid fa-folder mx-2"></i> Projectos
-                                </NavLink>
-                                <NavLink :active="route().current('clientes.index')"  :href="route('clientes.index')">
-                                    <i class="fa-solid fa-person  mx-2"></i> Clientes
-                                </NavLink>
-                                <NavLink :active="route().current('cotizaciones.index')"  :href="route('cotizaciones.index')">
-                                    <i class="fa-solid fa-file-invoice  mx-2"></i> Cotizaciones
-                                </NavLink>
-                                <NavLink :active="route().current('proveedores.index')" :href="route('proveedores.index')">
-                                    <i class="fa-solid fa-toolbox  mx-2"></i> Proveedores
-                                </NavLink>
+                                <template v-for="item in menu">
+                                    <NavLink :href="route(item.slug)" :active="route().current(item.slug)">
+                                     {{item.label}}
+                                    </NavLink>
+                                </template>
                             </div>
                         </div>
 
@@ -124,21 +115,12 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink  :active="route().current('proyectos.index')" :href="route('proyectos.index')">
-                            <i class="fa-solid fa-folder"></i> Projectos
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :active="route().current('clientes.index')" :href="route('clientes.index')">
-                            <i class="fa-solid fa-person"></i> Clientes
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :active="route().current('cotizaciones.index')"  :href="route('cotizaciones.index')">
-                            <i class="fa-solid fa-file-invoice"></i> Cotizaciones
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :active="route().current('proveedores.index')" :href="route('proveedores.index')">
-                            <i class="fa-solid fa-toolbox"></i> Proveedores
-                        </ResponsiveNavLink>
+                        <template v-for="item in menu">
+                            <ResponsiveNavLink :href="route(item.slug)" :active="route().current(item.slug)">
+                               {{item.label}}
+                            </ResponsiveNavLink>
+                        </template>
+                        
                     </div>
 
                     <!-- Responsive Settings Options -->
