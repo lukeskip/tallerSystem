@@ -28,7 +28,7 @@
             </a>
         </template>
         <template #main> 
-            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['delete','edit']" parentId="invoice_id"/>
+            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" parentId="invoice_id"/>
             
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>

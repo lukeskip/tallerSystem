@@ -36,7 +36,7 @@
           </thead>
           <tbody>
             <template v-for="item in itemsRef" :key="item.id">
-              <tr class="w-full" v-if="labelCategory(item.category) && lastCategory !== ''">
+              <tr class="w-full" v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
                     <td class="px-6 py-3 text-center w-full capitalize" :colspan="Object.keys(itemsRef[1]).length">
                       {{ lastCategory }}
                     </td>
