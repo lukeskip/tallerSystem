@@ -13,17 +13,34 @@ class PDFController extends Controller
     public function publish($id){
         $InvoiceService = new InvoiceService();
 
-        $invoiceItems = $InvoiceService->getById('2024_0006'); 
+        $invoice = $InvoiceService->getById($id); 
+
+        $invoiceItems = $invoice['invoiceItems']->map(function ($item){
+            return [
+                'Concepto'=> $item['label'],
+                'Descripción'=> $item['description'],
+                'Unidades'=> $item['units'],
+                'Valor Unitario'=> $item['unit_price'],
+                'category'=> $item['category'],
+                'Subtotal'=> $item['total_comission'],
+            ];
+        });
         
         $data = [
-            'invoiceItems' => $invoiceItems['invoiceItems'],
+            'invoice' => $invoice,
+            'invoiceItems' => $invoiceItems,
         ];
 
-        $html = view('pdf.invoice', $data)->render();
 
-        // return dump($html);
+
+        $html = view('pdf.invoice', $data)->render();
+        
         $pdf = Pdf::loadHTML($html);
-        return $pdf->download();
+        $pdf->set_option('isRemoteEnabled', true);
+        
+        $fileName = 'cotización_' . $invoice['id'] . '.pdf';
+
+        return $pdf->download($fileName);
 
     }
 }

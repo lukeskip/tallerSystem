@@ -87,6 +87,7 @@ class InvoiceService
         if($invoice){
             return [
                 'id'=>$invoice->id,
+                'project'=>$invoice->project->name,
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
                 'invoiceItems' => $invoiceItems,
