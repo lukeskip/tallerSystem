@@ -5,6 +5,7 @@
             v-model="model"
             ref="input"
             :name="name"
+            :type="type"
             @input="handleChange"
         />
         <div v-if="autocomplete && model !== '' && autocompleteOptions.length > 0" class="absolute z-10 w-full bg-white shadow-lg rounded-md">
@@ -29,8 +30,11 @@ import { onMounted, ref } from 'vue';
         type: String,
         },
         autocomplete: {
-            type: Array,
+            type: [Array,String],
         },
+        type:{
+            type:String
+        }
         
     });
 

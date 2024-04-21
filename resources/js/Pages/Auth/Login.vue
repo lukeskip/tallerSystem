@@ -44,7 +44,7 @@ const submit = () => {
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full no-border"
                     v-model="form.email"
                     required
                     autofocus
@@ -60,7 +60,7 @@ const submit = () => {
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full no-border"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -92,3 +92,8 @@ const submit = () => {
         </form>
     </GuestLayout>
 </template>
+<style>
+.no-border{
+    border:0;
+}
+</style>

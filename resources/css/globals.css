@@ -7,3 +7,15 @@
 .mainContainer{
     min-height: 80vh;
 }
+
+.text-main-color{
+    color:#9e915f
+}
+.bg-main-color{
+    color:#9e915f
+}
+
+.border-main-color{
+    --tw-border-opacity: 1;
+    border-color: #9e915f;
+}
