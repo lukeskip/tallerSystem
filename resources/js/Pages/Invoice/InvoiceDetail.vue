@@ -3,7 +3,11 @@
     <AuthenticatedLayout>
         
         <template #title>
-            Cotización {{invoice.id}} ({{ invoice.amount }}) 
+            Cotización {{invoice.id}} 
+            <div v-if="invoice.balance">
+                <span :class="{ 'line-through': invoice.balance }">({{ invoice.amount }})</span> 
+                {{ invoice.balance }}
+            </div>
         </template>
         <template #subtitle>
             {{ invoice.client }}
@@ -30,7 +34,32 @@
             </a>
         </template>
         <template #main> 
-            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" parentId="invoice_id"/>
+
+
+            <div>
+                <!-- Tabs labels -->
+                <div class="flex">
+                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none" @click="toggleTab(1)">Conceptos</button>
+                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none"  @click="toggleTab(2)">Ingresos</button>
+                </div>
+
+                <!-- Tabs content -->
+                <div class="p-4 border-t border-gray-200 rounded">
+                    <!-- Tab 1 -->
+                    <div v-if="activeTab === 1">
+                        <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                    </div>
+                    
+                    <!-- Tab 2 -->
+                    <div v-if="activeTab === 2">
+                        <TableComponent :items="invoice.incomes" :inner="true" :root="'ingresos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+            
             
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>
@@ -46,6 +75,7 @@
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
     import TableComponentInvoiceItems from '@/Components/TableComponentInvoiceItems.vue';
+    import TableComponent from '@/Components/TableComponent.vue';
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
     import { ref, onMounted }from 'vue';
@@ -57,9 +87,18 @@
         providers: { type: Array, required: true },
     });
 
+    onMounted(()=>{
+        console.log(props.invoice);
+    })
+
+    const activeTab = ref(1);
+
     const showModal = ref(false);
     const toggleModal = () => {
         showModal.value = !showModal.value;
+    };
+    const toggleTab = (tab) => {
+        activeTab.value = tab;
     };
 
     const showModalIncome = ref(false);

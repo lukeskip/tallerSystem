@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Client;
+use App\Models\Income;
 use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use App\Utils\Utils;
@@ -47,9 +48,30 @@ class Invoice extends Model
         return "$" . number_format($totalComissions, 2);
         
     }
+    public function getBalanceAttribute()
+    {   
+        $totalComissions = 0;
+        $totalIncomes = 0;
+        
+        foreach ($this->invoiceItems as $item) {
+            $totalComissions += floatval(str_replace(',', '', $item->total_comission));
+        }
+
+        foreach ($this->incomes as $item) {
+            $totalIncomes += floatval(str_replace(',', '', $item->amount));
+        }
+
+        $balance = $totalComissions - $totalIncomes;
+        return "$" . number_format($balance, 2);
+        
+    }
 
     public function invoiceItems()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+    public function incomes()
+    {
+        return $this->hasMany(Income::class);
     }
 }

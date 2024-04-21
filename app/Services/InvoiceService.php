@@ -63,7 +63,7 @@ class InvoiceService
 
     public function getById($id)
     {
-        $invoice = Invoice::with(['invoiceItems' => function ($query) {
+        $invoice = Invoice::with(['incomes','invoiceItems' => function ($query) {
             $query
             ->orderBy('category', 'asc')
             ->orderBy('created_at', 'desc');
@@ -91,6 +91,8 @@ class InvoiceService
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
                 'invoiceItems' => $invoiceItems,
+                'incomes' => $invoice->incomes,
+                'balance' => $invoice->balance,
                 'format_date'=>$invoice->format_date,
             ];
         }else {

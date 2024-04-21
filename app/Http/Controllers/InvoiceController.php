@@ -30,9 +30,7 @@ class InvoiceController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-
-        
+    {   
         $fields = Utils::getFields('invoices');
         return response()->json($fields);
     }
