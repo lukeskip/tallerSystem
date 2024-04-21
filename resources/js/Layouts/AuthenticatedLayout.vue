@@ -12,7 +12,7 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('proyectos.index')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
@@ -31,6 +31,18 @@ const showingNavigationDropdown = ref(false);
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
+                                </NavLink>
+                                <NavLink :active="route().current('proyectos.index')" :href="route('proyectos.index')">
+                                    <i class="fa-solid fa-folder mx-2"></i> Projectos
+                                </NavLink>
+                                <NavLink :active="route().current('clientes.index')"  :href="route('clientes.index')">
+                                    <i class="fa-solid fa-person  mx-2"></i> Clientes
+                                </NavLink>
+                                <NavLink :active="route().current('cotizaciones.index')"  :href="route('cotizaciones.index')">
+                                    <i class="fa-solid fa-file-invoice  mx-2"></i> Cotizaciones
+                                </NavLink>
+                                <NavLink :active="route().current('proveedores.index')" :href="route('proveedores.index')">
+                                    <i class="fa-solid fa-toolbox  mx-2"></i> Proveedores
                                 </NavLink>
                             </div>
                         </div>
@@ -115,6 +127,18 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink  :active="route().current('proyectos.index')" :href="route('proyectos.index')">
+                            <i class="fa-solid fa-folder"></i> Projectos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('clientes.index')" :href="route('clientes.index')">
+                            <i class="fa-solid fa-person"></i> Clientes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('cotizaciones.index')"  :href="route('cotizaciones.index')">
+                            <i class="fa-solid fa-file-invoice"></i> Cotizaciones
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('proveedores.index')" :href="route('proveedores.index')">
+                            <i class="fa-solid fa-toolbox"></i> Proveedores
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -145,7 +169,21 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="container mx-auto px-4 max-w-screen-xl">
+                    
+                    <header class="z-50 py-4 mb-4 grid grid-cols-2 gap-4 bg-white">
+                        <div class="text-left">
+                            <h1 class="text-xl font-bold"><slot name="title" /></h1>
+                            <h2><slot name="subtitle" /></h2>
+                            <h3><slot name="subtitle2" /></h3>
+                        </div>
+                        <div>
+                            <div class="flex space-x-1 justify-end"><slot name="submenu"/></div>
+                        </div>
+
+                    </header>
+                    <div class="mainContainer"><slot name="main" /></div>
+                </div>
             </main>
         </div>
     </div>

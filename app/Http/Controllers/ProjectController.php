@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\ProjectService;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use Illuminate\Support\Facades\Route;
 
 class ProjectController extends Controller
 {
@@ -22,6 +23,8 @@ class ProjectController extends Controller
       
         $projects = $this->service->getAll($request);
         return Inertia::render('Project/Projects', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
             'projects' => $projects,            
         ]);
     }

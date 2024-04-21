@@ -36,13 +36,13 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::resource('/proyectos', ProjectController::class);
-Route::resource('/clientes', ClientController::class);
-Route::resource('/cotizaciones', InvoiceController::class);
-Route::resource('/proveedores', ProviderController::class);
-Route::resource('/conceptos', InvoiceItemController::class);
+Route::resource('/proyectos', ProjectController::class)->middleware('auth');
+Route::resource('/clientes', ClientController::class)->middleware('auth');
+Route::resource('/cotizaciones', InvoiceController::class)->middleware('auth');
+Route::resource('/proveedores', ProviderController::class)->middleware('auth');
+Route::resource('/conceptos', InvoiceItemController::class)->middleware('auth');
 
-Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish');
+Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
