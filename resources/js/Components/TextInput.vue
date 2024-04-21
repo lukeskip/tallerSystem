@@ -1,7 +1,7 @@
 <template>
    <div class="relative">
         <input
-            class="border-gray-300 w-full focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+            class="border-gray-300 w-full focus:border-main-color rounded-md shadow-sm"
             v-model="model"
             ref="input"
             :name="name"

@@ -15,7 +15,7 @@
         
         <template #main>
             <div v-if="projects">
-                <TableComponent :items="projects" :root="'proyectos'" :actions="['delete','edit']" parentId='client_id'/>
+                <TableComponent :items="projects" :root="'proyectos'" :actions="['edit','delete']" parentId='client_id'/>
             </div>
             <div v-else>
                 <p>No hay proyectos disponibles.</p>

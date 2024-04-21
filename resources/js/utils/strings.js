@@ -27,6 +27,7 @@ const strings = {
         phone:"Teléfono",
         email:"Email",
         category:"Categoría",
-        file:"Folio"
+        file:"Folio",
+        forgot:"¿Olvidaste tu contraseña?",
 };
 export default strings;

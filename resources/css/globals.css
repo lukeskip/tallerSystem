@@ -14,6 +14,9 @@
 .bg-main-color{
     background:#9e915f
 }
+.bg-main-color-dark{
+    background:#574e28
+}
 
 .border-main-color{
     --tw-border-opacity: 1;

@@ -44,7 +44,7 @@
                       <template v-else-if="key !== 'id'">{{ value }}</template>
                     </td>
                   </template>
-                  <td class="border px-4 py-2" v-if="actions.length">
+                  <td class="border px-4 py-2 text-center" v-if="actions.length">
 
                     <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="[parentId,item[parentId]]"/>
                     
