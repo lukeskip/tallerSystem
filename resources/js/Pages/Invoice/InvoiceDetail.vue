@@ -20,7 +20,11 @@
             </a>
             <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
                 <i class="fa-solid fa-trash"></i>
-                    Borrar Cotización
+                    Borrar
+            </a>
+            <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700" as="button">
+                <i class="fa-solid fa-download"></i>
+                    Descargar
             </a>
         </template>
         <template #main> 

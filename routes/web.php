@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\InvoiceItemController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,8 @@ Route::resource('/clientes', ClientController::class);
 Route::resource('/cotizaciones', InvoiceController::class);
 Route::resource('/proveedores', ProviderController::class);
 Route::resource('/conceptos', InvoiceItemController::class);
+
+Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
