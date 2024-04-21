@@ -133,6 +133,19 @@ class InvoiceService
         return $providers;
     }
 
+    public function getInvoices (){
+        $invoices = Invoice::all();
+        
+        $invoices->transform(function ($invoice) {
+            return [
+                'id' => $invoice->id,
+                'name' => $invoice->project->name." ".$invoice->project->client->name,    
+            ];
+        });
+
+        return $invoices;
+    }
+
     protected function validateData($request){
         $validator = Validator::make($request->all(), [
             'id'=>'required|string',

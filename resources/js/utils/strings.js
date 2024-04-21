@@ -29,5 +29,6 @@ const strings = {
         category:"Categoría",
         file:"Folio",
         forgot:"¿Olvidaste tu contraseña?",
+        type:"Tipo",
 };
 export default strings;

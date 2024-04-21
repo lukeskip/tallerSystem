@@ -89,7 +89,7 @@
 
     const clearFormData = ()=>{
         fields.value.map(field => {      
-            if(field.type === "varchar" || field.type === "longtext" ){
+            if(field.type === "varchar" || field.type === "longtext"  || field.type === "text"){
                 formData.value[field.slug]= ref('');
             }
 

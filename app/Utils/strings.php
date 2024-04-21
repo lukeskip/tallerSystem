@@ -14,4 +14,8 @@ return [
     'email'=>'Email',
     'phone'=>'Teléfono',
     'category'=>'Categoría',
+    'amount'=>'Monto',
+    'type'=>'Tipo',
+    'reference'=>'Referencia',
+    'invoice_id'=>'Cotización',
 ];

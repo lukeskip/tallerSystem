@@ -6,7 +6,9 @@
                     {{ field.label }}
                 </label>
                 
-                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+
+                <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
                 
                 <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
                 
@@ -33,6 +35,7 @@
 </template>
 <script setup>
     import TextInput from '@/Components/TextInput.vue';
+    import TextArea from '@/Components/TextArea.vue';
     import NumberInput from '@/Components/NumberInput.vue';
     import Select from '@/Components/Select.vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -84,7 +87,7 @@
 
     const clearFormData = ()=>{
         fields.value.map(field => {      
-            if(field.type === "varchar" || field.type === "longtext" ){
+            if(field.type === "varchar" || field.type === "longtext" || field.type === "text"){
                 formData.value[field.slug]= ref('');
             }
 

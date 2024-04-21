@@ -23,7 +23,7 @@ class Utils
         $fields = Schema::getColumnListing($table);
         $fieldsEnd = [];
         $fieldsToExclude = ['created_at','updated_at','id','invoice_id'];
-        $fieldsToHide = ['invoice_id','project_id'];
+        $fieldsToHide = ['project_id'];
 
         foreach ($fields as $index => $field) {
             if(!in_array($field, $fieldsToExclude)){

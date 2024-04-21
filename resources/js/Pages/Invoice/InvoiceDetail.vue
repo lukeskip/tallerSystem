@@ -18,13 +18,15 @@
                 <i class="fa-solid fa-plus"></i>
                     Concepto
             </a>
+            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
+                <i class="fa-solid fa-plus"></i>
+                    Ingreso
+            </a>
             <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
                 <i class="fa-solid fa-trash"></i>
-                    Borrar
             </a>
             <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700" as="button">
                 <i class="fa-solid fa-download"></i>
-                    Descargar
             </a>
         </template>
         <template #main> 
@@ -32,6 +34,9 @@
             
             <Modal :show="showModal" @close="showModal = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>
+            </Modal>
+            <Modal :show="showModalIncome" @close="showModalIncome = false" >
+                <Form :default="{invoice_id:invoice.id}" :route="'ingresos'" @close="toggleModalIncome()"/>
             </Modal>
 
         </template>
@@ -55,6 +60,11 @@
     const showModal = ref(false);
     const toggleModal = () => {
         showModal.value = !showModal.value;
+    };
+
+    const showModalIncome = ref(false);
+    const toggleModalIncome = () => {
+        showModalIncome.value = !showModalIncome.value;
     };
 
     
