@@ -1,22 +1,24 @@
 <template>
-    <!-- Menú de navegación -->
-    <nav class="space-x-4">
-            <Link  :href="route('proyectos.index')" class="text-white hover:text-gray-300">
-                <i class="fa-solid fa-folder"></i> Projectos
-            </Link>
-            <Link  :href="route('clientes.index')" class="text-white hover:text-gray-300">
-                <i class="fa-solid fa-person"></i> Clientes
-            </Link>
-            <Link  :href="route('cotizaciones.index')" class="text-white hover:text-gray-300">
-                <i class="fa-solid fa-file-invoice"></i> Cotizaciones
-            </Link>
-            <Link :href="route('proveedores.index')" class="text-white hover:text-gray-300">
-                <i class="fa-solid fa-toolbox"></i> Proveedores
-            </Link>
-            
-        </nav>
+    <!-- Logo -->
+    <div class="shrink-0 flex items-center">
+        <Link :href="route('proyectos.index')">
+            <ApplicationLogo
+                class="block h-9 w-auto fill-current text-gray-800"
+            />
+        </Link>
+    </div>
+    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+        <template v-for="item in menu">
+            <NavLink :href="route(item.slug)" :active="route().current(item.slug)">
+                {{item.label}}
+            </NavLink>
+        </template>
+    </div>
 </template>
 <script setup>
-    import { Head, Link } from '@inertiajs/vue3';
+    import NavLink from '@/Components/NavLink.vue';
+    import menu from '@/menu.js'
+    import { Link } from '@inertiajs/vue3';
+    import ApplicationLogo from '@/Components/ApplicationLogo.vue';
     
 </script>
