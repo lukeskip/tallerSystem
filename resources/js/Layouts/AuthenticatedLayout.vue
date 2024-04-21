@@ -130,7 +130,7 @@ const showingNavigationDropdown = ref(false);
                     
                     <header class="z-50 py-4 mb-4 grid grid-cols-2 gap-4 bg-white">
                         <div class="text-left">
-                            <h1 class="text-xl font-bold"><slot name="title" /></h1>
+                            <h1 class="text-xl font-bold text-main-color uppercase"><slot name="title" /></h1>
                             <h2><slot name="subtitle" /></h2>
                             <h3><slot name="subtitle2" /></h3>
                         </div>
