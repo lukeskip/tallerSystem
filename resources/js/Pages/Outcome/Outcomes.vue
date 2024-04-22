@@ -7,7 +7,7 @@
 
         <template #main>
             <div v-if="outcomes">
-                <TableComponent :items="outcomes" :root="'egresos'" :actions="['edit','delete']" />
+                <TableComponent :items="outcomes" :root="'egresos'" :actions="['edit','delete']" :searchField="'description'"/>
             </div>
             <div v-else>
                 <p>No hay Egresos disponibles.</p>

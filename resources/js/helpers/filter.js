@@ -1,5 +1,6 @@
 const filter = (object, key, term) => {
-    console.log(term);
+    console.log(object);
+    console.log(key);
     object = object.filter((item) => {
         return item[key].toLowerCase().includes(term.toLowerCase());
         

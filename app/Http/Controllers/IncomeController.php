@@ -18,9 +18,9 @@ class IncomeController extends Controller
         $this->service = $incomeService;
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $incomes = $this->service->getAll();
+        $incomes = $this->service->getAll($request);
         
         return Inertia::render('Income/Incomes', [
             'incomes' => $incomes,

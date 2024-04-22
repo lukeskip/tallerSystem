@@ -72,17 +72,18 @@
                 <div class="p-4 border-t border-gray-200 rounded">
                     <!-- Tab 1 -->
                     <div v-if="activeTab === 1">
-                        <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                        <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" :searchField="'label'" parentId="invoice_id"/>
                     </div>
                     
                     <!-- Tab 2 -->
                     <div v-if="activeTab === 2">
-                        <TableComponent :items="invoice.incomes" :inner="true" :root="'ingresos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                        <TableComponent :items="invoice.incomes" :inner="true" :root="'ingresos'" :searchField="'description'" :actions="['edit','delete']" parentId="invoice_id"/>
                     </div>
 
                     <!-- Tab 3 -->
                     <div v-if="activeTab === 3">
-                        <TableComponent :items="invoice.outcomes" :inner="true" :root="'egresos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                        <TableComponent :items="invoice.outcomes" :inner="true" :root="'egresos'" :actions="['edit','delete']" parentId="invoice_id"
+                        :searchField="'description'"/>
                     </div>
                     
                     

@@ -18,9 +18,9 @@ class OutcomeController extends Controller
         $this->service = $outcomeService;
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $outcomes = $this->service->getAll();
+        $outcomes = $this->service->getAll($request);
         
         return Inertia::render('Outcome/Outcomes', [
             'outcomes' => $outcomes,

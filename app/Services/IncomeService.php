@@ -56,9 +56,17 @@ class IncomeService
         }
     }
 
-    public function getAll()
+    public function getAll($request)
     {
-        return Income::paginate()->map(function ($income) {
+        $incomes = Income::orderBy('id','desc');
+        
+        if ($request &&  $request->input('search')) {
+            $incomes->where('description', 'like', '%' . $request->input('search') . '%');
+        }
+        
+        $incomes = $incomes->paginate();
+
+        return $incomes->getCollection()->transform(function ($income) {
             return [
                 'id' => $income->id,
                 'description' => $income->description,

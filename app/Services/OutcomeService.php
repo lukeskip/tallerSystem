@@ -57,9 +57,18 @@ class OutcomeService
         }
     }
 
-    public function getAll()
+    public function getAll($request)
     {
-        return Outcome::paginate()->map(function ($outcome) {
+
+        $outcomes = Outcome::orderBy('id','desc');
+        
+        if ($request &&  $request->input('search')) {
+            $outcomes->where('description', 'like', '%' . $request->input('search') . '%');
+        }
+        
+        $outcomes = $outcomes->paginate();
+
+        return $outcomes->map(function ($outcome) {
             return [
                 'id' => $outcome->id,
                 'description' => $outcome->description,

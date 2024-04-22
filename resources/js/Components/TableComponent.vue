@@ -94,6 +94,10 @@ const props = defineProps({
     inner:{
       type:Boolean,
       default:false,
+    },
+    searchField:{
+      type:String,
+      default:"name"
     }
 });
 
@@ -122,7 +126,7 @@ const submitSearch = (root) => {
   router.get(root, { search: searchTerm.value })
 };
 const submitSearchFilter = () => {
-  itemsRef.value = filter(props.items,"label",searchTerm.value);
+  itemsRef.value = filter(props.items,props.searchField,searchTerm.value);
 };
 
 </script>
