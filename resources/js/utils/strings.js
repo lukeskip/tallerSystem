@@ -33,5 +33,6 @@ const strings = {
         cash:"Efectivo",
         transfer:"Transferencia",
         check:"Cheque",
+        reference:"Referencia",
 };
 export default strings;

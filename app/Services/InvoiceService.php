@@ -128,10 +128,19 @@ class InvoiceService
         }
     }
 
-    public function getAll()
+    public function getAll($request)
     {
 
-        $invoices = Invoice::with('project')->paginate();
+        $invoices = Invoice::with('project')->orderBy('id','desc');
+
+        if ($request &&  $request->input('search')) {
+            $invoices->where('id', 'like', '%' . $request->input('search') . '%')
+            ->orWhereHas('project', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('search') . '%');
+            });
+        }
+
+        $invoices = $invoices->paginate();
         
         $invoices->getCollection()->transform(function ($invoice) {
             return [
@@ -143,6 +152,7 @@ class InvoiceService
                 'format_date' => $invoice->format_date,
             ];
         });
+        
 
         return $invoices;
     }

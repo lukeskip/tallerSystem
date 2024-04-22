@@ -63,7 +63,12 @@ class Invoice extends Model
         }
 
         $balance = $totalComissions - $totalIncomes;
-        return "$" . number_format($balance, 2);
+        
+        if($totalIncomes > 0){
+            return "$" . number_format($balance, 2);
+        }else{
+            return null;
+        }
         
     }
 

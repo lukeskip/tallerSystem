@@ -17,9 +17,9 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = $this->service->getAll();
+        $invoices = $this->service->getAll($request);
         return Inertia::render('Invoice/Invoices', [
             'invoices' => $invoices,
             

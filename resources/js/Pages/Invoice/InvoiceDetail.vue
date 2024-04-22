@@ -4,9 +4,11 @@
         
         <template #title>
             Cotización {{invoice.id}} 
-            <div v-if="invoice.balance">
+            <div>
                 <span :class="{ 'line-through': invoice.balance }">({{ invoice.amount }})</span> 
-                {{ invoice.balance }}
+                <span v-if="invoice.balance">
+                    {{ invoice.balance }}
+                </span>
             </div>
         </template>
         <template #subtitle>
