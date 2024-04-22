@@ -1,20 +1,20 @@
 <template>
-    <Head title="Ingresos" />
+    <Head title="Egresos" />
     <AuthenticatedLayout>
         <template #title>
-          Ingresos
+          Egresos
         </template>
 
         <template #main>
-            <div v-if="incomes">
-                <TableComponent :items="incomes" :root="'ingresos'" :actions="['edit','delete']" />
+            <div v-if="outcomes">
+                <TableComponent :items="outcomes" :root="'egresos'" :actions="['edit','delete']" />
             </div>
             <div v-else>
-                <p>No hay Ingresos disponibles.</p>
+                <p>No hay Egresos disponibles.</p>
             </div>
 
             <Modal :show="showModal" @close="showModal = false" >
-                <Form route="ingresos" @close="toggleModal()" />
+                <Form route="egresos" @close="toggleModal()" />
             </Modal>
         </template>
 
@@ -29,7 +29,7 @@
     import {ref} from 'vue';
     
     const props = defineProps({
-        incomes: {
+        outcomes: {
             type: Object,
         },   
     });

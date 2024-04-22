@@ -23,6 +23,11 @@ const menu = [
         slug:'ingresos.index',
         icon:'<i class="fa-solid fa-toolbox"></i>',
         label:'Ingresos'
+    },  
+    {
+        slug:'egresos.index',
+        icon:'<i class="fa-solid fa-toolbox"></i>',
+        label:'Egresos'
     }  
 ];
 

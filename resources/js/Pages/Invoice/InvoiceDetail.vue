@@ -45,9 +45,27 @@
             <div>
                 <!-- Tabs labels -->
                 <div class="flex">
-                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none" @click="toggleTab(1)">Conceptos</button>
-                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none"  @click="toggleTab(2)">Ingresos</button>
-                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none"  @click="toggleTab(3)">Egresos</button>
+                    <button
+                        :class="{ 'bg-gray-800 text-white': activeTab === 1, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 1 }"
+                        class="py-2 px-4 focus:outline-none"
+                        @click="toggleTab(1)"
+                    >
+                        Conceptos
+                    </button>
+                    <button
+                        :class="{ 'bg-gray-800 text-white': activeTab === 2, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 2 }"
+                        class="py-2 px-4 focus:outline-none"
+                        @click="toggleTab(2)"
+                    >
+                        Ingresos
+                    </button>
+                    <button
+                        :class="{ 'bg-gray-800 text-white': activeTab === 3, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 3 }"
+                        class="py-2 px-4 focus:outline-none"
+                        @click="toggleTab(3)"
+                    >
+                        Egresos
+                    </button>
                 </div>
 
                 <!-- Tabs content -->
