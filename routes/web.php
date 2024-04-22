@@ -32,16 +32,17 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('/proyectos', ProjectController::class)->middleware('auth');
 
 Route::middleware(['auth','role:admin'])->group(function () {
-    Route::resource('/clientes', ClientController::class)->middleware('auth');
-    Route::resource('/cotizaciones', InvoiceController::class)->middleware('auth');
-    Route::resource('/proveedores', ProviderController::class)->middleware('auth');
-    Route::resource('/conceptos', InvoiceItemController::class)->middleware('auth');
-    Route::resource('/ingresos', IncomeController::class)->middleware('auth');
-    Route::resource('/egresos', OutcomeController::class)->middleware('auth');
+    Route::resource('/proyectos', ProjectController::class);
+    Route::resource('/clientes', ClientController::class);
+    Route::resource('/cotizaciones', InvoiceController::class);
+    Route::resource('/proveedores', ProviderController::class);
+    Route::resource('/conceptos', InvoiceItemController::class);
+    Route::resource('/ingresos', IncomeController::class);
+    Route::resource('/egresos', OutcomeController::class);
 });
+
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 
