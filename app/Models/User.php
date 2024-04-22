@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+         
+        return $this->role()->where('slug', $role)->exists();
+    }
+
+    public function isSuperAdmin(){
+        return $this->role()->where('slug', 'super_admin')->exists();
+    }
+    
+    public function isAdmin(){
+        return $this->role()->where('slug', 'admin')->exists();
+    }
+
+    
 }

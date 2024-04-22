@@ -9,6 +9,7 @@ use Database\Seeders\InvoiceItemSeeder;
 use Database\Seeders\InvoiceSeeder;
 use Database\Seeders\ProjectSeeder;
 use Database\Seeders\ProviderSeeder;
+use Database\Seeders\RoleSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
         $this->call(ClientSeeder::class);
         $this->call(ProjectSeeder::class);
         $this->call(InvoiceSeeder::class);

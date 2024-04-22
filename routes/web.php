@@ -26,20 +26,22 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return redirect()->route('login');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
 Route::resource('/proyectos', ProjectController::class)->middleware('auth');
-Route::resource('/clientes', ClientController::class)->middleware('auth');
-Route::resource('/cotizaciones', InvoiceController::class)->middleware('auth');
-Route::resource('/proveedores', ProviderController::class)->middleware('auth');
-Route::resource('/conceptos', InvoiceItemController::class)->middleware('auth');
-Route::resource('/ingresos', IncomeController::class)->middleware('auth');
-Route::resource('/egresos', OutcomeController::class)->middleware('auth');
+
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::resource('/clientes', ClientController::class)->middleware('auth');
+    Route::resource('/cotizaciones', InvoiceController::class)->middleware('auth');
+    Route::resource('/proveedores', ProviderController::class)->middleware('auth');
+    Route::resource('/conceptos', InvoiceItemController::class)->middleware('auth');
+    Route::resource('/ingresos', IncomeController::class)->middleware('auth');
+    Route::resource('/egresos', OutcomeController::class)->middleware('auth');
+});
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 
