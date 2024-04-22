@@ -21,5 +21,6 @@ return [
     'cash'=>'Efectivo',
     'transfer'=>'Transferencia',
     'check'=>'Cheque',
-    'pending'=>'Competed',
+    'pending'=>'Pendiente',
+    'completed'=>'Completada',
 ];

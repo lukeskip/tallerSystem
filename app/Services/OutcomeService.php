@@ -87,7 +87,7 @@ class OutcomeService
         $validator = Validator::make($request->all(), [
             'description' => 'nullable|string',
             'amount' => 'required|numeric',
-            'type' => 'string',
+            'type' => 'required|string',
             'reference' => 'string',
             'image' => 'nullable|string',
             'status' => 'required|string',

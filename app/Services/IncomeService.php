@@ -84,7 +84,7 @@ class IncomeService
         $validator = Validator::make($request->all(), [
             'description' => 'nullable|string',
             'amount' => 'required|numeric',
-            'type' => 'string',
+            'type' => 'required|string',
             'reference' => 'string',
             'invoice_id' => 'required|string', // Puedes ajustar esta validación según tus necesidades
         ]);
