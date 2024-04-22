@@ -55,7 +55,7 @@ import { onMounted, ref } from 'vue';
     }
     const handleChange = ()=>{
         
-        if(autocompleteOptions.value && model.value !== ''){
+        if(autocompleteOptions.value && model.value !== '' && Array.isArray(props.autocomplete)){
             autocompleteOptions.value = props.autocomplete.filter((item)=>{
                 return item.toLowerCase().includes(model.value.toLowerCase())
             });
