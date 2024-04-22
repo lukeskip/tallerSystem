@@ -18,4 +18,8 @@ return [
     'type'=>'Tipo',
     'reference'=>'Referencia',
     'invoice_id'=>'Cotización',
+    'cash'=>'Efectivo',
+    'transfer'=>'Transferencia',
+    'check'=>'Cheque',
+    'pending'=>'Competed',
 ];

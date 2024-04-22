@@ -41,7 +41,7 @@
                       <template v-if="index=== 1 && root !== '' && !inner">
                         <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
-                      <template v-else-if="key !== 'id'">{{ value }}</template>
+                      <template v-else-if="key !== 'id'">{{ showLabel(value) }}</template>
                     </td>
                   </template>
                   <td class="border px-4 py-2 text-center" v-if="actions.length">

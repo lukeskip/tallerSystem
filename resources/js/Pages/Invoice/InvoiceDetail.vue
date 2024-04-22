@@ -26,6 +26,10 @@
                 <i class="fa-solid fa-plus"></i>
                     Ingreso
             </a>
+            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
+                <i class="fa-solid fa-plus"></i>
+                    Egreso
+            </a>
             <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
                 <i class="fa-solid fa-trash"></i>
             </a>
@@ -41,6 +45,7 @@
                 <div class="flex">
                     <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none" @click="toggleTab(1)">Conceptos</button>
                     <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none"  @click="toggleTab(2)">Ingresos</button>
+                    <button class="py-2 px-4 bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none"  @click="toggleTab(3)">Egresos</button>
                 </div>
 
                 <!-- Tabs content -->
@@ -54,6 +59,11 @@
                     <div v-if="activeTab === 2">
                         <TableComponent :items="invoice.incomes" :inner="true" :root="'ingresos'" :actions="['edit','delete']" parentId="invoice_id"/>
                     </div>
+
+                    <!-- Tab 3 -->
+                    <div v-if="activeTab === 3">
+                        <TableComponent :items="invoice.outcomes" :inner="true" :root="'egresos'" :actions="['edit','delete']" parentId="invoice_id"/>
+                    </div>
                     
                     
                 </div>
@@ -66,6 +76,9 @@
             </Modal>
             <Modal :show="showModalIncome" @close="showModalIncome = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'ingresos'" @close="toggleModalIncome()"/>
+            </Modal>
+            <Modal :show="showModalOutcome" @close="showModalOutcome = false" >
+                <Form :default="{invoice_id:invoice.id}" :route="'egresos'" @close="toggleModalOutcome()"/>
             </Modal>
 
         </template>
@@ -104,6 +117,10 @@
     const showModalIncome = ref(false);
     const toggleModalIncome = () => {
         showModalIncome.value = !showModalIncome.value;
+    };
+    const showModalOutcome = ref(false);
+    const toggleModalOutcome = () => {
+        showModalOutcome.value = !showModalOutcome.value;
     };
 
     

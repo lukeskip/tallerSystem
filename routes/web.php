@@ -8,6 +8,7 @@ use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\OutcomeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +39,7 @@ Route::resource('/cotizaciones', InvoiceController::class)->middleware('auth');
 Route::resource('/proveedores', ProviderController::class)->middleware('auth');
 Route::resource('/conceptos', InvoiceItemController::class)->middleware('auth');
 Route::resource('/ingresos', IncomeController::class)->middleware('auth');
+Route::resource('/egresos', OutcomeController::class)->middleware('auth');
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Client;
 use App\Models\Income;
+use App\Models\Outcome;
 use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use App\Utils\Utils;
@@ -73,5 +74,9 @@ class Invoice extends Model
     public function incomes()
     {
         return $this->hasMany(Income::class);
+    }
+    public function outcomes()
+    {
+        return $this->hasMany(Outcome::class);
     }
 }

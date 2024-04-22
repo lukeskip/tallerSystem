@@ -16,7 +16,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('type'); 
-            $table->string('reference'); 
+            $table->string('reference');
+            $table->string('image')->nullable(); 
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->timestamps();

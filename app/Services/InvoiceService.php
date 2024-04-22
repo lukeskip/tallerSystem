@@ -63,7 +63,7 @@ class InvoiceService
 
     public function getById($id)
     {
-        $invoice = Invoice::with(['incomes','invoiceItems' => function ($query) {
+        $invoice = Invoice::with(['incomes','outcomes','invoiceItems' => function ($query) {
             $query
             ->orderBy('category', 'asc')
             ->orderBy('created_at', 'desc');
@@ -82,6 +82,33 @@ class InvoiceService
                 "total_comission"=>"$".$item->total_comission,
             ];
         });
+
+        $incomes = $invoice->incomes->map(function ($item) {
+            return [
+                "id"=>$item->id,
+                "description"=>$item->description,
+                "type"=>$item->type,
+                "amount"=>$item->amount,
+                "reference"=>$item->reference,
+                "image"=>$item->image,
+                "invoice_id"=>$item->invoice_id,
+                "date"=>$item->format_date,    
+            ];
+        });
+
+        $outcomes = $invoice->outcomes->map(function ($item) {
+            return [
+                "id"=>$item->id,
+                "description"=>$item->description,
+                "type"=>$item->type,
+                "amount"=>$item->amount,
+                "reference"=>$item->reference,
+                "image"=>$item->image,
+                "status"=>$item->status,
+                "date"=>$item->format_date,
+               
+            ];
+        });
        
         
         if($invoice){
@@ -91,7 +118,8 @@ class InvoiceService
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
                 'invoiceItems' => $invoiceItems,
-                'incomes' => $invoice->incomes,
+                'incomes' => $incomes,
+                'outcomes' => $outcomes,
                 'balance' => $invoice->balance,
                 'format_date'=>$invoice->format_date,
             ];

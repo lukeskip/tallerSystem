@@ -4,62 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Outcome;
 use Illuminate\Http\Request;
+use App\Services\OutcomeService;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+use App\Utils\Utils;
 
 class OutcomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $outcomeService;
+
+    public function __construct(OutcomeService $outcomeService)
+    {
+        $this->service = $outcomeService;
+    }
+    
     public function index()
     {
-        //
+        $outcomes = $this->service->getAll();
+        
+        return Inertia::render('Outcome/Outcomes', [
+            'outcomes' => $outcomes,
+        ]);
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $fields = Utils::getFields('outcomes');
+        return response()->json($fields);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return $outcome = $this->service->create($request);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Outcome $outcome)
+    public function edit($id)
     {
-        //
+        $outcome = $this->service->getById($id,true);
+        $fields = Utils::getFields('outcomes');
+        
+        return response()->json(["item"=>$outcome,"fields"=>$fields]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Outcome $outcome)
+    public function update(Request $request, $id)
     {
-        //
+        return $this->service->update($id,$request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Outcome $outcome)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Outcome $outcome)
-    {
-        //
+        $this->service->delete($id);
     }
 }

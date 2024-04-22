@@ -30,5 +30,8 @@ const strings = {
         file:"Folio",
         forgot:"¿Olvidaste tu contraseña?",
         type:"Tipo",
+        cash:"Efectivo",
+        transfer:"Transferencia",
+        check:"Cheque",
 };
 export default strings;

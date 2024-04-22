@@ -35,6 +35,14 @@ class Utils
                     $clientService = new ClientService();
                     $clients = $clientService->getClients();
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$clients];
+                }elseif($field === 'type' && ($table === 'incomes' || $table === 'outcomes')){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'cash','name'=>Utils::getLabel('cash')],['id'=>'transfer','name'=>Utils::getLabel('transfer')],['id'=>'check','name'=>Utils::getLabel('check')]]];
+                }elseif($field === 'status'){
+                    if($table === 'incomes' || $table === 'outcomes'){
+                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')]]];
+                    }else{
+                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')],['id'=>'rejected','name'=>Utils::getLabel('rejected')]]];
+                    }
                 }elseif($field === 'category' && $table === 'invoice_items' && $id){
                     $InvoiceService = new InvoiceService();
                     $categories = $InvoiceService->getItemCategories($id);
