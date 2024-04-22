@@ -54,6 +54,6 @@ class OutcomeController extends Controller
 
     public function destroy($id)
     {
-        $this->service->delete($id);
+    $this->service->delete($id);
     }
 }

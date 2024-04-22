@@ -33,9 +33,10 @@ class OutcomeService
         }      
     }
 
-    public function delete(Outcome $outcome)
+    public function delete($id)
     {
-        return $outcome->delete();
+        $income = Outcome::find($id);
+        return $income->delete();
     }
 
     public function getById($id)

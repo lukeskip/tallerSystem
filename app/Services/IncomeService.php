@@ -33,8 +33,9 @@ class IncomeService
         }      
     }
 
-    public function delete(Income $income)
+    public function delete($id)
     {
+        $income = Income::find($id);
         return $income->delete();
     }
 
