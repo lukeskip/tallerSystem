@@ -15,6 +15,7 @@ class Outcome extends Model
         'reference',
         'status',
         'type',
+        'image',
     ];
 
     use HasFactory;

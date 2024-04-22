@@ -72,14 +72,15 @@
 
 <script setup>
 import { ref,onUpdated,watch } from 'vue';
-import showLabel from '@/helpers/showLabel';
+import showLabel from '@/helpers/showLabel.js';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
 import ActionButton from '@/Components/ActionButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Form from '@/Components/Form.vue';
-import filter from '@/helpers/filter'
+import filter from '@/helpers/filter';
+
 
 
 const props = defineProps({
@@ -109,6 +110,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
+
 
 onUpdated(()=>{
   if(searchTerm.value === ''){

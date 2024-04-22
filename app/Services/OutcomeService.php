@@ -6,6 +6,7 @@ use App\Models\Outcome;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class OutcomeService
 {
@@ -15,6 +16,17 @@ class OutcomeService
         $validatedData = $this->validateData($request);
         
         if ($validatedData['status']) {
+
+            if($request->file('image')){
+                $image = $request->file('image');
+            
+                $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                    'folder' => 'taller/incomes',
+                    'resource_type' => 'image'])->getSecurePath();
+
+                $validatedData['data']['image'] = $uploadedFileUrl;
+            }
+
             return $outcome = Outcome::create($validatedData['data']);   
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);
@@ -89,7 +101,7 @@ class OutcomeService
             'amount' => 'required|numeric',
             'type' => 'required|string',
             'reference' => 'string',
-            'image' => 'nullable|string',
+            'image' => 'nullable',
             'status' => 'required|string',
             'invoice_id' => 'required|string', // Puedes ajustar esta validación según tus necesidades
         ]);

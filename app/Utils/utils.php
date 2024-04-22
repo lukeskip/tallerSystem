@@ -35,6 +35,8 @@ class Utils
                     $clientService = new ClientService();
                     $clients = $clientService->getClients();
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$clients];
+                }elseif($field === 'image'){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'file','label'=>Utils::getLabel($field)];
                 }elseif($field === 'type' && ($table === 'incomes' || $table === 'outcomes')){
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'cash','name'=>Utils::getLabel('cash')],['id'=>'transfer','name'=>Utils::getLabel('transfer')],['id'=>'check','name'=>Utils::getLabel('check')]]];
                 }elseif($field === 'status'){

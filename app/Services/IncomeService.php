@@ -6,6 +6,7 @@ use App\Models\Income;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class IncomeService
 {
@@ -15,6 +16,17 @@ class IncomeService
         $validatedData = $this->validateData($request);
         
         if ($validatedData['status']) {
+           
+            if($request->file('image')){
+                $image = $request->file('image');
+            
+                $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                    'folder' => 'taller/incomes',
+                    'resource_type' => 'image'])->getSecurePath();
+
+                $validatedData['data']['image'] = $uploadedFileUrl;
+            }
+
             return $income = Income::create($validatedData['data']);   
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);

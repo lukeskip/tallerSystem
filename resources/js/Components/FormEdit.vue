@@ -6,6 +6,8 @@
             </label>
             
             <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]"/>
+
+            <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
             
             <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
             
@@ -102,7 +104,14 @@
 
     const handleSubmit = async (stay = false)=>{
         try {  
-            const response = await axios.put(`/${props.route}/${props.editId}`,formData.value);
+
+            const newFormData = new FormData();
+        
+            for (const key in formData.value) {
+                console.log(key);
+                newFormData.append(key, formData.value[key]);
+            }
+            const response = await axios.put(`/${props.route}/${props.editId}`,newFormData);
             if(stay){
                 clearFormData()
             }else{
@@ -115,6 +124,10 @@
             console.log(error);
         }
     }
+
+    const handleFileSelected = (file) => {
+        formData.value['image'] = file; 
+    };
 
 
 </script>

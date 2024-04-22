@@ -41,7 +41,7 @@
                       <template v-if="index=== 1 && root !== '' && !inner">
                         <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
-                      <template v-else-if="key !== 'id'">{{ showLabel(value) }}</template>
+                      <template v-else-if="key !== 'id'"><span v-html="showLabel(value)"></span></template>
                     </td>
                   </template>
                   <td class="border px-4 py-2 text-center" v-if="actions.length">
@@ -65,7 +65,7 @@
 
 <script setup>
 import { ref,onUpdated } from 'vue';
-import showLabel from '@/helpers/showLabel';
+import showLabel from '@/helpers/showLabel.js';
 import { Link,router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue'
 import ActionButton from '@/Components/ActionButton.vue';

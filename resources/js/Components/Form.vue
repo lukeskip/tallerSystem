@@ -7,6 +7,8 @@
                 </label>
                 
                 <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                
+                <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
 
                 <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
                 
@@ -35,6 +37,7 @@
 </template>
 <script setup>
     import TextInput from '@/Components/TextInput.vue';
+    import FileInput from '@/Components/FileInput.vue';
     import TextArea from '@/Components/TextArea.vue';
     import NumberInput from '@/Components/NumberInput.vue';
     import Select from '@/Components/Select.vue';
@@ -85,6 +88,10 @@
         }
     });
 
+    const handleFileSelected = (file) => {
+        formData.value['image'] = file; 
+    };
+
     const clearFormData = ()=>{
         fields.value.map(field => {      
             if(field.type === "varchar" || field.type === "longtext" || field.type === "text"){
@@ -100,7 +107,16 @@
 
     const handleSubmit = async (stay = false)=>{
         try {  
-            const response = await axios.post(`/${props.route}`,formData.value);
+
+            const newFormData = new FormData();
+        
+            for (const key in formData.value) {
+                console.log(key);
+                newFormData.append(key, formData.value[key]);
+            }
+
+            const response = await axios.post(`/${props.route}`,newFormData);
+
             if(stay){
                 clearFormData()
             }else{

@@ -14,6 +14,7 @@ class Income extends Model
         'invoice_id',
         'reference',
         'type',
+        'image',
     ];
 
     use HasFactory;
