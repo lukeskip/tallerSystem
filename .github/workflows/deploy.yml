@@ -32,7 +32,7 @@ jobs:
           ftp_host: ${{secrets.FTP_HOST}}
           ftp_username: ${{secrets.FTP_USERNAME}}
           ftp_password: ${{secrets.FTP_PASSWORD}}
-          local_source_dir: "/github/workspace/app"
+          local_source_dir: "/github/workspace/"
           dist_target_dir: "/app"
           delete: "false"
           exclude: "'^tests/'"
@@ -43,7 +43,7 @@ jobs:
           ftp_username: ${{secrets.FTP_USERNAME}}
           ftp_password: ${{secrets.FTP_PASSWORD}}
           local_source_dir: "/github/workspace/public/build"
-          dist_target_dir: "/vue-client"
+          dist_target_dir: "/public/build"
           delete: "false"
           exclude: ""
       - name: Run Post Deploy Script
