@@ -35,17 +35,7 @@ jobs:
           local_source_dir: "/github/workspace/"
           dist_target_dir: "/app"
           delete: "false"
-          exclude: "'^tests/'"
-      - name: FTP Deploy Front End
-        uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
-        with:
-          ftp_host: ${{secrets.FTP_HOST}}
-          ftp_username: ${{secrets.FTP_USERNAME}}
-          ftp_password: ${{secrets.FTP_PASSWORD}}
-          local_source_dir: "/github/workspace/public/build"
-          dist_target_dir: "/public/build"
-          delete: "false"
-          exclude: ""
+          exclude: "'^tests/' 'vendor/'"
       - name: Run Post Deploy Script
         uses: garygrossgarten/github-action-ssh@release
         with:
