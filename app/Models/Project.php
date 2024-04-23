@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Invoice;
+use App\Models\File;
 use Carbon\Carbon;
 use App\Utils\Utils;
 
@@ -21,6 +22,11 @@ class Project extends Model
 
     public function invoices(){
         return $this->hasMany(Invoice::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
     
     public function client()

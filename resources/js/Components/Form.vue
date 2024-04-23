@@ -3,7 +3,7 @@
         <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
             <div class="mt-2"  v-for="field in fields">
                 <label class="block text-gray-700 text-sm font-bold mb-2">
-                    {{ field.label }}
+                    {{ showLabel(field.slug) }}
                 </label>
                 
                 <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
@@ -46,7 +46,8 @@
     import { router } from '@inertiajs/vue3';
     import {ref,onMounted,defineEmits} from 'vue';
     import axios from 'axios';
-    import strings from '@/utils/strings.js'
+    import strings from '@/utils/strings.js';
+    import showLabel from '@/helpers/showLabel.js';
     
     const emit  = defineEmits(['close']);
 
@@ -89,7 +90,7 @@
     });
 
     const handleFileSelected = (file) => {
-        formData.value['image'] = file; 
+        formData.value['file'] = file; 
     };
 
     const clearFormData = ()=>{

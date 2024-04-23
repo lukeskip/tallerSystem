@@ -17,8 +17,8 @@ class IncomeService
         
         if ($validatedData['status']) {
            
-            if($request->file('image')){
-                $image = $request->file('image');
+            if($request->file('file')){
+                $image = $request->file('file');
             
                 $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
                     'folder' => 'taller/incomes',

@@ -25,34 +25,56 @@ class Utils
         $fieldsToExclude = ['created_at','updated_at','id','invoice_id'];
         $fieldsToHide = ['project_id'];
 
+        if($table === 'files'){
+            array_push($fieldsToExclude, 'name', 'extension', 'project_id','preview');
+        }
+
         foreach ($fields as $index => $field) {
             if(!in_array($field, $fieldsToExclude)){
                 if($field === 'provider_id'){
                     $providerService = new InvoiceService();
                     $providers = $providerService->getProviders();
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$providers];
-                }elseif($field === 'client_id'){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>$providers];
+                }
+                
+                elseif($field === 'client_id'){
                     $clientService = new ClientService();
                     $clients = $clientService->getClients();
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>$clients];
-                }elseif($field === 'image'){
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'file','label'=>Utils::getLabel($field)];
-                }elseif($field === 'type' && ($table === 'incomes' || $table === 'outcomes')){
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'cash','name'=>Utils::getLabel('cash')],['id'=>'transfer','name'=>Utils::getLabel('transfer')],['id'=>'check','name'=>Utils::getLabel('check')]]];
-                }elseif($field === 'status'){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>$clients];
+                }
+                
+                elseif($field === 'image'){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'file'];
+                }
+                
+                elseif($field === 'type' && ($table === 'incomes' || $table === 'outcomes')){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'cash','name'=>Utils::getLabel('cash')],['id'=>'transfer','name'=>Utils::getLabel('transfer')],['id'=>'check','name'=>Utils::getLabel('check')]]];
+                }
+                
+                elseif($field === 'url' && $table === 'files'){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> 'file'];
+                }
+                
+                elseif($field === 'status'){
                     if($table === 'incomes' || $table === 'outcomes'){
-                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')]]];
+                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')]]];
                     }else{
-                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','label'=>Utils::getLabel($field),'options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')],['id'=>'rejected','name'=>Utils::getLabel('rejected')]]];
+                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')],['id'=>'rejected','name'=>Utils::getLabel('rejected')]]];
                     }
-                }elseif($field === 'category' && $table === 'invoice_items' && $id){
+                }
+                
+                elseif($field === 'category' && $table === 'invoice_items' && $id){
                     $InvoiceService = new InvoiceService();
                     $categories = $InvoiceService->getItemCategories($id);
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'label'=>Utils::getLabel($field),'autocomplete'=>$categories];
-                }elseif(in_array($field, $fieldsToHide)){
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'autocomplete'=>$categories];
+                }
+                
+                elseif(in_array($field, $fieldsToHide)){
                     $fieldsEnd[] = ['slug'=>$field,'type'=> 'hidden','label'=>null];
-                }else{
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'label'=>Utils::getLabel($field)];
+                }
+                
+                else{
+                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field)];
                 }
 
             }else{

@@ -38,12 +38,11 @@ class ProjectService
     {
         $project = Project::find($id);
         $project->delete();
-        return Inertia::location(route('proyectos.index'));
     }
 
     public function getById($id,$edit=false)
     {
-        $project =  Project::with(['client','invoices'])->find($id);
+        $project =  Project::with(['client','invoices','files'])->find($id);
 
         if ($project) {
 
@@ -70,6 +69,15 @@ class ProjectService
                             "amount" => $invoice->amount,
                             'status'=> $invoice->status,
                             'format_date' => $invoice->format_date
+                        ];
+                    }),
+                    'files' => $project->files->map(function ($file) {
+                        return [
+                            "id"=>$file->id,
+                            "name"=>$file->name,
+                            "url"=>$file->url,
+                            "extension" => $file->extension,
+                            'format_date' => $file->format_date
                         ];
                     }),
                     'format_date' => $project->format_date,

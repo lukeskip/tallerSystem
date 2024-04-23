@@ -9,6 +9,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutcomeController;
+use App\Http\Controllers\FileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,6 +42,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::resource('/conceptos', InvoiceItemController::class);
     Route::resource('/ingresos', IncomeController::class);
     Route::resource('/egresos', OutcomeController::class);
+    Route::resource('/archivos', FileController::class);
 });
 
 

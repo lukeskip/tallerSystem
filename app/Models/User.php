@@ -52,7 +52,6 @@ class User extends Authenticatable
 
     public function hasRole($role)
     {
-         
         return $this->role()->where('slug', $role)->exists();
     }
 
