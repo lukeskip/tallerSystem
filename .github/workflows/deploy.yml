@@ -1,0 +1,53 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build Front End
+        run: npm install && NODE_ENV=CI npm run build
+        working-directory: ./vue-client
+      - name: Wipe Project Dir
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: rm -rf taller1100.chekogarcia.com.mx/*;
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          passphrase: ${{secrets.SSH_PASSWORD}}
+          privateKey: ${{secrets.SSH_PRIVATE_KEY}}
+          port: ${{secrets.SSH_PORT}}
+      - name: FTP Deploy API
+        uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
+        with:
+          ftp_host: ${{secrets.FTP_HOST}}
+          ftp_username: ${{secrets.FTP_USERNAME}}
+          ftp_password: ${{secrets.FTP_PASSWORD}}
+          local_source_dir: "/github/workspace/app"
+          dist_target_dir: "/app"
+          delete: "false"
+          exclude: "'^tests/'"
+      - name: FTP Deploy Front End
+        uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
+        with:
+          ftp_host: ${{secrets.FTP_HOST}}
+          ftp_username: ${{secrets.FTP_USERNAME}}
+          ftp_password: ${{secrets.FTP_PASSWORD}}
+          local_source_dir: "/github/workspace/public/build"
+          dist_target_dir: "/vue-client"
+          delete: "false"
+          exclude: ""
+      - name: Run Post Deploy Script
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: cd /taller1100.chekogarcia.com.mx/app; chmod 755 deploy/deploy.ci.sh; chmod o+x deploy/deploy.ci.sh; ./deploy/deploy.ci.sh; exit;
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          passphrase: ${{secrets.SSH_PASSWORD}}
+          privateKey: ${{secrets.SSH_PRIVATE_KEY}}
+          port: ${{secrets.SSH_PORT}}
