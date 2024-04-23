@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Invoice;
 use App\Models\File;
 use Carbon\Carbon;
-use App\Utils\Utils;
+use App\Utils\utils;
 
 class Project extends Model
 {
