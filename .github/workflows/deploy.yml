@@ -17,15 +17,7 @@ jobs:
       - name: Build Front End
         run: npm install && NODE_ENV=CI npm run build
         working-directory: ./
-      # - name: Wipe Project Dir
-      #   uses: garygrossgarten/github-action-ssh@release
-      #   with:
-      #     command: rm -rf taller1100.chekogarcia.com.mx/*;
-      #     host: ${{secrets.SSH_HOST}}
-      #     username: ${{secrets.SSH_USERNAME}}
-      #     passphrase: ${{secrets.SSH_PASSWORD}}
-      #     privateKey: ${{secrets.SSH_PRIVATE_KEY}}
-      #     port: ${{secrets.SSH_PORT}}
+
       - name: FTP Deploy API
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -38,13 +30,3 @@ jobs:
           exclude: |
             **/vendor/**
             **/node_modules/**
-
-      - name: Run Post Deploy Script
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: cd /taller1100.chekogarcia.com.mx/app; chmod 755 deploy/deploy.ci.sh; chmod o+x deploy/deploy.ci.sh; ./deploy/deploy.ci.sh; exit;
-          host: ${{secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USERNAME}}
-          passphrase: ${{secrets.SSH_PASSWORD}}
-          privateKey: ${{secrets.SSH_PRIVATE_KEY}}
-          port: ${{secrets.SSH_PORT}}
