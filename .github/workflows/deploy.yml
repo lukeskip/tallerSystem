@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
+
       - name: Build Front End
         run: npm install && NODE_ENV=CI npm run build
         working-directory: ./
