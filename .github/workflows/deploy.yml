@@ -33,7 +33,7 @@ jobs:
           username: ${{secrets.FTP_USERNAME}}
           password: ${{secrets.FTP_PASSWORD}}
           protocol: "ftps"
-          local-dir: ./app
+          local-dir: ./app/
           exclude: |
             **/vendor/**
             **/node_modules/**
