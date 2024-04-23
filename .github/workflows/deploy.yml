@@ -37,7 +37,6 @@ jobs:
           server-dir: /app/
           exclude: |
             **/vendor/**
-            **/node_modules/**
 
       - name: Run Post Deploy Script
         uses: garygrossgarten/github-action-ssh@release
