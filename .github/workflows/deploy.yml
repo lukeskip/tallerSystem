@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build Front End
         run: npm install && NODE_ENV=CI npm run build
-        working-directory: ./vue-client
+        working-directory: ./
       - name: Wipe Project Dir
         uses: garygrossgarten/github-action-ssh@release
         with:
