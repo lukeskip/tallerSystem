@@ -27,15 +27,15 @@ jobs:
           privateKey: ${{secrets.SSH_PRIVATE_KEY}}
           port: ${{secrets.SSH_PORT}}
       - name: FTP Deploy API
-        uses: kevinpainchaud/simple-ftp-deploy-action@v1.1.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          ftp_host: ${{secrets.FTP_HOST}}
-          ftp_username: ${{secrets.FTP_USERNAME}}
-          ftp_password: ${{secrets.FTP_PASSWORD}}
-          local_source_dir: "/github/workspace/"
-          dist_target_dir: "/app"
-          delete: "false"
+          server: ${{secrets.FTP_HOST}}
+          username: ${{secrets.FTP_USERNAME}}
+          password: ${{secrets.FTP_PASSWORD}}
+          protocol: "ftps"
+          local-dir: ./app
           exclude: "'^tests/' 'vendor/'"
+
       - name: Run Post Deploy Script
         uses: garygrossgarten/github-action-ssh@release
         with:
