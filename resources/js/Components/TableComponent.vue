@@ -3,23 +3,43 @@
     
     <div>
 
-      <form v-if="root && !inner" @submit.prevent="submitSearch(root)" class="flex justify-end space-x-4">
-        <div class="flex mb-2 gap-1">
-          <TextInput v-model="searchTerm" :name="'search'" />
-          <PrimaryButton>
-            Buscar
-          </PrimaryButton>
+      <div class="flex justify-between space-x-4">
+        
+        <div>
+          <template v-if="itemsRef.length && items.links" class="mb-7">
+            <Pagination :pagination="items.links"/>
+          </template>
         </div>
-      </form>
 
-      <form v-if="inner" @submit.prevent="submitSearchFilter" class="flex justify-end space-x-4">
-        <div class="flex mb-2 gap-1">
-          <TextInput v-model="searchTerm" :name="'search'"/>
-          <PrimaryButton>
-            Buscar en esta cotización
-          </PrimaryButton>
+        <div v-if="root && !inner">
+          <form  @submit.prevent="submitSearch(root)">
+            <div class="flex mb-2 gap-1">
+              <TextInput v-model="searchTerm" :name="'search'" />
+              <PrimaryButton>
+                Buscar
+              </PrimaryButton>
+            </div>
+          </form>
         </div>
-      </form>
+
+        <div v-else>
+          <form v-if="inner" @submit.prevent="submitSearchFilter" class="flex justify-end space-x-4">
+            <div class="flex mb-2 gap-1">
+              <TextInput v-model="searchTerm" :name="'search'"/>
+              <PrimaryButton>
+                Buscar en esta cotización
+              </PrimaryButton>
+            </div>
+          </form>
+        </div>
+
+
+       
+      </div>
+
+      
+
+      
 
       <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead class="sticky top-24 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -55,9 +75,7 @@
       <div v-else>
         <p class="text-xl">No hay información que mostrar</p>
       </div>
-      <template v-if="itemsRef.length && items.links">
-        <Pagination :pagination="items.links"/>
-      </template>
+      
     </div>
 
     

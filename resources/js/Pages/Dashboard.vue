@@ -10,7 +10,7 @@
         <template #main>
             <div class="flex flex-wrap">
                 <!-- Incomes -->
-                <div class="w-full md:w-1/3 pr-4">
+                <div class="w-full md:w-1/3 p-4">
                     <div class="bg-main-color shadow-md rounded-lg p-6">
                         <h2 class="text-lg font-semibold text-white mb-4">
                             Ingresos
@@ -21,7 +21,7 @@
                 </div>
                 
                 <!-- Outcomes -->
-                <div class="w-full md:w-1/3">
+                <div class="w-full md:w-1/3 p-4">
                     <div class="bg-main-color shadow-md rounded-lg p-6">
                         <h2 class="text-lg font-semibold text-white mb-4">
                             Egresos
@@ -32,7 +32,7 @@
                 </div>
                 
                 <!-- Balance -->
-                <div class="w-full md:w-1/3 pl-4">
+                <div class="w-full md:w-1/3 p-4">
                     <div class="bg-main-color shadow-md rounded-lg p-6">
                         <h2 class="text-lg font-semibold text-white mb-4">
                             Balance
