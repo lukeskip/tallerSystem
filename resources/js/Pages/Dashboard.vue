@@ -1,5 +1,5 @@
 <template>
-    <Head title="Dashboardaaaa" />
+    <Head title="Dashboarda" />
 
     <AuthenticatedLayout>
         <template #title>
