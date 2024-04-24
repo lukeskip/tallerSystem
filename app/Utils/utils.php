@@ -86,7 +86,7 @@ class Utils
     }
 
     public static function getLabel($slug){
-        $strings = include app_path('utils/strings.php');
+        $strings = include app_path('Utils/strings.php');
         if(isset($strings[$slug])){
             return $strings[$slug];
         }else{
