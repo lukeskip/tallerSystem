@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Carbon\Carbon;
 
 class IncomeService
 {
@@ -76,6 +77,15 @@ class IncomeService
         if ($request &&  $request->input('search')) {
             $incomes->where('description', 'like', '%' . $request->input('search') . '%');
         }
+
+        if ($request &&  $request->input('month')) {
+            $currentDate = Carbon::now();
+            $firstDayOfMonth = $currentDate->startOfMonth()->format('Y-m-d H:i:s');
+            $lastDayOfMonth = $currentDate->endOfMonth()->format('Y-m-d H:i:s');
+
+            $incomes->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
+            ->orderBy('created_at','desc');
+        }
         
         $incomes = $incomes->paginate();
 
@@ -86,6 +96,7 @@ class IncomeService
                 'amount' => $income->amount,
                 'type' => $income->type,
                 'reference' => $income->reference,
+                'image' => $income->image,
                 'invoice_id' => $income->invoice_id,
             ];
         });

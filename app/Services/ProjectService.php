@@ -101,6 +101,7 @@ class ProjectService
                 $query->where('name', 'like', '%' . $request->input('search') . '%');
             });
         }
+        
 
         if ($request &&  $request->input('orderBy')) {
             $projects->orderBy($request->input('orderBy'),'desc');
