@@ -1,4 +1,5 @@
 <template>
+    <Loader v-if="loader"/>
     <template v-if="fields.length">
         <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
             <div class="mt-2"  v-for="field in fields">
@@ -31,7 +32,7 @@
             </div>
         </form>
     </template>
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else-if="!loader">
         <p class="text-xl">No hay campos que mostrar</p>
     </div>
 </template>
@@ -48,6 +49,7 @@
     import axios from 'axios';
     import strings from '@/utils/strings.js';
     import showLabel from '@/helpers/showLabel.js';
+    import Loader from '@/Components/Loader.vue'
     
     const emit  = defineEmits(['close']);
 
@@ -67,6 +69,7 @@
     const errors = ref([]);
 
     const fields = ref([]);
+    const loader = ref(true);
     const formData = ref({
         ...props.default,
         _token
@@ -75,17 +78,24 @@
 
     onMounted(async ()=>{
         try {
+            loader.value = true;
             let url = `${app_url}/${props.route}/create`;
 
             if (props.parentId !== undefined) {
                 url += `?parentId=${props.parentId}`;
             }
             const response = await axios(url);
-           
+            loader.value = false;
             fields.value = response.data;
+            
+
             clearFormData();
         } catch (error) {
-            console.log(error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: error.message,
+            });
         }
     });
 
@@ -112,7 +122,6 @@
             const newFormData = new FormData();
         
             for (const key in formData.value) {
-                console.log(key);
                 newFormData.append(key, formData.value[key]);
             }
 
@@ -132,3 +141,8 @@
 
 
 </script>
+<style>
+    .formWrapper{
+        min-height: 300px;
+    }
+</style>

@@ -34,5 +34,8 @@ const strings = {
         transfer:"Transferencia",
         check:"Cheque",
         reference:"Referencia",
+        unit_type:"Tipo de unidad",
+        provider_id:"Proveedor",
+        image:"Imagen",
 };
 export default strings;
