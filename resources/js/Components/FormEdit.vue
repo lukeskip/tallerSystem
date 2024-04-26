@@ -5,8 +5,7 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2">
                     {{ showLabel(field.slug) }}
                 </label>
-                
-                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext'" v-model="formData[field.slug]"/>
+                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]"/>
 
                 <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
                 
@@ -76,7 +75,6 @@
             const response = await axios(`${app_url}/${props.route}/${props.editId}/edit`);
             loader.value = false;
             fields.value = response.data.fields;
-
             clearFormData();
             fillInfo(response.data.item);
     
@@ -88,8 +86,9 @@
     });
 
     const fillInfo = (fieldsEdit)=>{
-   
-        for (let key in fieldsEdit) {  
+    
+        for (let key in fieldsEdit) { 
+            
             if(fieldsEdit[key]['type'] === 'number' || fieldsEdit[key]['type']==='select'){
                 formData.value[key]= Number(fieldsEdit[key]['value']);  
             }else{

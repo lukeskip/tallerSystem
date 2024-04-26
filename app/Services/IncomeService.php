@@ -11,8 +11,12 @@ use Carbon\Carbon;
 
 class IncomeService
 {
+    public function create(){
+        $fields = Utils::getFields('incomes');
+        return response()->json($fields);
+    }
 
-    public function create($request)
+    public function store($request)
     {
         $validatedData = $this->validateData($request);
         
@@ -32,6 +36,18 @@ class IncomeService
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);
         }
+    }
+
+    public function edit ($id){
+        $income = $this->getById($id);
+        $income = [
+            'description'=> ['value'=>$income['description'],'type'=>'string'],
+            'amount'=> ['value'=>$income['amount'],'type'=>'number'],
+            'type'=> ['value'=>$income['type'],'type'=>'string'],
+            'reference'=> ['value'=>$income['reference'],'type'=>'string'],
+        ];
+        $fields = Utils::getFields('incomes');
+        return response()->json(["item"=>$income,"fields"=>$fields]);
     }
 
     public function update(Income $income, array $data)
