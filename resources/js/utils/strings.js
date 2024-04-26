@@ -37,5 +37,6 @@ const strings = {
         unit_type:"Tipo de unidad",
         provider_id:"Proveedor",
         image:"Imagen",
+        client:"Cliente",
 };
 export default strings;

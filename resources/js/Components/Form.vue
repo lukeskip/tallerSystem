@@ -16,7 +16,7 @@
                 <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
                 
                 <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
-                <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
+                <div class="error text-red-500" v-if="errors[field.slug]">{{strings.required}}</div>
             </div>
             
             <div class="mt-5">
@@ -138,6 +138,11 @@
         } catch (error) {
             errors.value = error.response.data.errors;
             console.log(error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: error.message,
+            });
         }
     }
 

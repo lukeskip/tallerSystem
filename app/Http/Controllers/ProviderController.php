@@ -6,20 +6,21 @@ use App\Models\Provider;
 use Illuminate\Http\Request;
 use App\Services\ProviderService;
 use Inertia\Inertia;
+use App\Utils\Utils;
 
 
 class ProviderController extends Controller
 {
     public function __construct(ProviderService $providerService)
     {
-        $this->providerService = $providerService;
+        $this->service = $providerService;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $providers = $this->providerService->getAll($request);
+        $providers = $this->service->getAll($request);
         return Inertia::render('Provider/Providers', [
             'providers' => $providers,
         ]);
@@ -30,7 +31,8 @@ class ProviderController extends Controller
      */
     public function create()
     {
-        //
+        $fields = Utils::getFields('providers');
+        return response()->json($fields);
     }
 
     /**
@@ -38,7 +40,7 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       return  $this->service->create($request);
     }
 
     /**
@@ -68,8 +70,8 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provider $provider)
+    public function destroy($id)
     {
-        //
+        $this->service->delete($id);
     }
 }
