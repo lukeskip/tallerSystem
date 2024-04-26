@@ -16,6 +16,7 @@ class Outcome extends Model
         'status',
         'type',
         'image',
+        'provider_id',
     ];
 
     use HasFactory;

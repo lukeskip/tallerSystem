@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->text('description')->nullable();
             $table->decimal('amount', 10, 2);
-            $table->string('type'); 
-            $table->string('reference'); 
+            $table->string('type')->nullable(); 
+            $table->string('reference')->nullable(); 
             $table->string('image')->nullable(); 
             $table->string('status'); 
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->unsignedBigInteger('provider_id'); 
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
             $table->timestamps();
         });
     }
