@@ -58,6 +58,7 @@ class ProjectService
                     'id' => $project->id,
                     'name' => $project->name,
                     'address' => $project->address,
+                    'comission' => $project->comission,
                     'client' => [
                         'id' => $project->client->id,
                         'name' => $project->client->name,

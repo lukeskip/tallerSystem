@@ -5,7 +5,7 @@
         <template #title>
             Cotización {{invoice.id}} 
             <div>
-                <span :class="{ 'line-through': invoice.balance }">({{ invoice.amount }})</span> 
+                <span :class="{ 'line-through': invoice.balance }">Total: {{ invoice.amount }}</span> 
                 <span v-if="invoice.balance">
                     {{ invoice.balance }}
                 </span>
@@ -91,9 +91,8 @@
             </div>
 
             
-            
             <Modal :show="showModal" @close="showModal = false" >
-                <Form :default="{invoice_id:invoice.id}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>
+                <Form :default="{invoice_id:invoice.id,comission:Number(invoice.comission)}" :route="'conceptos'" @close="toggleModal()" :parentId="invoice.id"/>
             </Modal>
             <Modal :show="showModalIncome" @close="showModalIncome = false" >
                 <Form :default="{invoice_id:invoice.id}" :route="'ingresos'" @close="toggleModalIncome()"/>
@@ -120,10 +119,6 @@
         invoice: { type: [Object, Array], required: true },
         providers: { type: Array, required: true },
     });
-
-    onMounted(()=>{
-        console.log(props.invoice);
-    })
 
     const activeTab = ref(1);
 

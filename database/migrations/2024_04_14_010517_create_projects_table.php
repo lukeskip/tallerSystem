@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address')->nullable(); 
-            $table->decimal('comission', 5, 2)->nullable();
+            $table->integer('comission')->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

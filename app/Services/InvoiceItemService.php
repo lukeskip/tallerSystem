@@ -75,7 +75,6 @@ class InvoiceItemService
             'comission' => 'required|numeric|gt:0',
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
-            'unit_type' => 'required|string',
             'provider_id'=> 'numeric',
             'invoice_id'  => 'nullable',
             'category'  => 'nullable'

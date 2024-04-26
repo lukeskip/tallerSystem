@@ -10,7 +10,7 @@
 
                 <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
                 
-                <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
+                <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
                 
                 <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options" :default="formData[field.slug]" />
                 <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
@@ -88,7 +88,7 @@
     });
 
     const fillInfo = (fieldsEdit)=>{
-        console.log(fieldsEdit);
+   
         for (let key in fieldsEdit) {  
             if(fieldsEdit[key]['type'] === 'number' || fieldsEdit[key]['type']==='select'){
                 formData.value[key]= Number(fieldsEdit[key]['value']);  
@@ -104,7 +104,7 @@
                 formData.value[field.slug]= ref('');
             }
 
-            if(field.type === "decimal" || field.type === 'select'){
+            if(field.type === "decimal" || field.type === 'select' || field.type === 'int'){
                 formData.value[field.slug]= ref(0);
             }
         });
