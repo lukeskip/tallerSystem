@@ -3,12 +3,19 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use App\Models\Provider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProviderService
 {
-    public function create(array $data)
+    public function create(Request $request)
     {
-        return Provider::create($data);
+        $validatedData = $this->validateData($request);
+        if($validatedData['status']){
+            $provider = Provider::create($validatedData['data']);  
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     public function update(Provider $provider, array $data)
@@ -17,8 +24,9 @@ class ProviderService
         return $provider;    
     }
 
-    public function delete(Provider $provider)
-    {
+    public function delete($id)
+    {   
+        $provider = Provider::find($id);
         $provider->delete();
     }
 
@@ -43,13 +51,13 @@ class ProviderService
 
     public function getAll($request = null)
     {
-        $providers = Provider::query();
+        $providers = Provider::orderBy('created_at','desc');
 
         if ($request && $request->input('search')) {
             $providers->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
-        $providers = $providers->paginate(5);
+        $providers = $providers->paginate();
 
         $providers->getCollection()->transform(function ($provider) {
             return [
@@ -63,5 +71,30 @@ class ProviderService
         });
 
         return $providers;
+    }
+
+    protected function validateData($request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'contact_name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string',
+            'address' => 'required|string',
+            
+        ]);
+    
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $fieldErrors = [];
+            foreach ($errors->messages() as $field => $messages) {
+                $fieldErrors[$field] = $messages;
+            }
+
+            return ['status'=>false,'errors'=>$fieldErrors];
+        }
+
+        $cleanedData = $validator->validated();
+
+        return ['status'=>true,'data'=>$cleanedData];
     }
 }

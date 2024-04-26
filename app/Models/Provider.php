@@ -8,7 +8,16 @@ use App\Utils\Utils;
 
 class Provider extends Model
 {
+    protected $fillable = [
+        'name',
+        'contact_name',
+        'email',
+        'address',
+        'phone',
+    ];
+    
     use HasFactory;
+    
 
     public function getFormatDateAttribute()
     {
