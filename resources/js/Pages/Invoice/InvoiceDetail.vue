@@ -20,22 +20,22 @@
 
         
         <template #submenu>
-            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+            <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
                 <i class="fa-solid fa-plus"></i>
                     Concepto
             </a>
-            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
+            <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
                 <i class="fa-solid fa-plus"></i>
                     Ingreso
             </a>
-            <a href="#" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
+            <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
                 <i class="fa-solid fa-plus"></i>
                     Egreso
             </a>
-            <a href="#" class="inline-block py-2 px-4 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
+            <a href="#" class="inline-block py-2 px-4 bg-red-800 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
                 <i class="fa-solid fa-trash"></i>
             </a>
-            <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700" as="button">
+            <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800" as="button">
                 <i class="fa-solid fa-download"></i>
             </a>
         </template>
