@@ -21,9 +21,9 @@
         </div>
       </form>
 
-      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr >
+      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-800">
+          <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 bg-main-color text-white">
+              <tr>
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
                     <th v-if="key !== 'id' && key !== 'category'"  class="px-6 py-3">
                       {{ showLabel(key) }}
@@ -35,13 +35,13 @@
               </tr>
           </thead>
           <tbody>
-            <template v-for="item in itemsRef" :key="item.id">
-              <tr class="w-full" v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
-                    <td class="px-6 py-3 text-center w-full capitalize" :colspan="Object.keys(itemsRef[1]).length">
+            <template v-for="(item,index) in itemsRef" :key="item.id">
+              <tr class="w-full bg-main-color  border-t-4 border-white " v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
+                    <td class="px-6 py-3 text-center w-full uppercase text-white" :colspan="Object.keys(itemsRef[1]).length">
                       {{ lastCategory }}
                     </td>
               </tr>
-              <tr  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <tr :class="index % 2 === 0 ? 'bg-terciary' : 'bg-secondary-color'">
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id' && key !== 'category'" class="border px-4 py-2">
                       <template v-if="index=== 1 && root !== '' && !inner">

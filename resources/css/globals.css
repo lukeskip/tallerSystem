@@ -1,3 +1,6 @@
+body{
+    background: #e9e6dc;
+}
 .icon{
     width:20px;
     height:auto;
@@ -13,6 +16,9 @@
 }
 .bg-main-color{
     background:#9e915f
+}
+.bg-secondary-color{
+    background:#e0dccb
 }
 .bg-main-color-dark{
     background:#574e28
