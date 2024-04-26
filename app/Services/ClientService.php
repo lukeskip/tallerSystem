@@ -3,41 +3,48 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use App\Models\Client;
-use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;    
+use Inertia\Inertia;   
+use App\Utils\Utils;
+use Illuminate\Http\Request;
 
 class ClientService
 {
-    public function create($request)
+    public function store($request)
     {
-        $validatedData = $this->validateData($request);
+        return Client::create($request);     
+    }
+
+    public function create(){
+        return $fields = Utils::getFields('clients');
+    }
+
+    public function edit ($id){
+        $client = $this->getById($id);
+
+        $client = [
+                'name'=>['value'=>$client['name'],'type'=>'string'],    
+                'contact_name'=>['value'=>$client['contact_name'],'type'=>'string'],    
+                'phone'=>['value'=>$client['phone'],'type'=>'string'],    
+                'address'=>['value'=>$client['address'],'type'=>'string'],    
+                'email'=>['value'=>$client['email'],'type'=>'string'],      
+        ];
+    
+        $fields = Utils::getFields('clients');
         
-        if($validatedData['status']){
-            return Client::create($validatedData['data']);   
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }
+        return ["item"=>$client,"fields"=>$fields];
     }
 
     public function update($id, $request)
-    {
-        $validatedData = $this->validateData($request);
-        
-        if($validatedData['status']){
-            $client = Client::find($id);
-            $client->update($validatedData['data']);
-            return $client;    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }     
+    {    
+        $client = Client::find($id);
+        $client->update($request);
+        return $client;    
     }
 
     public function delete($id)
     {
         $client = Client::find($id);
-        $client->delete();
-        return Inertia::location(route('clientes.index'));
-        
+        return $client->delete();
     }
 
     public function getById($id,$edit = false)
@@ -46,33 +53,22 @@ class ClientService
 
         if ($client) {
 
-            if($edit){
-                return [
-                    'name'=>['value'=>$client->name,'type'=>'string'],    
-                    'contact_name'=>['value'=>$client->contact_name,'type'=>'string'],    
-                    'phone'=>['value'=>$client->phone,'type'=>'string'],    
-                    'address'=>['value'=>$client->address,'type'=>'string'],    
-                    'email'=>['value'=>$client->email,'type'=>'string'],    
-                    'project_id'=>['value'=>$client->project_id,'type'=>'number'],    
-                ];
-            }else{
-
-                return [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'contact_name' => $client->contact_name,
-                    'phone' => $client->phone,
-                    'address' => $client->address,
-                    'email' => $client->email,
-                    'projects' => $client->projects->map(function ($project) {
-                        return [
-                            "id"=>$project->id,
-                            "name" => $project->name,
-                            'format_date' => $project->format_date
-                        ];
-                    }),
-                ];
-            }
+            return [
+                'id' => $client->id,
+                'name' => $client->name,
+                'contact_name' => $client->contact_name,
+                'phone' => $client->phone,
+                'address' => $client->address,
+                'email' => $client->email,
+                'projects' => $client->projects->map(function ($project) {
+                    return [
+                        "id"=>$project->id,
+                        "name" => $project->name,
+                        'format_date' => $project->format_date
+                    ];
+                }),
+            ];
+            
         } else {
             return null;
         }
@@ -105,7 +101,6 @@ class ClientService
 
     public function getClients (){
         $clients = Client::all();
-        
         $clients->transform(function ($provider) {
             return [
                 'id' => $provider->id,
@@ -116,27 +111,5 @@ class ClientService
         return $clients;
     }
 
-    protected function validateData($request){
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'contact_name' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
-            'email' => 'required|string',
-        ]);
     
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
-
-            return ['status'=>false,'errors'=>$fieldErrors];
-        }
-
-        $cleanedData = $validator->validated();
-
-        return ['status'=>true,'data'=>$cleanedData];
-    }
 }
