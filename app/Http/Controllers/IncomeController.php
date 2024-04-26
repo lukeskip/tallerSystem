@@ -30,21 +30,17 @@ class IncomeController extends Controller
 
     public function create()
     {
-        $fields = Utils::getFields('incomes');
-        return response()->json($fields);
+        return $this->service->create();
     }
 
     public function store(Request $request)
     {
-        return $income = $this->service->create($request);
+        return $this->service->store($request);
     }
 
     public function edit($id)
     {
-        $income = $this->service->getById($id,true);
-        $fields = Utils::getFields('income');
-        
-        return response()->json(["item"=>$income,"fields"=>$fields]);
+        return $this->service->edit($id);
     }
 
     public function update(Request $request, $id)
