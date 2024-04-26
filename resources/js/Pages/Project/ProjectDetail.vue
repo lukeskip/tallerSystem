@@ -21,12 +21,13 @@
 
         <template #main> 
             <h3>Cotizaciones</h3>
+            
             <TableComponent :items="{data:project.invoices}" :root="'cotizaciones'" :actions="[]"/>
 
             <FileList v-if="project.files" :files="project.files"/>
 
             <Modal :show="showModalFile" @close="showModalFile = false" >
-                <Form :default="{project_id:project.id}" :route="'archivos'" @close="toggleModalFile()"/>
+                <Form :default="{project_id:project.id}"  :route="'archivos'" @close="toggleModalFile()"/>
             </Modal>
         </template>
 

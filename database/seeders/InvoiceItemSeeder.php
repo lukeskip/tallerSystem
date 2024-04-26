@@ -32,7 +32,6 @@ class InvoiceItemSeeder extends Seeder
                         'label' => $faker->sentence(3),
                         'description' => $faker->paragraph,
                         'comission' => $faker->randomFloat(2, 0, 100),
-                        'unit_type' => $faker->randomElement(['pieza', 'kg', 'l', 'm']),
                         'unit_price' => $faker->randomFloat(2, 10, 1000),
                         'units' => $faker->numberBetween(1, 6),
                         'category' => $faker->randomElement(['sala', 'cocina', 'jardin', 'recamara']),

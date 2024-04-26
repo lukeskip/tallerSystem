@@ -13,7 +13,7 @@
 
                 <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
                 
-                <NumberInput v-else-if="field.type === 'decimal'"  v-model="formData[field.slug]"/>
+                <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
                 
                 <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
                 <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
@@ -71,7 +71,6 @@
     const fields = ref([]);
     const loader = ref(true);
     const formData = ref({
-        ...props.default,
         _token
     });
     
@@ -106,13 +105,16 @@
     const clearFormData = ()=>{
         fields.value.map(field => {      
             if(field.type === "varchar" || field.type === "longtext" || field.type === "text"){
-                formData.value[field.slug]= ref('');
+                formData.value[field.slug]= ref(field.default || '');
             }
 
-            if(field.type === "decimal" || field.type === 'select'){
-                formData.value[field.slug]= ref(0);
+            if(field.type === "decimal" || field.type === 'select' || field.type === 'int'){
+                formData.value[field.slug]= ref(field.default || 0);
             }
         });
+        
+        formData.value = {...formData.value,...props.default}
+
     }
 
 

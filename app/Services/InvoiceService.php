@@ -63,7 +63,7 @@ class InvoiceService
 
     public function getById($id)
     {
-        $invoice = Invoice::with(['incomes','outcomes','invoiceItems' => function ($query) {
+        $invoice = Invoice::with(['incomes','project','outcomes','invoiceItems' => function ($query) {
             $query
             ->orderBy('category', 'asc')
             ->orderBy('created_at', 'desc');
@@ -115,6 +115,7 @@ class InvoiceService
             return [
                 'id'=>$invoice->id,
                 'project'=>$invoice->project->name,
+                'comission'=>$invoice->project->comission,
                 'client'=>$invoice->project->client->name,
                 'amount'=>$invoice->amount,
                 'invoiceItems' => $invoiceItems,

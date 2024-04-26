@@ -18,10 +18,9 @@ return new class extends Migration
             $table->string('label');
             $table->longText('description');
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('units', 5, 2);
-            $table->string('unit_type');
+            $table->integer('units');
             $table->string('category')->nullable();
-            $table->decimal('comission', 5, 2);
+            $table->integer('comission');
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();
