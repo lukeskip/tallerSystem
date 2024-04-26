@@ -34,7 +34,7 @@ class OutcomeService
         }
     }
 
-    public function update(Outcome $outcome, array $data)
+    public function update($id,$request)
     {
         $validatedData = $this->validateData($request);
         
