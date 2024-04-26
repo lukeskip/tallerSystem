@@ -58,7 +58,7 @@ class IncomeService
         return response()->json(["item"=>$income,"fields"=>$fields]);
     }
 
-    public function update(Income $income, array $data)
+    public function update($id,$request)
     {
         $validatedData = $this->validateData($request);
         
