@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Utils\Utils;
+use App\Models\Provider;
 
 class InvoiceItem extends Model
 {
@@ -35,9 +36,19 @@ class InvoiceItem extends Model
         $total = ($this->unit_price * $this->units) ;
         return number_format($total,2);
     }
+    public function getAmountAttribute()
+    {   
+        
+        $total = ($this->unit_price * $this->units) ;
+        return $total;
+    }
 
     public function getFormatDateAttribute()
     {
         return Utils::formatDate($this->created_at);
+    }
+
+    public function provider (){
+        return $this->belongsTo(Provider::class);
     }
 }

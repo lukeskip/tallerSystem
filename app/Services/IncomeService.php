@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Income;
+use App\Models\Provider;
+use App\Models\Outcome;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
@@ -32,7 +34,13 @@ class IncomeService
                 $validatedData['data']['image'] = $uploadedFileUrl;
             }
 
-            return $income = Income::create($validatedData['data']);   
+            $income = Income::create($validatedData['data']);   
+            
+            $amountToPay = $income->amount * .60;
+           
+            $this->createOutcomesForProviders($income);
+            
+            
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);
         }
@@ -141,5 +149,55 @@ class IncomeService
         $cleanedData = $validator->validated();
 
         return ['status' => true, 'data' => $cleanedData];
+    }
+
+
+    protected function createOutcomesForProviders($income)
+    {
+        $providers = Provider::whereHas('invoiceItems',function ($query)use($income){
+            $query->where('invoice_id',$income->invoice_id);
+        })->with('invoiceItems','outcomes');
+        
+        if($providers->count()){
+   
+            $providers->each(function ($provider) use ($income) {
+                $totalDebt = $provider->invoiceItems->sum('amount');
+                $totalPaid = $provider->outcomes->where(function ($outcome) {
+                    return $outcome->status === 'paid' || $outcome->status === 'pending';
+                })->sum('amount');
+                $balance = $totalDebt - $totalPaid;
+
+                if($totalDebt > 0 ){
+                    $percentageToPaid = ($balance / $totalDebt) * 100;
+                }else{
+                    $percentageToPaid = 0;
+                }
+                
+                dump($balance);
+                if($balance > 0){
+
+                    if($percentageToPaid >= 50){
+                        $amountToPayProvider = $totalDebt * .5;
+                    }
+
+                    
+                    // Generates an outcome un pending
+                    $provider->invoiceItems->each(function ($item) use (&$description,$amountToPayProvider) {
+                        $description .= $item->label . ", ";
+                    });
+        
+                    $outcome = Outcome::create([
+                        'amount' => $amountToPayProvider,
+                        'description' => $description,
+                        'invoice_id' => $income->invoice_id,
+                        'status' => 'pending',
+                        'type' => 'pending',
+                        'provider_id' => $provider->id
+                    ]);
+                }
+
+            });
+        }
+        
     }
 }
