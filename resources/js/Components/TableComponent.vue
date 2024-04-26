@@ -37,12 +37,9 @@
        
       </div>
 
-      
 
-      
-
-      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="sticky top-24 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table v-if="itemsRef.length" class="w-full text-md  text-left rtl:text-right text-gray-800 mt-5">
+          <thead class="sticky top-0 text-sm text-gray-700 text-white bg-main-color rounded uppercase bg-gray-50">
               <tr >
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
                     <th v-if="key !== 'id'"  class="px-6 py-3">
@@ -55,7 +52,7 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="item in itemsRef" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <tr v-for="(item,index) in itemsRef" :key="item.id" :class="index % 2 === 0 ? 'bg-terciary' : 'bg-secondary-color'" class="border">
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id'" class="border px-4 py-2">
                       <template v-if="index=== 1 && root !== '' && !inner">
