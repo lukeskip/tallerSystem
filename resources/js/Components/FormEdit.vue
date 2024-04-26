@@ -119,7 +119,11 @@
                 console.log(key);
                 newFormData.append(key, formData.value[key]);
             }
-            const response = await axios.put(`/${props.route}/${props.editId}`,newFormData);
+
+            newFormData.append('_method', 'put');
+            
+            const response = await axios.post(`/${props.route}/${props.editId}`,newFormData);
+
             if(stay){
                 clearFormData()
             }else{
