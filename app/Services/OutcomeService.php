@@ -10,40 +10,34 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Carbon\Carbon;
 
 class OutcomeService
-{
+{   
+    public function create(){
+        return $fields = Utils::getFields('outcomes');
+    }
 
-    public function create($request)
+    public function store($request)
     {
-        $validatedData = $this->validateData($request);
-        
-        if ($validatedData['status']) {
-
-            if($request->file('file')){
-                $image = $request->file('file');
-            
-                $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
-                    'folder' => 'taller/incomes',
-                    'resource_type' => 'image'])->getSecurePath();
-
-                $validatedData['data']['image'] = $uploadedFileUrl;
-            }
-
-            return $outcome = Outcome::create($validatedData['data']);   
-        } else {
-            return response()->json(['errors' => $validatedData['errors']], 422);
-        }
+        $income = Outcome::create($request);
     }
 
     public function update($id,$request)
     {
-        $validatedData = $this->validateData($request);
-        
-        if ($validatedData['status']) {
-            $outcome->update($validatedData['data']);
-            return response()->json(['redirect' => 'outcome/'.$outcome->id]);   
-        } else {
-            return response()->json(['errors' => $validatedData['errors']], 422);
-        }      
+        $outcome->update($validatedData['data']);    
+    }
+
+    public function edit (){
+        $income = $this->getById($id);
+        $income = [
+            'description'=> ['value'=>$income['description'],'type'=>'string'],
+            'amount'=> ['value'=>$income['amount'],'type'=>'number'],
+            'type'=> ['value'=>$income['type'],'type'=>'string'],
+            'reference'=> ['value'=>$income['reference'],'type'=>'string'],
+            'status'=> ['value'=>$income['status'],'type'=>'string'],
+            'invoice_id'=> ['value'=>$income['invoice_id'],'type'=>'hidden'],
+            'provider_id'=> ['value'=>$income['provider_id'],'type'=>'number'],
+        ];
+        $fields = Utils::getFields('incomes');
+        return ["item"=>$income,"fields"=>$fields];
     }
 
     public function delete($id)
@@ -105,30 +99,4 @@ class OutcomeService
         });
     }
 
-    protected function validateData($request)
-    {
-        $validator = Validator::make($request->all(), [
-            'description' => 'nullable|string',
-            'amount' => 'required|numeric',
-            'type' => 'required|string',
-            'reference' => 'string',
-            'image' => 'nullable',
-            'status' => 'required|string',
-            'invoice_id' => 'required|string', // Puedes ajustar esta validación según tus necesidades
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
-
-            return ['status' => false, 'errors' => $fieldErrors];
-        }
-
-        $cleanedData = $validator->validated();
-
-        return ['status' => true, 'data' => $cleanedData];
-    }
 }
