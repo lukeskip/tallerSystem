@@ -12,7 +12,6 @@ use App\Utils\Utils;
 class ClientController extends Controller
 {
     protected $service;
-    protected $validate;
 
     public function __construct(ClientService $clientService)
     {

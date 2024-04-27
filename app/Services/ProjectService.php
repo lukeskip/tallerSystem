@@ -5,33 +5,38 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia; 
+use App\Utils\Utils;
 
 class ProjectService
 {
-    public function create($request)
+    public function store($request)
     {
-        $validatedData = $this->validateData($request);
+        return Project::create($request);     
+    }
+
+    public function create(){
+        return $fields = Utils::getFields('projects');
+    }
+
+    public function edit ($id){
+        $project =  Project::with(['client'])->find($id);
+        $project =  [
+            'name'=> ['value'=>$project->name,'type'=>'string'],
+            'address'=> ['value'=>$project->address,'type'=>'string'],
+            'comission'=> ['value'=>$project->comission,'type'=>'number'],
+            'client_id'=> ['value'=>$project->client_id,'type'=>'number'],
+        ];
+    
+        $fields = Utils::getFields('projects');
         
-        if($validatedData['status']){
-            $project = Project::create($validatedData['data']); 
-            return response()->json(['redirect'=> 'proyectos/'.$project->id]);  
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }
-        
+        return ["item"=>$project,"fields"=>$fields];
     }
 
     public function update($id, $request)
     {
-        $validatedData = $this->validateData($request);
-        
-        if($validatedData['status']){
-            $project = Project::find($id);
-            $project->update($validatedData['data']);
-            return $project;    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }  
+        $project = Project::find($id);
+        $project->update($request);
+        return $project;      
     }
 
     public function delete($id)
@@ -46,44 +51,36 @@ class ProjectService
 
         if ($project) {
 
-            if($edit){
-                return [
-                    'name'=> ['value'=>$project->name,'type'=>'string'],
-                    'address'=> ['value'=>$project->address,'type'=>'string'],
-                    'comission'=> ['value'=>$project->comission,'type'=>'number'],
-                    'client_id'=> ['value'=>$project->client_id,'type'=>'number'],
-                ];
-            }else{
-                return [
-                    'id' => $project->id,
-                    'name' => $project->name,
-                    'address' => $project->address,
-                    'comission' => $project->comission,
-                    'client' => [
-                        'id' => $project->client->id,
-                        'name' => $project->client->name,
-                    ],
-                    'invoices' => $project->invoices->map(function ($invoice) {
-                        return [
-                            "id"=>$invoice->id,
-                            "file"=>$invoice->id,
-                            "amount" => $invoice->amount,
-                            'status'=> $invoice->status,
-                            'format_date' => $invoice->format_date
-                        ];
-                    }),
-                    'files' => $project->files->map(function ($file) {
-                        return [
-                            "id"=>$file->id,
-                            "name"=>$file->name,
-                            "url"=>$file->url,
-                            "extension" => $file->extension,
-                            'format_date' => $file->format_date
-                        ];
-                    }),
-                    'format_date' => $project->format_date,
-                ];
-            }
+            return [
+                'id' => $project->id,
+                'name' => $project->name,
+                'address' => $project->address,
+                'comission' => $project->comission,
+                'client' => [
+                    'id' => $project->client->id,
+                    'name' => $project->client->name,
+                ],
+                'invoices' => $project->invoices->map(function ($invoice) {
+                    return [
+                        "id"=>$invoice->id,
+                        "file"=>$invoice->id,
+                        "amount" => $invoice->amount,
+                        'status'=> $invoice->status,
+                        'format_date' => $invoice->format_date
+                    ];
+                }),
+                'files' => $project->files->map(function ($file) {
+                    return [
+                        "id"=>$file->id,
+                        "name"=>$file->name,
+                        "url"=>$file->url,
+                        "extension" => $file->extension,
+                        'format_date' => $file->format_date
+                    ];
+                }),
+                'format_date' => $project->format_date,
+            ];
+            
         } else {
             return null;
         }
@@ -125,26 +122,5 @@ class ProjectService
 
     }
 
-    protected function validateData($request){
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'comission' => 'required|numeric|gt:0',
-            'client_id'=> 'numeric|gt:0'
-        ]);
-    
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
 
-            return ['status'=>false,'errors'=>$fieldErrors];
-        }
-
-        $cleanedData = $validator->validated();
-
-        return ['status'=>true,'data'=>$cleanedData];
-    }
 }

@@ -8,12 +8,19 @@ use App\Services\ProjectService;
 use Inertia\Inertia;
 use App\Utils\Utils;
 use Illuminate\Support\Facades\Route;
+use App\Services\ValidateDataService;
 
 class ProjectController extends Controller
 {
     public function __construct(ProjectService $projectService)
     {
         $this->service = $projectService;
+        $this->rules = [
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'comission' => 'required|numeric|gt:0',
+            'client_id'=> 'numeric|gt:0'
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -43,7 +50,14 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        return  $this->service->create($request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            return $item = $this->service->store($validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        } 
     }
 
     /**
@@ -63,10 +77,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $item = $this->service->getById($id,true);
-        $fields = Utils::getFields('projects');
-        
-        return response()->json(["item"=>$item,"fields"=>$fields]);
+        $fields = $this->service->edit($id);
+        return response()->json($fields);
     }
 
     /**
@@ -74,7 +86,14 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($id,$request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            $item = $this->service->update($id,$validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     /**
