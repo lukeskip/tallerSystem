@@ -8,6 +8,7 @@ use App\Services\InvoiceItemService;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use App\Services\ValidateDataService;
 
 class InvoiceItemController extends Controller
 {
@@ -16,6 +17,16 @@ class InvoiceItemController extends Controller
     public function __construct(InvoiceItemService $invoiceItemService)
     {
         $this->service = $invoiceItemService;
+        $this->rules = [
+            'label' => 'required|string',
+            'description' => 'required|string',
+            'comission' => 'required|numeric|gt:0',
+            'units' => 'required|numeric',
+            'unit_price' => 'required|numeric|gt:0',
+            'provider_id'=> 'numeric',
+            'invoice_id'  => 'nullable',
+            'category'  => 'nullable'
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -50,7 +61,14 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        return $invoiceItem = $this->service->create($request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            return $item = $this->service->store($validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        } 
         
     }
 
@@ -67,10 +85,9 @@ class InvoiceItemController extends Controller
      */
     public function edit($id)
     {
-        $invoiceItem = $this->service->getById($id,true);
-        $fields = Utils::getFields('invoice_items');
+        $fields = $this->service->edit($id);
         
-        return response()->json(["item"=>$invoiceItem,"fields"=>$fields]);
+        return response()->json($fields);
     }
 
     /**
@@ -78,7 +95,14 @@ class InvoiceItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->service->update($id,$request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            $item = $this->service->update($id,$validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     /**
