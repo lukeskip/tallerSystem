@@ -7,12 +7,18 @@ use Illuminate\Http\Request;
 use App\Services\InvoiceService;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use App\Services\ValidateDataService;
 
 class InvoiceController extends Controller
 {
     public function __construct(InvoiceService $invoiceService)
     {
         $this->service = $invoiceService;
+        $this->rules = [
+            'id'=>'required|string',
+            'status' => 'required|string',
+            'project_id' => 'required|numeric|gt:0',
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -40,7 +46,16 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        return  $this->service->create($request);
+        $request['id'] = Utils::generateInvoiceId();
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            $item = $this->service->store($validatedData['data']);
+            return Inertia::location(route('cotizaciones.show',$item->id));    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     /**
@@ -61,9 +76,7 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $item = $this->service->getById($id,true);
-        $fields = Utils::getFields('projects');
-        return response()->json(["item"=>$item,"fields"=>$fields]);
+    
     }
 
     /**
@@ -79,6 +92,7 @@ class InvoiceController extends Controller
      */
     public function destroy($id)
     {
-        return $invoice = $this->service->delete($id);
+        $projectID = $this->service->delete($id);
+        return Inertia::location(route('proyectos.show',$projectID)); 
     }
 }

@@ -98,7 +98,7 @@ class Utils
         $year = date('Y');
     
         // Contar el número de facturas en el año actual
-        $count = Invoice::where('id', 'like', "$year%")->count();
+        $count = Invoice::withTrashed()->where('id', 'like', "$year%")->count();
 
         // Generar el siguiente número de factura
         if ($count > 0) {
