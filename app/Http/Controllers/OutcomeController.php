@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Outcome;
 use Illuminate\Http\Request;
 use App\Services\OutcomeService;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use App\Services\ValidateDataService;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class OutcomeController extends Controller
 {
@@ -16,6 +17,16 @@ class OutcomeController extends Controller
     public function __construct(OutcomeService $outcomeService)
     {
         $this->service = $outcomeService;
+        $this->rules = [
+            'description' => 'nullable|string',
+            'amount' => 'required|numeric',
+            'type' => 'required|string',
+            'reference' => 'string',
+            'image' => 'nullable',
+            'status' => 'required|string',
+            'invoice_id' => 'required|string',
+            'provider_id' => 'nullable',
+        ];
     }
     
     public function index(Request $request)
@@ -30,26 +41,56 @@ class OutcomeController extends Controller
 
     public function create()
     {
-        $fields = Utils::getFields('outcomes');
-        return response()->json($fields);
+        return $this->service->create();
     }
 
     public function store(Request $request)
     {
-        return $outcome = $this->service->create($request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($request->file('file')){
+            $image = $request->file('file');
+        
+            $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                'folder' => 'taller/outcomes',
+                'resource_type' => 'image'])->getSecurePath();
+
+            $validatedData['data']['image'] = $uploadedFileUrl;
+        }
+
+        if($validatedData['status']){
+            return $item = $this->service->store($validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        } 
     }
 
     public function edit($id)
     {
-        $outcome = $this->service->getById($id,true);
-        $fields = Utils::getFields('outcomes');
-        
-        return response()->json(["item"=>$outcome,"fields"=>$fields]);
+        return $this->service->edit($id);
     }
 
     public function update(Request $request, $id)
     {
-        return $this->service->update($id,$request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($request->file('file')){
+            $image = $request->file('file');
+        
+            $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                'folder' => 'taller/outcomes',
+                'resource_type' => 'image'])->getSecurePath();
+
+            $validatedData['data']['image'] = $uploadedFileUrl;
+        }
+
+        if($validatedData['status']){
+            $item = $this->service->update($id,$validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     public function destroy($id)

@@ -84,7 +84,6 @@ class IncomeController extends Controller
         }
 
         if($validatedData['status']){
-            dump($validatedData['data']);
             $item = $this->service->update($id,$validatedData['data']);    
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
