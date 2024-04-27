@@ -138,7 +138,7 @@
     }
 
     const handleFileSelected = (file) => {
-        formData.value['image'] = file; 
+        formData.value['file'] = file; 
     };
 
 

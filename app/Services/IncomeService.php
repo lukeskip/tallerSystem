@@ -8,42 +8,24 @@ use App\Models\Outcome;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Carbon\Carbon;
 
 class IncomeService
 {
+    
+
     public function create(){
-        $fields = Utils::getFields('incomes');
-        return response()->json($fields);
+        return $fields = Utils::getFields('incomes');
     }
 
     public function store($request)
     {
-        $validatedData = $this->validateData($request);
+
+        $income = Income::create($request);   
         
-        if ($validatedData['status']) {
-           
-            if($request->file('file')){
-                $image = $request->file('file');
-            
-                $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
-                    'folder' => 'taller/incomes',
-                    'resource_type' => 'image'])->getSecurePath();
-
-                $validatedData['data']['image'] = $uploadedFileUrl;
-            }
-
-            $income = Income::create($validatedData['data']);   
-            
-            $amountToPay = $income->amount * .60;
-           
-            $this->createOutcomesForProviders($income);
-            
-            
-        } else {
-            return response()->json(['errors' => $validatedData['errors']], 422);
-        }
+        $amountToPay = $income->amount * .60;
+        
+        $this->createOutcomesForProviders($income);
     }
 
     public function edit ($id){
@@ -53,21 +35,16 @@ class IncomeService
             'amount'=> ['value'=>$income['amount'],'type'=>'number'],
             'type'=> ['value'=>$income['type'],'type'=>'string'],
             'reference'=> ['value'=>$income['reference'],'type'=>'string'],
+            'invoice_id'=> ['value'=>$income['invoice_id'],'type'=>'hidden'],
         ];
         $fields = Utils::getFields('incomes');
-        return response()->json(["item"=>$income,"fields"=>$fields]);
+        return ["item"=>$income,"fields"=>$fields];
     }
 
     public function update($id,$request)
     {
-        $validatedData = $this->validateData($request);
-        
-        if ($validatedData['status']) {
-            $income->update($validatedData['data']);
-            return response()->json(['redirect' => 'income/'.$income->id]);   
-        } else {
-            return response()->json(['errors' => $validatedData['errors']], 422);
-        }      
+        $income = Income::find($id);
+        $income->update($request);
     }
 
     public function delete($id)
@@ -126,30 +103,7 @@ class IncomeService
         });
     }
 
-    protected function validateData($request)
-    {
-        $validator = Validator::make($request->all(), [
-            'description' => 'nullable|string',
-            'amount' => 'required|numeric',
-            'type' => 'required|string',
-            'reference' => 'string',
-            'invoice_id' => 'required|string', // Puedes ajustar esta validación según tus necesidades
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
-
-            return ['status' => false, 'errors' => $fieldErrors];
-        }
-
-        $cleanedData = $validator->validated();
-
-        return ['status' => true, 'data' => $cleanedData];
-    }
+    
 
 
     protected function createOutcomesForProviders($income)

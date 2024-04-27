@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Income;
 use Illuminate\Http\Request;
 use App\Services\IncomeService;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use App\Utils\Utils;
+use App\Services\ValidateDataService;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class IncomeController extends Controller
 {
@@ -16,6 +17,13 @@ class IncomeController extends Controller
     public function __construct(IncomeService $incomeService)
     {
         $this->service = $incomeService;
+        $this->rules = [
+            'description' => 'nullable|string',
+            'amount' => 'required|numeric',
+            'type' => 'required|string',
+            'reference' => 'string',
+            'invoice_id' => 'required|string',
+        ];
     }
     
     public function index(Request $request)
@@ -35,7 +43,24 @@ class IncomeController extends Controller
 
     public function store(Request $request)
     {
-        return $this->service->store($request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($request->file('file')){
+            $image = $request->file('file');
+        
+            $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                'folder' => 'taller/incomes',
+                'resource_type' => 'image'])->getSecurePath();
+
+            $validatedData['data']['image'] = $uploadedFileUrl;
+        }
+
+        if($validatedData['status']){
+            return $item = $this->service->store($validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        } 
     }
 
     public function edit($id)
@@ -45,7 +70,25 @@ class IncomeController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $this->service->update($id,$request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($request->file('file')){
+            $image = $request->file('file');
+        
+            $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                'folder' => 'taller/incomes',
+                'resource_type' => 'image'])->getSecurePath();
+
+            $validatedData['data']['image'] = $uploadedFileUrl;
+        }
+
+        if($validatedData['status']){
+            dump($validatedData['data']);
+            $item = $this->service->update($id,$validatedData['data']);    
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
     }
 
     public function destroy($id)
