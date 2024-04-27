@@ -10,9 +10,11 @@ use App\Models\Outcome;
 use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use App\Utils\Utils;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
+    use SoftDeletes;
     public $incrementing = false;
     protected $keyType = 'string';
 

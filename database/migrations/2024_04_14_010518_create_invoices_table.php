@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id')->primary(); 
             $table->string('status')->default('pending');
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

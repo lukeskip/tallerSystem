@@ -17,31 +17,22 @@ class InvoiceService
         $this->mainRoute = 'cotizaciones.index';
     }
 
-    public function create($request)
-    {
-        $request['id'] = Utils::generateInvoiceId();
-        $validatedData = $this->validateData($request);
-        
-        if($validatedData['status']){
-            $invoice =  Invoice::create($validatedData['data']);   
-            return Inertia::location(route('cotizaciones.show',$invoice->id));
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }
-        return Inertia::location(route($this->mainRoute));
+   
+
+    public function create(){
+        return $fields = Utils::getFields('projects');
     }
 
-    public function update(Invoice $invoice, array $data)
+    public function store($request)
     {
-        $validatedData = $this->validateData($request);
-        
-        if($validatedData['status']){
+        return $invoice =  Invoice::create($request);    
+    }
+
+    public function update(Invoice $invoice, $request)
+    {
             $invoice = Invoice::find($id);
-            $invoice->update($validatedData['data']);
-            return response()->json(['redirect'=> 'invoice/'.$invoice->id]);   
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }      
+            $invoice->update($request);
+            return response()->json(['redirect'=> 'invoice/'.$invoice->id]);     
     }
 
     public function getItemCategories($id){
@@ -55,10 +46,15 @@ class InvoiceService
         return $categories;
     }
 
-    public function delete(Invoice $invoice)
+    public function delete($id)
     {
-        $invoice->delete();
-        return Inertia::location(route($this->mainRoute));
+        $invoice = Invoice::find($id);
+        $projectID = $invoice->project_id;
+        $invoice->delete($id);
+
+        return $projectID;
+
+
     }
 
     public function getById($id)
@@ -69,49 +65,52 @@ class InvoiceService
             ->orderBy('created_at', 'desc');
         }])->find($id);
 
-        $invoiceItems = $invoice->invoiceItems->map(function ($item) {
-            return [
-                "id"=>$item->id,
-                "label"=>$item->label,
-                "description"=>$item->description,
-                "units"=>$item->units,
-                "category"=>$item->category,
-                "unit_price"=>"$".$item->unit_price,
-                "total"=>"$".$item->total,
-                "comission"=>$item->comission."%",
-                "total_comission"=>"$".$item->total_comission,
-            ];
-        });
-
-        $incomes = $invoice->incomes->map(function ($item) {
-            return [
-                "id"=>$item->id,
-                "description"=>$item->description,
-                "type"=>$item->type,
-                "amount"=>$item->amount,
-                "reference"=>$item->reference,
-                "image"=>$item->image,
-                "invoice_id"=>$item->invoice_id,
-                "date"=>$item->format_date,    
-            ];
-        });
-
-        $outcomes = $invoice->outcomes->map(function ($item) {
-            return [
-                "id"=>$item->id,
-                "description"=>$item->description,
-                "type"=>$item->type,
-                "amount"=>$item->amount,
-                "reference"=>$item->reference,
-                "image"=>$item->image,
-                "status"=>$item->status,
-                "date"=>$item->format_date,
-               
-            ];
-        });
+        
        
         
         if($invoice){
+
+            $invoiceItems = $invoice->invoiceItems->map(function ($item) {
+                return [
+                    "id"=>$item->id,
+                    "label"=>$item->label,
+                    "description"=>$item->description,
+                    "units"=>$item->units,
+                    "category"=>$item->category,
+                    "unit_price"=>"$".$item->unit_price,
+                    "total"=>"$".$item->total,
+                    "comission"=>$item->comission."%",
+                    "total_comission"=>"$".$item->total_comission,
+                ];
+            });
+    
+            $incomes = $invoice->incomes->map(function ($item) {
+                return [
+                    "id"=>$item->id,
+                    "description"=>$item->description,
+                    "type"=>$item->type,
+                    "amount"=>$item->amount,
+                    "reference"=>$item->reference,
+                    "image"=>$item->image,
+                    "invoice_id"=>$item->invoice_id,
+                    "date"=>$item->format_date,    
+                ];
+            });
+    
+            $outcomes = $invoice->outcomes->map(function ($item) {
+                return [
+                    "id"=>$item->id,
+                    "description"=>$item->description,
+                    "type"=>$item->type,
+                    "amount"=>$item->amount,
+                    "reference"=>$item->reference,
+                    "image"=>$item->image,
+                    "status"=>$item->status,
+                    "date"=>$item->format_date,
+                   
+                ];
+            });
+
             return [
                 'id'=>$invoice->id,
                 'project'=>$invoice->project->name,
@@ -187,25 +186,4 @@ class InvoiceService
         return $invoices;
     }
 
-    protected function validateData($request){
-        $validator = Validator::make($request->all(), [
-            'id'=>'required|string',
-            'status' => 'required|string',
-            'project_id' => 'required|numeric|gt:0',
-        ]);
-    
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $fieldErrors = [];
-            foreach ($errors->messages() as $field => $messages) {
-                $fieldErrors[$field] = $messages;
-            }
-
-            return ['status'=>false,'errors'=>$fieldErrors];
-        }
-
-        $cleanedData = $validator->validated();
-
-        return ['status'=>true,'data'=>$cleanedData];
-    }
 }

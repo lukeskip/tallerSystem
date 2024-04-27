@@ -41,7 +41,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $fields = Utils::getFields('projects');
+        $fields = $this->service->create();
         return response()->json($fields);
     }
 

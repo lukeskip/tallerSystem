@@ -106,7 +106,7 @@
 </template>
 <script setup>
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-    import { Head, Link } from '@inertiajs/vue3';
+    import { Head, Link, router } from '@inertiajs/vue3';
     import TableComponentInvoiceItems from '@/Components/TableComponentInvoiceItems.vue';
     import TableComponent from '@/Components/TableComponent.vue';
     import Modal from '@/Components/Modal.vue';
@@ -150,10 +150,8 @@
         }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                Swal.fire("Saved!", "", "success");
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
-            }
+                router.delete(`/cotizaciones/${props.invoice.id}`)
+            } 
         });
     }
 </script> 
