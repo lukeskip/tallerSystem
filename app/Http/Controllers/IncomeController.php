@@ -21,7 +21,7 @@ class IncomeController extends Controller
             'description' => 'nullable|string',
             'amount' => 'required|numeric',
             'type' => 'required|string',
-            'reference' => 'string',
+            'reference' => 'nullable|string',
             'invoice_id' => 'required|string',
         ];
     }

@@ -118,8 +118,7 @@
             const newFormData = new FormData();
         
             for (const key in formData.value) {
-                console.log(key);
-                newFormData.append(key, formData.value[key]);
+                newFormData.append(key, formData.value[key] || "");
             }
 
             newFormData.append('_method', 'put');

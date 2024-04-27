@@ -105,8 +105,11 @@
                 formData.value[field.slug]= ref(field.default || '');
             }
 
-            if(field.type === "decimal" || field.type === 'select' || field.type === 'int'){
+            if(field.type === "decimal" || field.type === 'int'){
                 formData.value[field.slug]= ref(field.default || 0);
+            }
+            if(field.type === 'select'){
+                formData.value[field.slug]= ref(field.default || null);
             }
         });
         
@@ -122,7 +125,7 @@
             const newFormData = new FormData();
         
             for (const key in formData.value) {
-                newFormData.append(key, formData.value[key]);
+                newFormData.append(key, formData.value[key] || "");
             }
 
             const response = await axios.post(`/${props.route}`,newFormData);
