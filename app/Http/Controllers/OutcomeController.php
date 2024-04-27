@@ -19,13 +19,13 @@ class OutcomeController extends Controller
         $this->service = $outcomeService;
         $this->rules = [
             'description' => 'nullable|string',
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|gt:0',
             'type' => 'required|string',
-            'reference' => 'string',
+            'reference' => 'nullable|string',
             'image' => 'nullable',
             'status' => 'required|string',
             'invoice_id' => 'required|string',
-            'provider_id' => 'nullable',
+            'provider_id' => 'required',
         ];
     }
     

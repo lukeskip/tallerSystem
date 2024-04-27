@@ -22,22 +22,24 @@ class OutcomeService
 
     public function update($id,$request)
     {
-        $outcome->update($validatedData['data']);    
+        $outcome = Outcome::find($id);
+        $outcome->update($request);    
     }
 
-    public function edit (){
-        $income = $this->getById($id);
-        $income = [
-            'description'=> ['value'=>$income['description'],'type'=>'string'],
-            'amount'=> ['value'=>$income['amount'],'type'=>'number'],
-            'type'=> ['value'=>$income['type'],'type'=>'string'],
-            'reference'=> ['value'=>$income['reference'],'type'=>'string'],
-            'status'=> ['value'=>$income['status'],'type'=>'string'],
-            'invoice_id'=> ['value'=>$income['invoice_id'],'type'=>'hidden'],
-            'provider_id'=> ['value'=>$income['provider_id'],'type'=>'number'],
+    public function edit ($id){
+        $outcome = $this->getById($id);
+
+        $outcome = [
+            'description'=> ['value'=>$outcome['description'],'type'=>'string'],
+            'amount'=> ['value'=>$outcome['amount'],'type'=>'number'],
+            'type'=> ['value'=>$outcome['type'],'type'=>'string'],
+            'reference'=> ['value'=>$outcome['reference'],'type'=>'string'],
+            'status'=> ['value'=>$outcome['status'],'type'=>'string'],
+            'invoice_id'=> ['value'=>$outcome['invoice_id'],'type'=>'hidden'],
+            'provider_id'=> ['value'=>$outcome['provider_id'],'type'=>'number'],
         ];
-        $fields = Utils::getFields('incomes');
-        return ["item"=>$income,"fields"=>$fields];
+        $fields = Utils::getFields('outcomes');
+        return ["item"=>$outcome,"fields"=>$fields];
     }
 
     public function delete($id)
@@ -59,6 +61,8 @@ class OutcomeService
                 'reference' => $outcome->reference,
                 'image' => $outcome->image,
                 'invoice_id' => $outcome->invoice_id,
+                'status' => $outcome->status,
+                'provider_id' => $outcome->provider_id,
             ];
         } else {
             return null;
