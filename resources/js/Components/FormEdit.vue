@@ -41,6 +41,7 @@
     import axios from 'axios';
     import strings from '@/utils/strings.js'
     import showLabel from '@/helpers/showLabel';
+    import errorHandler from '@/helpers/errorHandler';
     
     const emit  = defineEmits(['close']);
 
@@ -80,6 +81,7 @@
     
         } catch (error) {
             console.log(error);
+            errorHandler(error);
         }
 
         
@@ -132,8 +134,13 @@
             }
             router.reload();
         } catch (error) {
-            errors.value = error.response.data.errors;
-            console.log(error);
+            if(error.response.data.errors){
+                errors.value = error.response.data.errors;
+            }
+            
+            loader.value = false;
+
+            errorHandler(error);
         }
     }
 

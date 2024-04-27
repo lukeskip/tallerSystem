@@ -50,6 +50,7 @@
     import strings from '@/utils/strings.js';
     import showLabel from '@/helpers/showLabel.js';
     import Loader from '@/Components/Loader.vue'
+    import errorHandler from '@/helpers/errorHandler';
     
     const emit  = defineEmits(['close']);
 
@@ -90,11 +91,7 @@
 
             clearFormData();
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.message,
-            });
+            errorHandler(error);
         }
     });
 
@@ -121,6 +118,7 @@
     const handleSubmit = async (stay = false)=>{
         try {  
 
+            loader.value = true;
             const newFormData = new FormData();
         
             for (const key in formData.value) {
@@ -128,7 +126,7 @@
             }
 
             const response = await axios.post(`/${props.route}`,newFormData);
-
+            loader.value = false;
             if(stay){
                 clearFormData()
             }else{
@@ -136,13 +134,16 @@
             }
             router.reload({preserveState:false});
         } catch (error) {
-            errors.value = error.response.data.errors;
-            console.log(error);
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.message,
-            });
+            
+            if(error.response.data.errors){
+                errors.value = error.response.data.errors;
+            }
+
+            errorHandler(error);
+            
+            loader.value = false;
+
+            
         }
     }
 

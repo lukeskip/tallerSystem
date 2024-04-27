@@ -46,6 +46,7 @@ class InvoiceItemController extends Controller
      */
     public function create()
     {
+        
         if(isset($_GET['parentId'])){
             $id = $_GET['parentId'];
         }else{
@@ -86,7 +87,6 @@ class InvoiceItemController extends Controller
     public function edit($id)
     {
         $fields = $this->service->edit($id);
-        
         return response()->json($fields);
     }
 

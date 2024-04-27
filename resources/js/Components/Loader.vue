@@ -1,10 +1,15 @@
 <template>
-    <div class="loader h-half-screen flex justify-center items-center"><div class="spinner"></div></div>
+    <div class="bg-white loader w-full flex justify-center items-center absolute top-0 right-0"><div class="spinner"></div></div>
 </template>
 <script setup>
 
 </script>
 <style>
+.loader{
+   z-index: 10;
+   min-height: 50vh;
+   height: 100%;
+}
 .h-half-screen {
   height: 50vh;
 }
