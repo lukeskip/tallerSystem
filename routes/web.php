@@ -46,6 +46,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
 
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
+// Route::get('/test/invoice/{invoice}', [PDFController::class, 'test'])->name('publish')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

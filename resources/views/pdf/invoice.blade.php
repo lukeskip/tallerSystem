@@ -24,12 +24,12 @@
         <h2>{{$invoice['project']}}</h2>
 
         @if($invoiceItems->count() > 0)
-        <table class="w-full text-md text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table style="font-size:12px;border-collapse: collapse;">
+            <thead style="background-color:#9e915f; color:white;text-transform: uppercase;font-size:14px;">
                 <tr>
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id')
-                            <th class="px-6 py-3">
+                            <th style="border:0;padding:5px">
                                 {{ $key }}
                             </th>
                         @endif
@@ -40,21 +40,21 @@
             @php
                 $currentCategory = null;
             @endphp
-            @foreach($invoiceItems as $item)
+            @foreach($invoiceItems as $index => $item)
                 @if ($currentCategory !== $item['category'])
                     @php
                         $currentCategory = $item['category'];
                     @endphp
-                    <tr style="background-color: #f3f4f6;">
-                        <td colspan="{{ count($invoiceItems->first()) }}" style="text-align:center">
+                    <tr style="background-color: #9e915f; color:white;border-top:solid white 3px;text-transform: uppercase;">
+                        <td colspan="{{ count($invoiceItems->first()) }}" style="text-align:center;font-size:12px;">
                             <h3>{{ $currentCategory }}</strong>
                         </td>
                     </tr>
                 @endif
-                <tr style="background-color: #ffffff; border-bottom: 1px solid #d1d5db;">
+                <tr style="background-color: {{ $index % 2 == 0 ? '#ffffff' : '#f3f4f6' }}; border-bottom: 1px solid #d1d5db;">
                     @foreach($item as $key => $value)
                         @if($key !== 'id')
-                            <td class="border px-4 py-2">
+                            <td style="padding:10px 5px">
                                 {{ $value }}
                             </td>
                         @endif

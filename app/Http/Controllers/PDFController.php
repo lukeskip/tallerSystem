@@ -43,4 +43,32 @@ class PDFController extends Controller
         return $pdf->download($fileName);
 
     }
+
+    public function test($id){
+        $InvoiceService = new InvoiceService();
+
+        $invoice = $InvoiceService->getById($id); 
+
+        $invoiceItems = $invoice['invoiceItems']->map(function ($item){
+            return [
+                'Concepto'=> $item['label'],
+                'Descripción'=> $item['description'],
+                'Unidades'=> $item['units'],
+                'Valor Unitario'=> $item['unit_price'],
+                'category'=> $item['category'],
+                'Subtotal'=> $item['total_comission'],
+            ];
+        });
+        
+        $data = [
+            'invoice' => $invoice,
+            'invoiceItems' => $invoiceItems,
+        ];
+
+
+
+        return view('pdf.invoice', $data)->render();
+        
+
+    }
 }
