@@ -16,15 +16,53 @@ class ClientSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Generar clientes de ejemplo
-        for ($i = 0; $i < 5; $i++) {
-            Client::create([
-                'name' => $faker->company,
-                'contact_name' => $faker->name,
-                'phone' => $faker->phoneNumber,
-                'address' => $faker->address,
-                'email' => $faker->unique()->safeEmail,
-            ]);
-        }
+
+        Client::create([
+            'name' => 'Luis Álvarez',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
+
+        Client::create([
+            'name' => 'Bella Milmo',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
+        
+        Client::create([
+            'name' => 'Rebeca Rangel',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
+
+        Client::create([
+            'name' => 'Ángeles Rión',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
+
+        Client::create([
+            'name' => 'Mariana Gómez',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
+
+        Client::create([
+            'name' => 'Andrea Heguevich',
+            'contact_name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+            'address' => $faker->address,
+            'email' => $faker->unique()->safeEmail,
+        ]);
     }
 }
