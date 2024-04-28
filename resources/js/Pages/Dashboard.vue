@@ -44,11 +44,11 @@
             </div>
 
             <div class="mt-10">
-                <h3 class="text-lg font-semibold">Ùltimos Ingresos</h3>
+                <h3 class="text-lg font-semibold">Últimos Ingresos</h3>
                 <TableComponent :items="incomes" />
             </div>
             <div class="mt-10">
-                <h3 class="text-lg font-semibold">Ùltimos Egresos</h3>
+                <h3 class="text-lg font-semibold">Últimos Egresos</h3>
                 <TableComponent :items="outcomes" />
             </div>
 

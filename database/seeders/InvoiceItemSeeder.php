@@ -174,15 +174,17 @@ class InvoiceItemSeeder extends Seeder
             if ($invoice->exists()) {
 
                 foreach ($data as $item) {
-                    InvoiceItem::create([
-                        'label' => $item['label'],
-                        'description' => $item['description'],
-                        'unit_price' => $item['unit_price'],
-                        'units' => $item['units'],
-                        'comission' => $invoice->project->comission,
-                        'category' => $item['category'],
-                        'invoice_id' => $invoice->id,
-                    ]);
+                    if($faker->boolean(70)){
+                        InvoiceItem::create([
+                            'label' => $item['label'],
+                            'description' => $item['description'],
+                            'unit_price' => $item['unit_price'],
+                            'units' => $item['units'],
+                            'comission' => $invoice->project->comission,
+                            'category' => $item['category'],
+                            'invoice_id' => $invoice->id,
+                        ]);
+                    }
                 }
             }
         }
