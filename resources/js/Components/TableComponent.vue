@@ -56,7 +56,7 @@
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id'" class="border px-4 py-2">
                       <template v-if="index=== 1 && root !== '' && !inner">
-                        <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
+                        <Link class="font-bold" :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
                       <template v-else-if="key !== 'id'"><span v-html="showLabel(value)"></span></template>
                     </td>
