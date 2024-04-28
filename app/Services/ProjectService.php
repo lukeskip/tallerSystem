@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 use Illuminate\Support\Facades\Validator;
 use App\Utils\Utils;
+use Carbon\Carbon;
 
 class ProjectService
 {
@@ -50,11 +51,31 @@ class ProjectService
 
         if ($project) {
 
+            $incomes = $project->incomes;
+            $outcomes = $project->outcomes;
+            
+            if($incomes){
+                $incomesTotal = $incomes->sum('amount');
+            }else{
+                $incomesTotal = 0;
+            }
+
+            if($outcomes){
+                $outcomesTotal = $outcomes->sum('amount');
+            }else{
+                $outcomesTotal = 0;
+            }
+
+            $balance = $incomesTotal - $outcomesTotal;
+
             return [
                 'id' => $project->id,
                 'name' => $project->name,
                 'address' => $project->address,
                 'comission' => $project->comission,
+                'incomesTotal'=>$incomesTotal,
+                'outcomesTotal'=>$outcomesTotal,
+                'balance'=>$balance,
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
