@@ -19,16 +19,16 @@ const menu = [
         icon:'<i class="fa-solid fa-toolbox"></i>',
         label:'Proveedores'
     }, 
-    {
-        slug:'ingresos.index',
-        icon:'<i class="fa-solid fa-toolbox"></i>',
-        label:'Ingresos'
-    },  
-    {
-        slug:'egresos.index',
-        icon:'<i class="fa-solid fa-toolbox"></i>',
-        label:'Egresos'
-    }  
+    // {
+    //     slug:'ingresos.index',
+    //     icon:'<i class="fa-solid fa-toolbox"></i>',
+    //     label:'Ingresos'
+    // },  
+    // {
+    //     slug:'egresos.index',
+    //     icon:'<i class="fa-solid fa-toolbox"></i>',
+    //     label:'Egresos'
+    // }  
 ];
 
 export default menu;
