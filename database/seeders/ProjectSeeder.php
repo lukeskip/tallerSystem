@@ -17,20 +17,81 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        // Obtener todos los clientes
-        $clients = Client::all();
 
-        // Iterar sobre cada cliente
-        $clients->each(function ($client)use($faker) {
-            // Crear dos proyectos por cada cliente
-            for ($i = 0; $i < 2; $i++) {
-                Project::create([
-                    'name' => 'Proyecto ' . ($i + 1) . ' de ' . $client->name,
-                    'address'=>$faker->streetAddress,
-                    'comission' => $faker->randomFloat(2, 0, 100),
-                    'client_id' => $client->id,
-                ]);
-            }
-        });
+     
+        $client = Client::where('name', 'Luis Álvarez')->first();;
+        Project::create([
+            'name' => 'San Jerónimo',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+        Project::create([
+            'name' => 'Valle de Bravo',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+        Project::create([
+            'name' => 'Acapulco',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+        Project::create([
+            'name' => 'Vail',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+
+        
+        $client = Client::where('name', 'Bella Milmo')->first();;
+        Project::create([
+            'name' => 'Monterrey',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+
+        $client = Client::where('name', 'Rebeca Rangel')->first();;
+        Project::create([
+            'name' => 'Tamán Condesa',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+
+        $client = Client::where('name', 'Mariana Gómez')->first();;
+        Project::create([
+            'name' => 'Dewi',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+        Project::create([
+            'name' => 'Quiroga',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+
+        $client = Client::where('name', 'Andrea Heguevich')->first();;
+        Project::create([
+            'name' => 'Monterrey',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+        Project::create([
+            'name' => 'Lomas',
+            'address'=>$faker->streetAddress,
+            'comission' => $faker->randomFloat(2, 0, 100),
+            'client_id' => $client->id,
+        ]);
+
+       
+        
+        
     }
 }
