@@ -23,6 +23,10 @@ class InvoiceItem extends Model
     ];
     use HasFactory;
 
+    public function provider (){
+        return $this->belongsTo(Provider::class);
+    }
+
     public function getTotalComissionAttribute()
     {   
         $comission = $this->comission / 100;
@@ -48,7 +52,5 @@ class InvoiceItem extends Model
         return Utils::formatDate($this->created_at);
     }
 
-    public function provider (){
-        return $this->belongsTo(Provider::class);
-    }
+    
 }
