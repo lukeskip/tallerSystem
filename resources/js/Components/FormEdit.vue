@@ -5,7 +5,7 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2">
                     {{ showLabel(field.slug) }}
                 </label>
-                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]"/>
+                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
 
                 <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
                 
