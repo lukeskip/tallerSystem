@@ -131,12 +131,6 @@ class IncomeService
                 
                 $balanceProvider = $totalDebtProvider - $totalPaidProvider;
                 $proportion = ($balanceProvider * 100) /  $totalDebt;
-
-                dump($balanceProvider);
-                dump($totalDebtProvider);
-                dump($totalPaidProvider);
-                dump($proportion);
-
                 
                 if($balanceProvider > 0){
 

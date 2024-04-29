@@ -84,7 +84,36 @@ class InvoiceService
                     "total_comission"=>Utils::publishMoney($item->total_comission),
                 ];
             });
-    
+
+            $debtsByProvider = $invoice->invoiceItems()
+                ->with('provider')
+                ->selectRaw('provider_id, providers.name as provider_name, SUM(units * unit_price) as total_amount')
+                ->join('providers', 'providers.id', '=', 'invoice_items.provider_id')
+                ->whereNotNull('providers.id')
+                ->orderBy('provider_id')
+                ->groupBy('provider_id')
+                ->get();
+
+
+            $debtsByProvider->transform(function ($item)use($invoice) {
+                $totalPaid = $invoice->outcomes
+                ->where('provider_id',$item['provider_id'])
+                ->where('status','completed')
+                ->sum('amount');
+
+                $totalAmount = $item['total_amount'];
+                
+                $item['id'] = $item['provider_id'];
+                $item['total_paid'] = Utils::publishMoney($totalPaid);
+                $item['total_amount'] = Utils::publishMoney($totalAmount);
+                $item['balance'] = Utils::publishMoney($totalAmount - $totalPaid);
+                
+                unset($item['provider']); 
+                unset($item['provider_id']); 
+                return $item;
+            });
+
+           
             $incomes = $invoice->incomes->map(function ($item) {
                 return [
                     "id"=>$item->id,
@@ -122,6 +151,7 @@ class InvoiceService
                 'invoiceItems' => $invoiceItems,
                 'incomes' => $incomes,
                 'outcomes' => $outcomes,
+                'debts'=>$debtsByProvider,
                 'balance' => $invoice->balance,
                 'format_date'=>$invoice->format_date,
             ];

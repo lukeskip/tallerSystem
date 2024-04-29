@@ -38,5 +38,8 @@ const strings = {
         provider_id:"Proveedor",
         image:"Imagen",
         client:"Cliente",
+        provider_name:"Proveedor",
+        total_amount:"Total de deuda",
+        total_paid:"Total Pagado",
 };
 export default strings;

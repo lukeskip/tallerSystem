@@ -77,6 +77,9 @@ class OutcomeService
         if ($request &&  $request->input('search')) {
             $outcomes->where('description', 'like', '%' . $request->input('search') . '%');
         }
+        if ($request &&  $request->input('status')) {
+            $outcomes->where('status', 'like', $request->input('status'));
+        }
 
         if ($request &&  $request->input('month')) {
             $currentDate = Carbon::now();
