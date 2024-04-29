@@ -32,7 +32,7 @@ class InvoiceItem extends Model
         $comission = $this->comission / 100;
         $comisionAmount = $comission * ($this->unit_price * $this->units);
         $total = ($this->unit_price * $this->units) + $comisionAmount;
-        return number_format($total,2);
+        return $total;
     }
     public function getTotalAttribute()
     {   

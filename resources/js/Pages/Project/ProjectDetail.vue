@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <h3>Cotizaciones</h3>
+            <h3 class="text-lg font-semibold mt-10">Cotizaciones de este proyecto</h3>
             
             <TableComponent :items="{data:project.invoices}" :root="'cotizaciones'" :actions="[]"/>
 
