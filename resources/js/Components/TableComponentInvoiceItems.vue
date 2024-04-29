@@ -25,7 +25,7 @@
           <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 bg-main-color text-white">
               <tr>
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
-                    <th v-if="key !== 'id' && key !== 'category'"  class="px-6 py-3">
+                    <th v-if="!columnsToHide.includes(key)"   class="px-6 py-3">
                       {{ showLabel(key) }}
                     </th>
                   </template>
@@ -42,12 +42,38 @@
                     </td>
               </tr>
               <tr :class="index % 2 === 0 ? 'bg-terciary' : 'bg-secondary-color'">
-                <template v-for="(value, key, index) in item" :key="key">
-                    <td v-if="key !== 'id' && key !== 'category'" class="border px-4 py-2">
-                      <template v-if="index=== 1 && root !== '' && !inner">
-                        <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
+                <template v-for="(value, key) in item" :key="key">
+                    <td v-if="!columnsToHide.includes(key)" class="border px-4 py-2">
+                 
+                      <template v-if="key === 'label'">
+                        <div class="relative">
+                          <div class="hasToolTip">
+                            {{value}}
+                            <div class="toolTip">
+                              {{itemsRef[index]['description']}}
+                            </div>
+                          </div>
+                         
+                        </div>
                       </template>
-                      <template v-else-if="key !== 'id'">{{ value }}</template>
+                      <template v-else-if="key === 'total_comission'">
+                        <div class="relative">
+                          <div class="hasToolTip">
+                            {{value}}
+                            <div class="toolTip">
+                              {{itemsRef[index]['comission']}}
+                            </div>
+                          </div>
+                         
+                        </div>
+                      </template>
+                      <template v-else>
+                          <div class="relative">
+                            {{ value }}
+                          </div>
+                      </template>
+
+
                     </td>
                   </template>
                   <td class="border px-4 py-2 text-center" v-if="actions.length">
@@ -110,6 +136,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
+const columnsToHide = ['id','category','description','comission'];
 
 
 onUpdated(()=>{
@@ -146,3 +173,25 @@ const submitSearchFilter = () => {
 };
 
 </script>
+<style>
+  .hasToolTip{
+    position:relative;
+    cursor: pointer;
+  }
+  .hasToolTip:hover .toolTip{
+    display: block;
+  }
+  .toolTip{
+    display: none;
+    position: absolute;
+    max-width:200px;
+    top: 0;
+    left:10px;
+    font-size: .8em;
+    background: white;
+    padding: 3px 5px;
+    z-index: 10;
+
+
+  }
+</style>
