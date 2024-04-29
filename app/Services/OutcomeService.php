@@ -92,6 +92,7 @@ class OutcomeService
         return $outcomes->map(function ($outcome) {
             return [
                 'id' => $outcome->id,
+                'provider' => $outcome->provider->name,
                 'description' => $outcome->description,
                 'amount' => $outcome->amount,
                 'type' => $outcome->type,
