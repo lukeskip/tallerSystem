@@ -18,6 +18,7 @@ class InvoiceItemService
 
     public function edit($id){
         $invoiceItem =  InvoiceItem::find($id);
+        $invoice_id = $invoiceItem->invoice_id;
         $invoiceItem =  [
             'label'=> ['value'=>$invoiceItem->label,'type'=>'string'],
             'description'=> ['value'=>$invoiceItem->description,'type'=>'string'],
@@ -29,7 +30,7 @@ class InvoiceItemService
             'category'=> ['value'=>$invoiceItem->category,'type'=>'string'],
         ];
     
-        $fields = Utils::getFields('invoice_items');
+        $fields = Utils::getFields('invoice_items',$invoice_id);
         return ["item"=>$invoiceItem,"fields"=>$fields];
         
     }
