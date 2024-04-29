@@ -5,10 +5,10 @@
         <template #title>
             Cotización {{invoice.id}} 
             <div>
-                <span :class="{ 'line-through': invoice.balance }">Total: {{ invoice.amount }}</span> 
-                <span v-if="invoice.balance">
+                <div :class="{ 'line-through': invoice.balance }">Total: {{ invoice.amount }}</div> 
+                <div v-if="invoice.balance">
                     {{ invoice.balance }}
-                </span>
+                </div>
             </div>
         </template>
         <template #subtitle>
