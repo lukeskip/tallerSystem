@@ -66,6 +66,13 @@
                     >
                         Egresos
                     </button>
+                    <button
+                        :class="{ 'bg-main-color text-white': activeTab === 4, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 4 }"
+                        class="py-2 px-4 focus:outline-none"
+                        @click="toggleTab(4)"
+                    >
+                        Deuda
+                    </button>
                 </div>
 
                 <!-- Tabs content -->
@@ -84,6 +91,11 @@
                     <div v-if="activeTab === 3">
                         <TableComponent :items="invoice.outcomes" :inner="true" :root="'egresos'" :actions="['edit','delete']" parentId="invoice_id"
                         :searchField="'description'"/>
+                    </div>
+
+                    <!-- Tab 3 -->
+                    <div v-if="activeTab === 4">
+                        <TableComponent :items="invoice.debts" :inner="true" />
                     </div>
                     
                     
@@ -119,6 +131,11 @@
         invoice: { type: [Object, Array], required: true },
         providers: { type: Array, required: true },
     });
+
+    onMounted(()=>{
+        console.log(props.invoice);
+    });
+
 
     const activeTab = ref(1);
 

@@ -26,9 +26,10 @@ class DashboardController extends Controller
         $firstDayOfMonth = $currentDate->startOfMonth()->format('Y-m-d H:i:s');
         $lastDayOfMonth = $currentDate->endOfMonth()->format('Y-m-d H:i:s');
 
-        $request = new Request(['month' => true]);
-        $incomes = $this->incomeService->getAll($request);
-        $outcomes = $this->outcomeService->getAll($request);
+        $requestOutcome = new Request(['month' => true,'status'=>'completed']);
+        $requestIncome = new Request(['month' => true]);
+        $incomes = $this->incomeService->getAll($requestIncome);
+        $outcomes = $this->outcomeService->getAll($requestOutcome);
 
         $incomesTotal = $incomes->sum('amount');
         $outcomesTotal = $outcomes->sum('amount');
