@@ -22,7 +22,7 @@
       </form>
 
       <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-800">
-          <thead class="sticky top-0 text-sm text-gray-700 uppercase bg-gray-50 bg-main-color text-white">
+          <thead class="sticky z-10 relative top-0 text-sm text-gray-700 uppercase bg-gray-50 bg-main-color text-white">
               <tr>
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
                     <th v-if="!columnsToHide.includes(key)"   class="px-6 py-3">
