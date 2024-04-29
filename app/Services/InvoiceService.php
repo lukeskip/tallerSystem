@@ -80,6 +80,7 @@ class InvoiceService
                     "unit_price"=>"$".$item->unit_price,
                     "total"=>"$".$item->total,
                     "comission"=>$item->comission."%",
+                    "provider"=> $item->provider->name ?? '',
                     "total_comission"=>"$".$item->total_comission,
                 ];
             });
@@ -100,6 +101,7 @@ class InvoiceService
             $outcomes = $invoice->outcomes->map(function ($item) {
                 return [
                     "id"=>$item->id,
+                    "provider"=>$item->provider->name,
                     "description"=>$item->description,
                     "type"=>$item->type,
                     "amount"=>$item->amount,

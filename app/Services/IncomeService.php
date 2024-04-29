@@ -25,7 +25,7 @@ class IncomeService
         
         $amountToPay = $income->amount * .60;
         
-        $this->createOutcomesForProviders($income);
+        return $this->createOutcomesForProviders($income);
     }
 
     public function edit ($id){
@@ -44,7 +44,10 @@ class IncomeService
     public function update($id,$request)
     {
         $income = Income::find($id);
+        
         $income->update($request);
+        
+        return $this->createOutcomesForProviders($income);
     }
 
     public function delete($id)
@@ -108,37 +111,42 @@ class IncomeService
 
     protected function createOutcomesForProviders($income)
     {
+        if($income->outcomes){
+            $income->outcomes()->where('status', 'pending')->delete();
+        }
+
         $providers = Provider::whereHas('invoiceItems',function ($query)use($income){
             $query->where('invoice_id',$income->invoice_id);
-        })->with('invoiceItems','outcomes');
+        })->with('invoiceItems','outcomes')->get();
         
         if($providers->count()){
-   
-            $providers->each(function ($provider) use ($income) {
-                $totalDebt = $provider->invoiceItems->sum('amount');
-                $totalPaid = $provider->outcomes->where(function ($outcome) {
+            $totalDebt = $providers->flatMap->invoiceItems->sum('amount');
+
+            $providers->each(function ($provider) use ($income,$totalDebt) {
+                $totalDebtProvider = $provider->invoiceItems->sum('amount');
+                $totalPaidProvider = $provider->outcomes->where(function ($outcome) {
                     return $outcome->status === 'paid' || $outcome->status === 'pending';
                 })->sum('amount');
-                $balance = $totalDebt - $totalPaid;
 
-                if($totalDebt > 0 ){
-                    $percentageToPaid = ($balance / $totalDebt) * 100;
-                }else{
-                    $percentageToPaid = 0;
-                }
                 
-                dump($balance);
-                if($balance > 0){
+                $balanceProvider = $totalDebtProvider - $totalPaidProvider;
+                $proportion = ($balanceProvider * 100) /  $totalDebt;
 
-                    if($percentageToPaid >= 50){
-                        $amountToPayProvider = $totalDebt * .5;
-                    }
+                dump($balanceProvider);
+                dump($totalDebtProvider);
+                dump($totalPaidProvider);
+                dump($proportion);
 
-                    
-                    // Generates an outcome un pending
-                    $provider->invoiceItems->each(function ($item) use (&$description,$amountToPayProvider) {
+                
+                if($balanceProvider > 0){
+
+
+                    $amountToPayProvider = $income->amount * ($proportion / 100);
+
+                    $provider->invoiceItems->each(function ($item) use (&$description) {
                         $description .= $item->label . ", ";
                     });
+
         
                     $outcome = Outcome::create([
                         'amount' => $amountToPayProvider,
@@ -146,8 +154,10 @@ class IncomeService
                         'invoice_id' => $income->invoice_id,
                         'status' => 'pending',
                         'type' => 'pending',
-                        'provider_id' => $provider->id
+                        'provider_id' => $provider->id,
+                        'income_id' => $income->id
                     ]);
+               
                 }
 
             });
