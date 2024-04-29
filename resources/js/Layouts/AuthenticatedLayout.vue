@@ -142,6 +142,11 @@ const showingNavigationDropdown = ref(false);
                     <div class="mainContainer"><slot name="main" /></div>
                 </div>
             </main>
+            <footer class="bg-main-color text-white py-4 mt-20">
+                <div class="container mx-auto px-4">
+                    <p class="text-center">&copy; 2024 Cheko García. Todos los derechos reservados.</p>
+                </div>
+            </footer>
         </div>
     </div>
 </template>
