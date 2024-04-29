@@ -52,7 +52,7 @@ class ProjectService
         if ($project) {
 
             $incomesTotal = $project->invoices->flatMap->incomes->sum('amount');
-            $outcomesTotal = $project->invoices->flatMap->outcomes->sum('amount');
+            $outcomesTotal = $project->invoices->flatMap->outcomes->where('status','completed')->sum('amount');
             
            
             $balance = $incomesTotal - $outcomesTotal;
