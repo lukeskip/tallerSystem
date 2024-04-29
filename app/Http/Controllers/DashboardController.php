@@ -9,6 +9,7 @@ use App\Models\Outcome;
 use Carbon\Carbon;
 use App\Services\IncomeService;
 use App\Services\OutcomeService;
+use App\Utils\Utils;
 
 
 class DashboardController extends Controller
@@ -32,13 +33,23 @@ class DashboardController extends Controller
         $incomesTotal = $incomes->sum('amount');
         $outcomesTotal = $outcomes->sum('amount');
         $balance = $incomesTotal - $outcomesTotal;
+
+        $incomes->transform(function ($item) {
+            $item['amount'] = Utils::publishMoney($item['amount']);
+            return $item;
+        });
+        
+        $outcomes->transform(function ($item) {
+            $item['amount'] = Utils::publishMoney($item['amount']);
+            return $item;
+        });
         
         return Inertia::render('Dashboard',[
+            'incomesTotal' => Utils::publishMoney($incomesTotal),
+            'outcomesTotal' => Utils::publishMoney($outcomesTotal),
+            'balance' => Utils::publishMoney($balance),
             'incomes' => $incomes,
-            'incomesTotal' => "$" . number_format($incomesTotal).'MXN',
-            'outcomesTotal' => "$" . number_format($outcomesTotal).'MXN',
             'outcomes' => $outcomes,
-            'balance' => "$" . number_format($balance).'MXN',
         ]);
     }
 }

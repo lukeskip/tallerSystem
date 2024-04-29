@@ -51,49 +51,39 @@ class ProjectService
 
         if ($project) {
 
-            $incomes = $project->incomes;
-            $outcomes = $project->outcomes;
+            $incomesTotal = $project->invoices->flatMap->incomes->sum('amount');
+            $outcomesTotal = $project->invoices->flatMap->outcomes->sum('amount');
             
-            if($incomes){
-                $incomesTotal = $incomes->sum('amount');
-            }else{
-                $incomesTotal = 0;
-            }
-
-            if($outcomes){
-                $outcomesTotal = $outcomes->sum('amount');
-            }else{
-                $outcomesTotal = 0;
-            }
-
+           
             $balance = $incomesTotal - $outcomesTotal;
+            
 
             return [
                 'id' => $project->id,
                 'name' => $project->name,
                 'address' => $project->address,
                 'comission' => $project->comission,
-                'incomesTotal'=>$incomesTotal,
-                'outcomesTotal'=>$outcomesTotal,
-                'balance'=>$balance,
+                'incomesTotal'=>Utils::publishMoney($incomesTotal),
+                'outcomesTotal'=>Utils::publishMoney($outcomesTotal),
+                'balance'=>Utils::publishMoney($balance),
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
                 ],
-                'invoices' => $project->invoices->map(function ($invoice) {
+                'invoices' => $project->invoices->transform(function ($invoice) {
                     return [
-                        "id"=>$invoice->id,
-                        "file"=>$invoice->id,
+                        "id" => $invoice->id,
+                        "file" => $invoice->id,
                         "amount" => $invoice->amount,
-                        'status'=> $invoice->status,
+                        'status' => $invoice->status,
                         'format_date' => $invoice->format_date
                     ];
                 }),
-                'files' => $project->files->map(function ($file) {
+                'files' => $project->files->transform(function ($file) {
                     return [
-                        "id"=>$file->id,
-                        "name"=>$file->name,
-                        "url"=>$file->url,
+                        "id" => $file->id,
+                        "name" => $file->name,
+                        "url" => $file->url,
                         "extension" => $file->extension,
                         'format_date' => $file->format_date
                     ];

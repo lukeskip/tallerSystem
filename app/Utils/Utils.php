@@ -112,4 +112,11 @@ class Utils
 
         return $year . '_' . $nextInvoiceNumberFormatted;
     }
+
+    public static function publishMoney ($field){
+        return "$" .number_format(round($field));
+    }
+    public static function publishPercentage($field){
+        return number_format(round($field))."%";
+    }
 }

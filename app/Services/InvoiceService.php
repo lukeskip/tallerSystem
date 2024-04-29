@@ -77,11 +77,11 @@ class InvoiceService
                     "description"=>$item->description,
                     "units"=>$item->units,
                     "category"=>$item->category,
-                    "unit_price"=>"$".$item->unit_price,
+                    "unit_price"=>Utils::publishMoney($item->unit_price),
                     "total"=>"$".$item->total,
-                    "comission"=>$item->comission."%",
+                    "comission"=>Utils::publishPercentage($item->comission),
                     "provider"=> $item->provider->name ?? '',
-                    "total_comission"=>"$".$item->total_comission,
+                    "total_comission"=>Utils::publishMoney($item->total_comission),
                 ];
             });
     
@@ -90,7 +90,7 @@ class InvoiceService
                     "id"=>$item->id,
                     "description"=>$item->description,
                     "type"=>$item->type,
-                    "amount"=>$item->amount,
+                    "amount"=>Utils::publishMoney($item->amount),
                     "reference"=>$item->reference,
                     "image"=>$item->image,
                     "invoice_id"=>$item->invoice_id,
@@ -104,7 +104,7 @@ class InvoiceService
                     "provider"=>$item->provider->name,
                     "description"=>$item->description,
                     "type"=>$item->type,
-                    "amount"=>$item->amount,
+                    "amount"=>Utils::publishMoney($item->amount),
                     "reference"=>$item->reference,
                     "image"=>$item->image,
                     "status"=>$item->status,
