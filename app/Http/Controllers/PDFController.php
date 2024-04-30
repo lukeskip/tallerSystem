@@ -18,6 +18,10 @@ class PDFController extends Controller
 
         $invoice = $InvoiceService->getById($id); 
 
+        if(!$invoice){
+            return abort(404, 'El recurso no fue encontrado.'); 
+        }
+
         $invoiceItems = $invoice['invoiceItems']->map(function ($item){
             return [
                 'Concepto'=> $item['label'],
