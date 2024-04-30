@@ -14,7 +14,7 @@
       required: true
     },
     default:{
-      type:Number
+      type:[Number,String]
     }
   });
 

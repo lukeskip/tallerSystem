@@ -22,6 +22,8 @@ class Invoice extends Model
         'id',
         'project_id',
         'status',
+        'iva',
+        'fee',
     ];
 
     use HasFactory;
@@ -41,37 +43,72 @@ class Invoice extends Model
         return Utils::formatDate($this->created_at);
     }
 
-    public function getAmountAttribute()
+    public function getSubtotalAttribute()
     {   
-        $totalComissions = 0;
-        
-        foreach ($this->invoiceItems as $item) {
-            $totalComissions += floatval(str_replace(',', '', $item->total_comission));
+        if($this->invoiceItems){
+            return $this->invoiceItems->sum('amount');
+        }else{
+            return 0;
         }
-        return "$" . number_format($totalComissions, 2);
         
     }
+
+    public function getTotalAttribute (){
+        $subtotal = $this->getSubtotalAttribute();
+        $ivaAmount = $this->getIvaAmountAttribute();
+        $feeAmount = $this->getFeeAmountAttribute();
+        
+        return $subtotal + $ivaAmount + $feeAmount;
+
+    }
+
     public function getBalanceAttribute()
     {   
-        $totalComissions = 0;
-        $totalIncomes = 0;
         
-        foreach ($this->invoiceItems as $item) {
-            $totalComissions += floatval(str_replace(',', '', $item->total_comission));
-        }
+        $total = $this->getTotalAttribute();
+        $totalIncomes = $this->getAmountPaidAttribute();
 
-        foreach ($this->incomes as $item) {
-            $totalIncomes += floatval(str_replace(',', '', $item->amount));
-        }
-
-        $balance = $totalComissions - $totalIncomes;
+        return $balance = $total - $totalIncomes; 
         
-        if($totalIncomes > 0){
-            return "$" . number_format($balance, 2);
+    }
+    public function getFeeAmountAttribute()
+    {   
+        
+        if($this->fee > 0){
+            $fee = $this->fee / 100;
+            $amountFee = $this->getSubtotalAttribute() * $fee;
+
+            return $amountFee;
         }else{
-            return null;
-        }
+            return 0;
+        } 
         
+    }
+    public function getSubtotalFeeAttribute()
+    {   
+        $subtotal = $this->getSubtotalAttribute();
+        $fee = $this->getFeeAmountAttribute();
+        return $subtotal + $fee;
+    }
+
+    public function getIvaAmountAttribute(){
+
+        if($this->iva > 0){
+            $iva = $this->iva / 100;
+            $amountIVA = $this->getSubtotalAttribute() * $iva;
+            return $amountIVA;
+        }else{
+            return 0;
+        }
+    
+    }
+
+    public function getAmountPaidAttribute(){
+        if($this->outcomes){
+            $this->outcomes->sum('amount');
+        }else{
+            return 0;
+        }
     }
 
     public function invoiceItems()

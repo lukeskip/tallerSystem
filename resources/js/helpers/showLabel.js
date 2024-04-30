@@ -2,7 +2,7 @@ import strings from '@/utils/strings'
 
 
 const showLabel = (label)=>{
-    if (label && label.startsWith("https")) {
+    if (label && typeof label === 'string' && label.startsWith("https")) {
         
         return `<a href="${label}" target="_blank"><i class="fa-solid fa-image"></i></a>`;
     } else {

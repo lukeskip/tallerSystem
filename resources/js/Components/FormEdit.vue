@@ -1,8 +1,10 @@
 <template>
     <template v-if="fields.length">
+        
         <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <div class="mt-2" v-for="field in fields" k>
-                <label class="block text-gray-700 text-sm font-bold mb-2">
+            <div>{{ message }}</div>
+            <div class="mt-2" v-for="field in fields">
+                <label v-if="field.type !== 'hidden'" class="block text-gray-700 text-sm font-bold mb-2">
                     {{ showLabel(field.slug) }}
                 </label>
                 <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
@@ -53,7 +55,7 @@
             type:Function
         },
         route :{type:String,required:true},
-        editId:{type:Number},
+        editId:{type:[Number,String]},
         default:{type:Object}
     })
 
@@ -64,6 +66,7 @@
    
 
     const fields = ref([]);
+    const message = ref("");
     const formData = ref({
         ...props.default,
         _token
@@ -91,12 +94,14 @@
     
         for (let key in fieldsEdit) { 
             
-            if(fieldsEdit[key]['type'] === 'number' || fieldsEdit[key]['type']==='select'){
-                formData.value[key]= Number(fieldsEdit[key]['value']);  
+            if(fieldsEdit[key]['type'] === 'number'){
+                formData.value[key]= Number(fieldsEdit[key]['value'] || fieldsEdit[key]['value']);  
             }else{
-                formData.value[key]= fieldsEdit[key]['value'];
-            }           
+                formData.value[key] = fieldsEdit[key]['value'];
+            }     
+            
         }        
+        console.log(formData.value);
     }
 
     const clearFormData = ()=>{
@@ -122,13 +127,17 @@
             }
 
             newFormData.append('_method', 'put');
-            
+            loader.value = true;
             const response = await axios.post(`/${props.route}/${props.editId}`,newFormData);
+            loader.value = false;
+
+            if(response.data.message){
+                message.value = response.data.message;
+            }
 
             if(stay){
                 clearFormData()
             }else{
-                console.log(`/${response.data.redirect}`);
                 emit('close');
             }
             router.reload();

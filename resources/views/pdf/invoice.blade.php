@@ -14,6 +14,23 @@
             body{
                 font-family:roboto,sans-serif;
             }
+
+            .totals{
+                margin:50px 0;
+                width:100%;
+            }
+
+            .totals td{
+                padding: 10px 5px;
+                width:20%;
+                text-align:right;
+            }
+            .totals td:first-child{
+                padding: 10px 5px;
+                width:80%;
+                text-align:right;
+            }
+           
         </style>
 
     
@@ -22,12 +39,12 @@
 
         <div style="display:flex;flex-wrap:wrap;justify-content: space-between; align-items: center;">
             <div>
-                <img src="{{asset('./img/logo.svg')}}" style="width:200px" alt="">
+                <img src="'./img/logo.svg'" style="width:200px" alt="">
             </div>
             <div style="text-align:right;margin-bottom:20px">
-                <h2 style="margin:0">Cotización {{$invoice['id']}}</h1>
-                <h2 style="margin:0">{{$invoice['project']['name']}}</h2>
-                <h3 style="margin:0">{{$invoice['client']}}</h3>
+                <h2 style="margin:0;">Cotización {{$invoice['id']}}</h1>
+                <h2 style="margin:0:color:black">{{$invoice['project']['name']}}</h2>
+                <h3 style="margin:0:color:black">{{$invoice['client']}}</h3>
             </div>
         </div>
         
@@ -109,12 +126,68 @@
         </table>
         @endif
 
-        
-        <h3 style="text-align:right;margin-bottom:0">SUBTOTAL: {{$invoice['amount']}}</h3>
-        <h3 style="text-align:right;margin:0">IVA: {{$invoice['iva']}}</h3>
-        <h3 style="text-align:right;margin:0">PAGADO: {{$invoice['paid']}}</h3>
-        <h3 style="text-align:right;margin:0">BALANCE: {{$invoice['balance']}}</h3>
+        <div style="display:flex;justify-content: flex-end;">
+            <table class="totals">
+                <tr style="background:#f3f4f6">
+                    <td>
+                        SUBTOTAL:
+                    </td>
+                    <td>
+                        {{$invoice['subtotal']}}
+                    </td>
+                </tr>
+                <tr style="background:white">
+                    <td>
+                        FEE ({{$invoice['fee']}}):
+                    </td>
+                    <td>
+                        {{$invoice['fee_amount']}}
+                    </td>
+                </tr>
+                <tr style="background:#f3f4f6">
+                    <td>
+                        SUBTOTAL:
+                    </td>
+                    <td>
+                        {{$invoice['subtotal_fee']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        IVA ({{$invoice['iva']}}):
+                    </td>
+                    <td>
+                        {{$invoice['iva_amount']}}
+                    </td>
+                </tr>
+                <tr style="background:#f3f4f6">
+                    <td>
+                        TOTAL:
+                    </td>
+                    <td>
+                        {{$invoice['total']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PAGADO:
+                    </td>
+                    <td>
+                        {{$invoice['amount_paid']}}
+                    </td>
+                </tr>
+                <tr style="background:#f3f4f6">
+                    <td>
+                        BALANCE:
+                    </td>
+                    <td>
+                        {{$invoice['balance']}}
+                    </td>
+                </tr>
+            </table>
+        </div>
 
+        
 
     </body>
 </html>
