@@ -120,12 +120,24 @@ class InvoiceService
                 ->sum('amount');
 
                 $totalAmount = $item['total_amount'];
+                unset($item['total_amount']); 
+
+                if($invoice->iva > 0){
+                    $iva = $invoice->iva / 100;
+                    $amountIVA = $totalAmount * $iva;
+                 
+                }else{
+                    $amountIVA =  0;
+                }
                 
                 $item['id'] = $item['provider_id'];
+                $item['subtotal'] = Utils::publishMoney($totalAmount);
+                $item['iva'] = Utils::publishMoney($amountIVA);
                 $item['total_paid'] = Utils::publishMoney($totalPaid);
-                $item['total_amount'] = Utils::publishMoney($totalAmount);
-                $item['balance'] = Utils::publishMoney($totalAmount - $totalPaid);
+                $item['total_amount'] = Utils::publishMoney($totalAmount + $amountIVA);
+                $item['balance'] = Utils::publishMoney(($totalAmount + $amountIVA) - $totalPaid);
                 
+                unset($item['provider']); 
                 unset($item['provider']); 
                 unset($item['provider_id']); 
                 return $item;
