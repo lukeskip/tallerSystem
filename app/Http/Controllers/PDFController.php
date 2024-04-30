@@ -25,10 +25,19 @@ class PDFController extends Controller
                 'Subtotal'=> $item['total_comission'],
             ];
         });
+
+        $incomes = $invoice['incomes']->map(function ($item){
+            return [
+                'Descripción'=> $item['description'],
+                'Monto'=> $item['amount'],
+                'Fecha'=>$item['format_date']
+            ];
+        });
         
         $data = [
             'invoice' => $invoice,
             'invoiceItems' => $invoiceItems,
+            'incomes'=> $incomes,
         ];
 
 
@@ -59,13 +68,24 @@ class PDFController extends Controller
                 'Subtotal'=> $item['total_comission'],
             ];
         });
+
+
+        dump($invoice['incomes']);
+        $incomes = $invoice['incomes']->map(function ($item){
+            return [
+                'Descripción'=> $item['description'],
+                'Monto'=> $item['amount'],
+                'Fecha'=>$item['format_date']
+            ];
+        });
+        
+
         
         $data = [
             'invoice' => $invoice,
             'invoiceItems' => $invoiceItems,
+            'incomes' => $incomes,
         ];
-
-
 
         return view('pdf.invoice', $data)->render();
         

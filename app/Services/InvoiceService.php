@@ -23,16 +23,34 @@ class InvoiceService
         return $fields = Utils::getFields('projects');
     }
 
+    public function edit ($id){
+        $invoice =  Invoice::find($id);
+        $invoice =  [
+            'status'=> ['value'=>$invoice->status,'type'=>'select'],
+            'iva'=> ['value'=>$invoice->iva,'type'=>'number'],
+            'fee'=> ['value'=>$invoice->fee,'type'=>'number'],
+        ];
+    
+        $fields = Utils::getFields('invoices');
+        
+        return ["item"=>$invoice,"fields"=>$fields];
+    }
+
     public function store($request)
     {
         return $invoice =  Invoice::create($request);    
     }
 
-    public function update(Invoice $invoice, $request)
-    {
-            $invoice = Invoice::find($id);
-            $invoice->update($request);
-            return response()->json(['redirect'=> 'invoice/'.$invoice->id]);     
+    public function update($id, $request)
+    {       
+        
+        $invoice = Invoice::find($id);
+        if(!$request['iva']){
+            $request['iva'] = 0;
+        }
+
+        return $invoice->update($request);
+     
     }
 
     public function getItemCategories($id){
@@ -112,7 +130,6 @@ class InvoiceService
                 unset($item['provider_id']); 
                 return $item;
             });
-
            
             $incomes = $invoice->incomes->map(function ($item) {
                 return [
@@ -144,15 +161,23 @@ class InvoiceService
 
             return [
                 'id'=>$invoice->id,
-                'project'=>$invoice->project->name,
+                'project'=>$invoice->project,
+                'status'=>$invoice->status,
                 'comission'=>$invoice->project->comission,
                 'client'=>$invoice->project->client->name,
-                'amount'=>$invoice->amount,
                 'invoiceItems' => $invoiceItems,
                 'incomes' => $incomes,
                 'outcomes' => $outcomes,
                 'debts'=>$debtsByProvider,
-                'balance' => $invoice->balance,
+                'balance' => Utils::publishMoney($invoice->balance),
+                "subtotal"=>Utils::publishMoney($invoice->subtotal),
+                "fee_amount"=>Utils::publishMoney($invoice->fee_amount),
+                "total"=>Utils::publishMoney($invoice->total),
+                "iva_amount"=>Utils::publishMoney($invoice->iva_amount),
+                "iva"=>Utils::publishPercentage($invoice->iva),
+                "fee"=>Utils::publishPercentage($invoice->fee),
+                "subtotal_fee"=>Utils::publishMoney($invoice->subtotal_fee),
+                "amount_paid"=>Utils::publishMoney($invoice->amount_paid),
                 'format_date'=>$invoice->format_date,
             ];
         }else {
@@ -173,14 +198,17 @@ class InvoiceService
         }
 
         $invoices = $invoices->paginate();
-        
+
         $invoices->getCollection()->transform(function ($invoice) {
             return [
                 'id' => $invoice->id,
                 'file' => $invoice->id,
                 'project' => $invoice->project->name,
                 'client'=>$invoice->project->client->name,
-                'amount'=>$invoice->amount,
+                'subtotal'=>Utils::publishMoney($invoice->subtotal),
+                'iva_amount'=>Utils::publishMoney($invoice->iva_amount),
+                'amount_paid'=>Utils::publishMoney($invoice->amount_paid),
+                'total'=>Utils::publishMoney($invoice->total),
                 'format_date' => $invoice->format_date,
             ];
         });

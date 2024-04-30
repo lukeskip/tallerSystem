@@ -23,4 +23,5 @@ return [
     'check'=>'Cheque',
     'pending'=>'Pendiente',
     'completed'=>'Completada',
+    'rejected'=>'Rechazada',
 ];

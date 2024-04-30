@@ -41,5 +41,8 @@ const strings = {
         provider_name:"Proveedor",
         total_amount:"Total de deuda",
         total_paid:"Total Pagado",
+        provider:"Proveedor",
+        status:"Estatus",
+        iva:"IVA",
 };
 export default strings;

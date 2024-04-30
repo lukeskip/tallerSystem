@@ -8,7 +8,7 @@ const errorHandler = (error)=>{
             text: error.message,
             footer: 'Por favor inténtalo de nuevo'
         }).then(()=>{
-            if(error.response.status === 419){
+            if(error.response.status === 419 || error.response.status === 401){
                 window.location.reload();
             }
         });
