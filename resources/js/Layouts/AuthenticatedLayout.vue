@@ -133,6 +133,7 @@ const showingNavigationDropdown = ref(false);
                             <h1 class="text-xl font-bold text-main-color uppercase"><slot name="title" /></h1>
                             <h2><slot name="subtitle" /></h2>
                             <h3><slot name="subtitle2" /></h3>
+                            <h4><slot name="subtitle3" /></h4>
                         </div>
                         <div>
                             <div class="flex space-x-1 justify-end"><slot name="submenu"/></div>

@@ -12,7 +12,7 @@
             </div>
         </template>
         <template #subtitle>
-            {{ invoice.client }}
+            {{ invoice.project }} / {{ invoice.client }}
         </template>
         <template #subtitle2>
             {{ invoice.format_date }}
