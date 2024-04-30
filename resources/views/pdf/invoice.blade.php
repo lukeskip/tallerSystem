@@ -11,18 +11,22 @@
 
             .totals{
                 margin:20px 0;
-                width:100%;
+                margin-left:80%;
+                
             }
 
             .totals td{
-                padding: 10px 5px;
+                padding: 5px 3px;
                 width:20%;
                 text-align:right;
+                font-size:18px;
+                font-weight:bold;
+                letter-spacing: 3px;
             }
             .totals td:first-child{
-                padding: 10px 5px;
-                width:80%;
+          
                 text-align:right;
+                padding-right:20px
             }
            
         </style>
@@ -65,7 +69,7 @@
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
                             <th style="border:0;padding:5px;text-align:left;font-size:12px;">
-                                <span style="color:white">{{ $key }}</span>
+                                <h3 style="color:white">{{ $key }}</h3>
                             </th>
                         @endif
                     @endforeach
@@ -89,7 +93,7 @@
                 <tr style="background-color: {{ $index % 2 == 0 ? '#ffffff' : '#f3f4f6' }}; border-bottom: 1px solid #d1d5db;">
                     @foreach($item as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
-                            <td style="padding:10px 5px; border:solid 1px #d1d5db">
+                            <td style="padding:5px 5px; border:solid 1px #d1d5db">
                                 {{ $value }}
                             </td>
                         @endif
@@ -135,61 +139,61 @@
         </table>
         @endif
 
-        <div style="display:flex;justify-content: flex-end;">
+        <div>
             <table class="totals">
                 <tr style="background:#f3f4f6;">
-                    <td style="font-size:.8em; width:80%">
+                    <td style="width:80%">
                         SUBTOTAL:
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['subtotal']}}
                     </td>
                 </tr>
                 <tr style="background:white">
-                    <td style="font-size:.8em; width:80%">
+                    <td style=" width:80%">
                         FEE ({{$invoice['fee']}}):
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['fee_amount']}}
                     </td>
                 </tr>
                 <tr style="background:#f3f4f6">
-                    <td style="font-size:.8em; width:80%">
+                    <td style=" width:80%">
                         SUBTOTAL:
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['subtotal_fee']}}
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size:.8em; width:80%">
+                    <td style=" width:80%">
                         IVA ({{$invoice['iva']}}):
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['iva_amount']}}
                     </td>
                 </tr>
-                <tr style="background:#f3f4f6">
-                    <td style="font-size:.8em; width:80%">
+                <tr style="background-color:#9e915f;">
+                    <td style="width:80%;color:white">
                         TOTAL:
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="color:white">
                         {{$invoice['total']}}
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size:.8em; width:80%">
+                    <td style=" width:80%">
                         PAGADO:
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['amount_paid']}}
                     </td>
                 </tr>
                 <tr style="background:#f3f4f6">
-                    <td style="font-size:.8em; width:80%">
+                    <td style="width:80%">
                         BALANCE:
                     </td>
-                    <td style="font-size:.8em;">
+                    <td style="">
                         {{$invoice['balance']}}
                     </td>
                 </tr>
