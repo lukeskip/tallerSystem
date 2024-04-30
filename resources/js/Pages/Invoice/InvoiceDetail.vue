@@ -1,7 +1,7 @@
 <template>
-    <Head :title="`Cotización ${invoice.total}`"/>
+    <Head :title="`Cotización ${invoice?.total}`"/>
     <AuthenticatedLayout>
-        
+    
         <template #headerLeft>
            <div>
                 <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoice.id}} </h1>
@@ -99,8 +99,7 @@
         </template>
         
 
-        
-        
+
         <template #main> 
             <div>
                 <!-- Tabs labels -->

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('status'); 
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
-            $table->unsignedBigInteger('provider_id'); 
+            $table->unsignedBigInteger('provider_id')->nullable(); 
             $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
-            $table->unsignedBigInteger('income_id'); 
+            $table->unsignedBigInteger('income_id')->nullable();
             $table->foreign('income_id')->references('id')->on('incomes')->onDelete('cascade');
             $table->timestamps();
         });

@@ -47,6 +47,8 @@
             title: "Confirma que quieres borrar este item",
             showCancelButton: true,
             confirmButtonText: strings.delete,
+            confirmButtonColor: "#9e915f",
+            cancelButtonColor: "black",
             cancelButtonText:strings.cancel
         }).then((result) => {
             if (result.isConfirmed) {

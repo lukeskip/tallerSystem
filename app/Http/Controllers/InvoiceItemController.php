@@ -23,7 +23,7 @@ class InvoiceItemController extends Controller
             'comission' => 'required|numeric|gt:0',
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
-            'provider_id'=> 'numeric',
+            'provider_id'=> 'nullable',
             'invoice_id'  => 'nullable',
             'category'  => 'nullable'
         ];
