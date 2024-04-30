@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\InvoiceService;
+use PDF;
+
+
 
 
 class PDFController extends Controller
@@ -40,16 +43,21 @@ class PDFController extends Controller
             'incomes'=> $incomes,
         ];
 
-
-
-        $html = view('pdf.invoice', $data)->render();
-        
-        $pdf = Pdf::loadHTML($html);
-        $pdf->set_option('isRemoteEnabled', true);
+        $font_data = array(
+            'Figtree' => [
+                'R' => 'Figtree-VariableFont_wght.ttf',      // regular font
+            ]
+        );
+    
         
         $fileName = 'cotización_' . $invoice['id'] . '.pdf';
+        $pdf = PDF::Make();
+        $pdf->addCustomFont($font_data);
+        $pdf->showImageErrors = true;
+        $pdf->loadView('pdf.invoice', $data);
+        return $pdf->stream($fileName);
 
-        return $pdf->download($fileName);
+        // return $pdf->download($fileName);
 
     }
 
