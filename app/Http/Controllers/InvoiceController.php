@@ -15,8 +15,9 @@ class InvoiceController extends Controller
     {
         $this->service = $invoiceService;
         $this->rules = [
-            'id'=>'required|string',
             'status' => 'required|string',
+            'iva' => 'nullable',
+            'fee' => 'nullable',
             'project_id' => 'required|numeric|gt:0',
         ];
     }
@@ -76,15 +77,25 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-    
+        $fields = $this->service->edit($id);
+        return response()->json($fields);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            $this->service->update($id,$validatedData['data']);  
+            return response()->json(['message'=>"actualizado con éxito"]);
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        }
+        
     }
 
     /**
