@@ -161,6 +161,7 @@ return [
          */
         \Barryvdh\DomPDF\ServiceProvider::class,
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        ZanySoft\LaravelPDF\PdfServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -188,6 +189,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
+        'PDF' => ZanySoft\LaravelPDF\Facades\PDF::class
     ])->toArray(),
 
 ];
