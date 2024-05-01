@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/usuarios', UserController::class);
 });
 
+
+
+Route::get('/send-mail', function () {
+    $to = 'destinatario@example.com';
+    $subject = 'Correo de prueba';
+    $body = 'Este es un correo de prueba enviado desde Laravel utilizando MailHog.';
+
+    Mail::raw($body, function($message) use ($to, $subject) {
+        $message->to($to)
+                ->subject($subject);
+    });
+
+    return 'Correo enviado con éxito!';
+});
 
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
