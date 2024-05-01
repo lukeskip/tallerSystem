@@ -13,6 +13,11 @@ class ProviderController extends Controller
 {
     public function __construct(ProviderService $providerService)
     {
+        $this->middleware('can:read provider', ['only' => ['index', 'show']]);
+        $this->middleware('can:create provider', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit provider', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete provider', ['only' => ['destroy']]);
+
         $this->service = $providerService;
     }
     /**

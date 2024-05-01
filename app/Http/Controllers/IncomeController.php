@@ -16,6 +16,11 @@ class IncomeController extends Controller
 
     public function __construct(IncomeService $incomeService)
     {
+        $this->middleware('can:read income', ['only' => ['index', 'show']]);
+        $this->middleware('can:create income', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit income', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete income', ['only' => ['destroy']]);
+
         $this->service = $incomeService;
         $this->rules = [
             'description' => 'nullable|string',

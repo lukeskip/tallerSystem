@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
@@ -13,25 +14,21 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
-            'name' => 'Super Administrador',
-            'slug' => 'super_admin',
-        ]);
+        $role = Role::create(['name' => 'superadmin','guard_name' => 'web']);
+        $role->givePermissionTo(Permission::all());
         
-        Role::create([
-            'name' => 'Administrador',
-            'slug' => 'admin',
-        ]);
-        
-        Role::create([
-            'name' => 'Colaborador',
-            'slug' => 'colaborator',
-        ]);
+        $role = Role::create(['name' => 'admin','guard_name' => 'web']);
+        $role->givePermissionTo(Permission::all());
+        $role->revokePermissionTo(['edit user','create user','delete user']);
+     
+        $role = Role::create(['name' => 'collaborator','guard_name' => 'web']);
+        $role->givePermissionTo(Permission::all());
+        $role->revokePermissionTo(['edit user','create user','delete user']);
+        $role->revokePermissionTo(['delete project']);
+        $role->revokePermissionTo(['delete invoice']);
+        $role->revokePermissionTo(['delete provider']);
 
-        Role::create([
-            'name' => 'Cliente',
-            'slug' => 'client',
-        ]);
+        $role = Role::create(['name' => 'client','guard_name' => 'web']);
         
     }
 }

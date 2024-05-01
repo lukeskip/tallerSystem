@@ -179,6 +179,7 @@ class InvoiceService
                 'comission'=>$invoice->project->comission,
                 'client'=>$invoice->project->client->name,
                 'invoiceItems' => $invoiceItems,
+                'executive' => $invoice->project->user->name ?? null,
                 'incomes' => $incomes,
                 'outcomes' => $outcomes,
                 'debts'=>$debtsByProvider,

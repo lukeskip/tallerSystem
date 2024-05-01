@@ -16,6 +16,11 @@ class InvoiceItemController extends Controller
 
     public function __construct(InvoiceItemService $invoiceItemService)
     {
+        $this->middleware('can:read invoice_item', ['only' => ['index', 'show']]);
+        $this->middleware('can:create invoice_item', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit invoice_item', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete invoice_item', ['only' => ['destroy']]);
+
         $this->service = $invoiceItemService;
         $this->rules = [
             'label' => 'required|string',

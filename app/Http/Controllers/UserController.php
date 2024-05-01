@@ -2,42 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
-use App\Services\ClientService;
+use App\Services\UserService;
 use App\Services\ValidateDataService;
 use Inertia\Inertia;
 use App\Utils\Utils;
 
-class ClientController extends Controller
+class UserController extends Controller
 {
     protected $service;
 
-    public function __construct(ClientService $clientService)
+    public function __construct(UserService $userService)
     {
-        $this->middleware('can:read client', ['only' => ['index', 'show']]);
-        $this->middleware('can:create client', ['only' => ['create', 'store']]);
-        $this->middleware('can:edit client', ['only' => ['edit', 'update']]);
-        $this->middleware('can:delete client', ['only' => ['destroy']]);
-
-        $this->service = $clientService;
+        $this->service = $userService;
         $this->rules = [
             'name' => 'required|string|max:255',
-            'contact_name' => 'required|string|max:255',
-            'phone' => 'required|string',
-            'address' => 'required|string|max:255',
             'email' => 'required|email',
+            // Añade aquí las reglas de validación para otros campos si es necesario
         ];
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $clients = $this->service->getAll($request);
-        return Inertia::render('Client/Clients', [
-            'clients' => $clients,
-        ]); 
+        $users = $this->service->getAll($request);
+        return Inertia::render('User/Users', [
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -54,15 +48,14 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            return $item = $this->service->store($validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        } 
+        if ($validatedData['status']) {
+            return $item = $this->service->store($validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
     }
 
     /**
@@ -70,10 +63,9 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $client = $this->service->getById($id);
-        return Inertia::render('Client/ClientDetail', [
-            'client' => $client,
-            
+        $user = $this->service->getById($id);
+        return Inertia::render('User/UserDetail', [
+            'user' => $user,
         ]);
     }
 
@@ -94,12 +86,11 @@ class ClientController extends Controller
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            $item = $this->service->update($id,$validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        } 
-        
+        if ($validatedData['status']) {
+            $item = $this->service->update($id, $validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
     }
 
     /**
@@ -108,9 +99,6 @@ class ClientController extends Controller
     public function destroy($id)
     {
         $this->service->delete($id);
-        return Inertia::location(route('clientes.index'));
-        
+        return Inertia::location(route('users.index'));
     }
-
-    
 }

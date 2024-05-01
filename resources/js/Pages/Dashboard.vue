@@ -67,7 +67,7 @@
             required:true,
         },
         incomesTotal:{
-            type:Number,
+            type:String,
             required:true,
         },
         outcomes:{
@@ -75,11 +75,11 @@
             required:true,
         },
         outcomesTotal:{
-            type:Number,
+            type:String,
             required:true,
         },
         balance:{
-            type:Number,
+            type:String,
             required:true,
         },
     })

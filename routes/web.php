@@ -11,6 +11,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutcomeController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,7 +34,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth'])->name('dashboard');
 
 
-Route::middleware(['auth','role:admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::resource('/proyectos', ProjectController::class);
     Route::resource('/clientes', ClientController::class);
     Route::resource('/cotizaciones', InvoiceController::class);
@@ -42,7 +43,9 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::resource('/ingresos', IncomeController::class);
     Route::resource('/egresos', OutcomeController::class);
     Route::resource('/archivos', FileController::class);
+    Route::resource('/usuarios', UserController::class);
 });
+
 
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');

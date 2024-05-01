@@ -13,6 +13,11 @@ class InvoiceController extends Controller
 {
     public function __construct(InvoiceService $invoiceService)
     {
+        $this->middleware('can:read invoice', ['only' => ['index', 'show']]);
+        $this->middleware('can:create invoice', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit invoice', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete invoice', ['only' => ['destroy']]);
+
         $this->service = $invoiceService;
         $this->rules = [
             'status' => 'required|string',

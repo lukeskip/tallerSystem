@@ -24,7 +24,8 @@ class CheckRole
         }
         
         if ($request->user() &&  !$request->user()->hasRole($role)) {
-            return redirect()->route('proyectos.index')->with('error', 'No tienes permiso para acceder a esta página.');
+            dump($role);
+            return redirect()->route('dashboard')->with('error', 'No tienes permiso para acceder a esta página.');
         }
 
         return $next($request);

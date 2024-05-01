@@ -16,6 +16,11 @@ class OutcomeController extends Controller
 
     public function __construct(OutcomeService $outcomeService)
     {
+        $this->middleware('can:read outcome', ['only' => ['index', 'show']]);
+        $this->middleware('can:create outcome', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit outcome', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete outcome', ['only' => ['destroy']]);
+
         $this->service = $outcomeService;
         $this->rules = [
             'description' => 'nullable|string',

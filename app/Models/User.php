@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
 use App\Models\Project;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -46,23 +47,7 @@ class User extends Authenticatable
     ];
 
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
-    public function hasRole($role)
-    {
-        return $this->role()->where('slug', $role)->exists();
-    }
-
-    public function isSuperAdmin(){
-        return $this->role()->where('slug', 'super_admin')->exists();
-    }
-    
-    public function isAdmin(){
-        return $this->role()->where('slug', 'admin')->exists();
-    }
 
     public function projects()
     {

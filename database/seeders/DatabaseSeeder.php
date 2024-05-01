@@ -10,6 +10,8 @@ use Database\Seeders\InvoiceSeeder;
 use Database\Seeders\ProjectSeeder;
 use Database\Seeders\ProviderSeeder;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+
 
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ClientSeeder::class);
