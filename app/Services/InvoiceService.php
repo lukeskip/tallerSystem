@@ -37,7 +37,8 @@ class InvoiceService
     }
 
     public function store($request)
-    {
+    {   
+        $request['id'] = Utils::generateInvoiceId();
         return $invoice =  Invoice::create($request);    
     }
 

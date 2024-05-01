@@ -22,7 +22,7 @@ class Utils
     public static function getFields($table,$id = false){
         $fields = Schema::getColumnListing($table);
         $fieldsEnd = [];
-        $fieldsToExclude = ['created_at','updated_at','id','invoice_id','deleted_at'];
+        $fieldsToExclude = ['created_at','updated_at','id','invoice_id','deleted_at','user_id'];
         $fieldsToHide = ['project_id'];
 
         if($table === 'files'){

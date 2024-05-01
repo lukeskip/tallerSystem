@@ -17,6 +17,7 @@ class Project extends Model
         'address',
         'comission',
         'client_id',
+        'user_id',
     ];
 
     use HasFactory;
