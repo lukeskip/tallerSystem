@@ -109,7 +109,7 @@ class InvoiceService
                 ->join('providers', 'providers.id', '=', 'invoice_items.provider_id')
                 ->whereNotNull('providers.id')
                 ->orderBy('provider_id')
-                ->groupBy('provider_id')
+                ->groupBy('provider_id', 'providers.name')
                 ->get();
 
 
