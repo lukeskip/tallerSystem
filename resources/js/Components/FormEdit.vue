@@ -84,7 +84,7 @@
     
         } catch (error) {
             console.log(error);
-            errorHandler(error);
+            errorHandler(error,emit);
         }
 
         
@@ -148,7 +148,7 @@
             
             loader.value = false;
 
-            errorHandler(error);
+            errorHandler(error,emit);
         }
     }
 
