@@ -7,6 +7,9 @@
         <template #subtitle>
             {{ project.client.name }}
         </template>
+        <template #subtitle2 v-if="project.user">
+            Ejecutivo: {{ project.user.name }}
+        </template>
 
         <template #submenu>
             <Link method="post" href="/cotizaciones" :data="{ status: 'pending',project_id:project.id }" class="inline-block py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" as="button">

@@ -47,7 +47,7 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $request['id'] = Utils::generateInvoiceId();
+        
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 

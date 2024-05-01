@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class ProjectService
 {
     public function store($request)
-    {
+    {   
         return Project::create($request);     
     }
 
@@ -66,6 +66,7 @@ class ProjectService
                 'incomesTotal'=>Utils::publishMoney($incomesTotal),
                 'outcomesTotal'=>Utils::publishMoney($outcomesTotal),
                 'balance'=>Utils::publishMoney($balance),
+                'user'=>$project->user,
                 'client' => [
                     'id' => $project->client->id,
                     'name' => $project->client->name,
