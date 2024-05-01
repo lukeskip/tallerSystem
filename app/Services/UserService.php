@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
+use App\Notifications\ChoosePasswordNotification;
 
 class UserService
 {
@@ -19,6 +21,11 @@ class UserService
         $user = User::create($request);
 
         $user->assignRole($role->name); 
+
+        $token = Password::getRepository()->create($user);
+        
+        $user->notify(new ChoosePasswordNotification($token));
+
         return $user; 
     }
 
