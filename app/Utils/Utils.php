@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Services\InvoiceService;
 use App\Services\ClientService;
 use App\Models\Invoice;
+use Spatie\Permission\Models\Role;
 
 
 class Utils 
@@ -22,8 +23,9 @@ class Utils
     public static function getFields($table,$id = false){
         $fields = Schema::getColumnListing($table);
         $fieldsEnd = [];
-        $fieldsToExclude = ['created_at','updated_at','id','invoice_id','deleted_at','user_id','password','email_verified_at','role_id','remember_token'];
+        $fieldsToExclude = ['created_at','updated_at','id','invoice_id','deleted_at','user_id','password','email_verified_at','remember_token'];
         $fieldsToHide = ['project_id'];
+        
 
         if($table === 'files'){
             array_push($fieldsToExclude, 'name', 'extension', 'project_id','preview');
@@ -80,6 +82,11 @@ class Utils
             }else{
                 unset($fields[$index]);
             }
+        }
+
+        if($table === 'users'){
+            $roles =  Role::all()->select('id','name');
+            $fieldsEnd[] = ['slug'=>'role','type'=> 'select','options'=>$roles];
         }
 
         return $fieldsEnd;
