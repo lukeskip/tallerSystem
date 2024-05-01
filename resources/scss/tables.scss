@@ -1,0 +1,38 @@
+@import "./variables";
+table {
+    @apply w-full text-left rtl:text-right text-gray-800 mt-5;
+
+    thead {
+        @apply sticky top-0 text-sm text-gray-700 text-white bg-main-color rounded uppercase bg-gray-50;
+    }
+    th {
+        background-color: $mainColor;
+    }
+
+    tr {
+        &:nth-child(even) {
+            background-color: $secondaryColor;
+        }
+
+        /* Estilos para filas impares */
+        &:nth-child(odd) {
+            background-color: $lightColor; /* Color de fondo para filas impares */
+        }
+
+        &.bg-main-color {
+            background-color: $mainColor;
+        }
+
+        td {
+            @apply border px-4 py-2;
+
+            &:first-child {
+                @apply font-bold;
+            }
+
+            &:last-child {
+                @apply border px-4 py-2 text-center;
+            }
+        }
+    }
+}

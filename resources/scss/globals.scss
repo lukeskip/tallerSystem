@@ -1,0 +1,47 @@
+@import "./tables.scss";
+@import "./_variables.scss";
+
+body {
+    background: $lightColor;
+}
+.icon {
+    width: 20px;
+    height: auto;
+    margin: 0 10px;
+}
+
+.mainContainer {
+    min-height: 80vh;
+}
+
+.text-main-color {
+    color: $mainColor;
+}
+.bg-main-color {
+    background: $mainColor;
+}
+.bg-secondary-color {
+    background: $secondaryColor;
+}
+.bg-main-color-dark {
+    background: $darkColor;
+}
+
+.border-main-color {
+    --tw-border-opacity: 1;
+    border-color: #9e915f;
+}
+
+h1,
+h2,
+h3 {
+    @apply font-bold;
+}
+
+h1 {
+    @apply text-xl;
+}
+
+.no-info {
+    @apply text-xl font-bold;
+}
