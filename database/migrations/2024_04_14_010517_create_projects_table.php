@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('address')->nullable(); 
             $table->integer('comission')->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('incomes')->onDelete('cascade');
             $table->timestamps();
         });
     }

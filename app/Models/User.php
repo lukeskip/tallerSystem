@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
+use App\Models\Project;
 
 class User extends Authenticatable
 {
@@ -63,5 +64,9 @@ class User extends Authenticatable
         return $this->role()->where('slug', 'admin')->exists();
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
     
 }
