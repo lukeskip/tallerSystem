@@ -107,9 +107,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $this->service->delete($id);
-        return Inertia::location(route('clientes.index'));
-        
+        return $this->service->delete($id);
     }
 
     

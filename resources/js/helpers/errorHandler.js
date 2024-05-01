@@ -1,7 +1,9 @@
 import Swal from 'sweetalert2'
-const errorHandler = (error)=>{
+const errorHandler = (error,emit = ()=>{} )=>{
 
     if(error.response.status !== 422){  
+        emit('close');
+        console.log(emit);
         Swal.fire({
             icon: "error",
             title: "Oops...",

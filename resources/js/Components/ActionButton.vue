@@ -16,11 +16,13 @@
 </template>
 <script setup>
     import { router } from '@inertiajs/vue3';
+    import axios from 'axios';
     import Swal from 'sweetalert2'
     import strings from '@/utils/strings.js';
     import Modal from '@/Components/Modal.vue';
     import FormEdit from '@/Components/FormEdit.vue';
-    import { ref } from 'vue'
+    import { ref } from 'vue';
+    import errorHandler from '@/helpers/errorHandler';
   
 
     const props = defineProps({
@@ -50,9 +52,15 @@
             confirmButtonColor: "#9e915f",
             cancelButtonColor: "black",
             cancelButtonText:strings.cancel
-        }).then((result) => {
+        }).then(async(result) => {
+            console.log(props.root);
             if (result.isConfirmed) {
-                router.delete(route(`${props.root}.destroy`, id));
+                try {
+                    await axios.delete(`/${props.root}/${id}`);
+                    router.reload();
+                } catch (error) {
+                    errorHandler(error);
+                }
             }
         });
         
