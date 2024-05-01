@@ -17,8 +17,8 @@ return new class extends Migration
             $table->decimal('iva')->default(16);
             $table->decimal('fee')->default(10);
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

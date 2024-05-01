@@ -26,6 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('income_id')->nullable();
             $table->foreign('income_id')->references('id')->on('incomes')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
