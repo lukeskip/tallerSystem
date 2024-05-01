@@ -15,6 +15,11 @@ class UserController extends Controller
 
     public function __construct(UserService $userService)
     {
+        $this->middleware('can:read user', ['only' => ['index', 'show']]);
+        $this->middleware('can:create user', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit user', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete user', ['only' => ['destroy']]);
+
         $this->service = $userService;
         $this->rules = [
             'name' => 'required|string|max:255',
