@@ -142,7 +142,7 @@
                 errors.value = error.response.data.errors;
             }
 
-            errorHandler(error);
+            errorHandler(error,emit);
             
             loader.value = false;
 
