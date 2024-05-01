@@ -24,7 +24,7 @@ class UserController extends Controller
         $this->rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email',
-            // Añade aquí las reglas de validación para otros campos si es necesario
+            'role' => 'required',
         ];
     }
 
@@ -103,7 +103,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->service->delete($id);
-        return Inertia::location(route('users.index'));
+       return  $this->service->delete($id);
     }
 }
