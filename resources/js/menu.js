@@ -19,6 +19,11 @@ const menu = [
         icon:'<i class="fa-solid fa-toolbox"></i>',
         label:'Proveedores'
     }, 
+    {
+        slug:'usuarios.index',
+        icon:'<i class="fa-solid fa-toolbox"></i>',
+        label:'Usuarios'
+    }, 
     // {
     //     slug:'ingresos.index',
     //     icon:'<i class="fa-solid fa-toolbox"></i>',

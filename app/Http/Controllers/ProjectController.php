@@ -9,11 +9,18 @@ use Inertia\Inertia;
 use App\Utils\Utils;
 use Illuminate\Support\Facades\Route;
 use App\Services\ValidateDataService;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     public function __construct(ProjectService $projectService)
     {
+
+        $this->middleware('can:read project', ['only' => ['index', 'show']]);
+        $this->middleware('can:create project', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit project', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete project', ['only' => ['destroy']]);
+
         $this->service = $projectService;
         $this->rules = [
             'name' => 'required|string',

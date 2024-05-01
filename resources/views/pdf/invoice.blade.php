@@ -58,6 +58,7 @@
                 <h2 style="margin:0;font-size:1em;">Cotización {{$invoice['id']}}</h1>
                 <h2 style="margin:0:color:black;font-size:1em;">{{$invoice['project']['name']}}</h2>
                 <h3 style="margin:0:color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
+                <h3 style="margin:0:color:black;font-size:.7em;margin-bottom:20px">Ejecutivo {{$invoice['executive']}}</h3>
             </div>
         </div>
         
