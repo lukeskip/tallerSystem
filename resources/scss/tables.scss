@@ -4,6 +4,11 @@ table {
 
     thead {
         @apply sticky top-0 text-sm text-gray-700 text-white bg-main-color rounded uppercase bg-gray-50;
+        tr {
+            th {
+                @apply px-6 py-3;
+            }
+        }
     }
     th {
         background-color: $mainColor;
@@ -21,6 +26,13 @@ table {
 
         &.bg-main-color {
             background-color: $mainColor;
+        }
+
+        &.category {
+            background-color: $mainColor;
+            color: white;
+            text-transform: uppercase;
+            @apply w-full border-t-4 border-white;
         }
 
         td {

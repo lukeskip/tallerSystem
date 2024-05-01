@@ -21,11 +21,11 @@
         </div>
       </form>
 
-      <table v-if="itemsRef.length" class="w-full text-md text-left rtl:text-right text-gray-800">
-          <thead class="sticky z-10 relative top-0 text-sm text-gray-700 uppercase bg-gray-50 bg-main-color text-white">
+      <table v-if="itemsRef.length">
+          <thead>
               <tr>
                   <template v-for="(value, key) in  itemsRef[0]" :key="key">
-                    <th v-if="!columnsToHide.includes(key)"   class="px-6 py-3">
+                    <th v-if="!columnsToHide.includes(key)" >
                       {{ showLabel(key) }}
                     </th>
                   </template>
@@ -36,14 +36,14 @@
           </thead>
           <tbody>
             <template v-for="(item,index) in itemsRef" :key="item.id">
-              <tr class="w-full bg-main-color  border-t-4 border-white " v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
-                    <td class="px-6 py-3 text-center w-full uppercase text-white" :colspan="Object.keys(itemsRef[1]).length">
+              <tr class="category" v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
+                    <td :colspan="Object.keys(itemsRef[1]).length">
                       {{ lastCategory }}
                     </td>
               </tr>
-              <tr :class="index % 2 === 0 ? 'bg-terciary' : 'bg-secondary-color'">
+              <tr>
                 <template v-for="(value, key) in item" :key="key">
-                    <td v-if="!columnsToHide.includes(key)" class="border px-4 py-2">
+                    <td v-if="!columnsToHide.includes(key)">
                  
                       <template v-if="key === 'label'">
                         <div class="relative">
@@ -76,7 +76,7 @@
 
                     </td>
                   </template>
-                  <td class="border px-4 py-2 text-center" v-if="actions.length">
+                  <td v-if="actions.length">
 
                     <ActionButton v-for="(action,index) in actions" :key="index + action" :root="root" :action="action" :id="item.id" :parentId="[parentId,item[parentId]]"/>
                     
