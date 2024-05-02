@@ -49,18 +49,27 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+// Route::get('/send-mail', function () {
+//     $to = 'contacto@chekogarcia.com.mx';
+//     $subject = 'Correo de prueba';
+//     $body = 'Este es un correo de prueba enviado desde Laravel utilizando MailHog.';
+
+//     Mail::raw($body, function($message) use ($to, $subject) {
+//         $message->to($to)
+//                 ->subject($subject)
+//                 ->from('contacto@chekogarcia.com.mx', 'Sergio García');
+//     });
+
+//     return 'Correo enviado con éxito!';
+// });
+
 Route::get('/send-mail', function () {
-    $to = 'contacto@chekogarcia.com.mx';
-    $subject = 'Correo de prueba';
-    $body = 'Este es un correo de prueba enviado desde Laravel utilizando MailHog.';
+    $user = App\Models\User::find(1);
+    $token = Illuminate\Support\Facades\Password::getRepository()->create($user);
+    $user->notify(new App\Notifications\ChoosePasswordNotification($token));
+    return $user; 
 
-    Mail::raw($body, function($message) use ($to, $subject) {
-        $message->to($to)
-                ->subject($subject)
-                ->from('contacto@chekogarcia.com.mx', 'Sergio García');
-    });
-
-    return 'Correo enviado con éxito!';
+return 'Correo enviado con éxito!';
 });
 
 
