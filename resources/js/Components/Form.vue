@@ -1,41 +1,44 @@
 <template>
     <Loader v-if="loader"/>
-    <template v-if="fields.length">
-        <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <div class="mt-2"  v-for="field in fields" >
-                <template v-if="field.type !== 'hidden'">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                        {{ showLabel(field.slug) }}
-                    </label>
-                    
-                    <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
-                    
-                    <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
-    
-                    <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
-                    
-                    <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
-                    
-                    <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
-                    <div class="error text-red-500" v-if="errors[field.slug]">{{strings.required}}</div>
-                </template>
-            </div>
-            
-            <div class="mt-5">
-                <PrimaryButton class="mx-2">
-                    Guardar
-                </PrimaryButton>
-                <SecondaryButton class="mx-2" @click="handleSubmit(true)">
-                    Guardar y agregar otro
-                </SecondaryButton>
-                <SecondaryButton @click="emit('close')">
-                    Cancelar
-                </SecondaryButton>
-            </div>
-        </form>
-    </template>
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else-if="!loader">
-        <p class="text-xl">No hay campos que mostrar</p>
+    <div class="formWrapper bg-white shadow-md rounded px-8 pt-6 pb-8">
+        <template v-if="fields.length">
+            <form @submit.prevent="handleSubmit()" >
+                <div class="mt-2"  v-for="field in fields" >
+                    <template v-if="field.type !== 'hidden'">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            {{ showLabel(field.slug) }}
+                        </label>
+                        
+                        <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                        
+                        <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
+        
+                        <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                        
+                        <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
+                        
+                        <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
+                        <div class="error text-red-500" v-if="errors[field.slug]">{{strings.required}}</div>
+                    </template>
+                </div>
+                
+                <div class="mt-5">
+                    <PrimaryButton class="mx-2">
+                        Guardar
+                    </PrimaryButton>
+                    <SecondaryButton class="mx-2" @click="handleSubmit(true)">
+                        Guardar y agregar otro
+                    </SecondaryButton>
+                    <SecondaryButton @click="emit('close')">
+                        Cancelar
+                    </SecondaryButton>
+                </div>
+            </form>
+        </template>
+
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else-if="!loader">
+            <p class="text-xl">No hay campos que mostrar</p>
+        </div>
     </div>
 </template>
 <script setup>
@@ -47,7 +50,7 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import { router } from '@inertiajs/vue3';
-    import {ref,onMounted,defineEmits} from 'vue';
+    import {ref,onBeforeMount,onMounted,defineEmits} from 'vue';
     import axios from 'axios';
     import strings from '@/utils/strings.js';
     import showLabel from '@/helpers/showLabel.js';
@@ -74,17 +77,18 @@
     const loader = ref(true);
     const formData = ref([]);
     
-
+    onBeforeMount(()=>{
+        loader.value = true;
+    })
     onMounted(async ()=>{
         try {
-            loader.value = true;
             let url = `${app_url}/${props.route}/create`;
 
             if (props.parentId !== undefined) {
                 url += `?parentId=${props.parentId}`;
             }
             const response = await axios(url);
-            loader.value = false;
+            
             fields.value = response.data;
             
             const _token = response.data.find((item)=>{
@@ -96,6 +100,7 @@
             }
 
             clearFormData();
+            loader.value = false;
         } catch (error) {
             errorHandler(error);
         }
