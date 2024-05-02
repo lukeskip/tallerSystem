@@ -35,9 +35,13 @@ class ChoosePasswordNotification extends ResetPasswordNotification
      */
     public function toMail($notifiable)
     {
+        $fromAddress = env('MAIL_FROM_ADDRESS', 'contacto@chekogarcia.com.mx');
+        $fromName = env('MAIL_FROM_NAME', 'Sergio García');
+
         return (new MailMessage)
+            ->from($fromAddress,  $fromName)
             ->subject('Ahora tienes accesso a Taller 1100')
-            ->line('Recibes este correo electrónico se ha creado una cuenta para ti, ahora debes seleccionar una contraseña')
+            ->line('Recibes este correo electrónico porque se ha creado una cuenta para ti, ahora debes seleccionar una contraseña')
             ->action('Elegir Contraseña', url(config('app.url').route('password.reset', ['token' => $this->token], false)));
     }
 

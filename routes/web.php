@@ -50,13 +50,14 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/send-mail', function () {
-    $to = 'destinatario@example.com';
+    $to = 'contacto@chekogarcia.com.mx';
     $subject = 'Correo de prueba';
     $body = 'Este es un correo de prueba enviado desde Laravel utilizando MailHog.';
 
     Mail::raw($body, function($message) use ($to, $subject) {
         $message->to($to)
-                ->subject($subject);
+                ->subject($subject)
+                ->from('contacto@chekogarcia.com.mx', 'Sergio García');
     });
 
     return 'Correo enviado con éxito!';
