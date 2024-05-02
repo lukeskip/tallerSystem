@@ -1,5 +1,5 @@
 <template>
-    <Head title="Clientes" />
+    <Head title="Usuarios" />
     <AuthenticatedLayout>
         <template #title>
           Usuarios
