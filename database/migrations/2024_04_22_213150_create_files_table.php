@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained('projects');
             $table->string('url');
+            $table->string('public_id');
             $table->string('name');
             $table->string('extension');
             $table->timestamps();

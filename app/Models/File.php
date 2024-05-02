@@ -15,6 +15,7 @@ class File extends Model
         'name',
         'extension',
         'preview',
+        'public_id',
     ];
     use HasFactory;
 

@@ -32,10 +32,11 @@ class FileService
                 $uploadedFileUrl = Cloudinary::upload($file->getRealPath(), [
                     'folder' => 'taller/files',
                     'resource_type'=> "auto"
-                ])->getSecurePath();
+                ]);
     
-        
-                $request['url'] = $uploadedFileUrl;
+                dump($uploadedFileUrl->getPublicId());
+                $request['url'] = $uploadedFileUrl->getSecurePath();
+                $request['public_id'] = $uploadedFileUrl->getPublicId();
                 $request['name'] = $fileName;
                 $request['extension'] = $extension;
 
@@ -70,7 +71,7 @@ class FileService
     {
         try {
             $file = File::find($id);
-            Cloudinary::destroy($file->url); 
+            $cloudinary = Cloudinary::destroy($file->public_id,["resource_type" => 'image' ]); 
             return $file->delete(); 
         } catch (\Exception $e) {
             return response()->json(['message'=>$e], 500);
@@ -110,6 +111,7 @@ class FileService
             'url' => 'required|string',
             'name' => 'required|string',
             'extension' => 'required|string',
+            'public_id' => 'required|string',
         ]);
     
         if ($validator->fails()) {
