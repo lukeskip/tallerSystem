@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
 // });
 
 Route::get('/send-mail', function () {
+    echo env('APP_NAME');
     $user = App\Models\User::find(1);
     $token = Illuminate\Support\Facades\Password::getRepository()->create($user);
     $user->notify(new App\Notifications\ChoosePasswordNotification($token));
