@@ -28,5 +28,5 @@ jobs:
           local-dir: ./
           server-dir: /app/
           exclude: |
-            **/vendor/**
+            /vendor/
             **/node_modules/**
