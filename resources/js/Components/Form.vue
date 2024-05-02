@@ -1,6 +1,6 @@
 <template>
-    <Loader v-if="loader"/>
-    <div class="formWrapper bg-white shadow-md rounded px-8 pt-6 pb-8">
+    <div class="formWrapper relative bg-white shadow-md rounded px-8 pt-6 pb-8">
+        <Loader v-if="loader"/>
         <template v-if="fields.length">
             <form @submit.prevent="handleSubmit()" >
                 <div class="mt-2"  v-for="field in fields" >
