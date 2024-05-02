@@ -2,21 +2,23 @@
     <Loader v-if="loader"/>
     <template v-if="fields.length">
         <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <div class="mt-2"  v-for="field in fields">
-                <label class="block text-gray-700 text-sm font-bold mb-2">
-                    {{ showLabel(field.slug) }}
-                </label>
-                
-                <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
-                
-                <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
-
-                <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
-                
-                <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
-                
-                <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
-                <div class="error text-red-500" v-if="errors[field.slug]">{{strings.required}}</div>
+            <div class="mt-2"  v-for="field in fields" >
+                <template v-if="field.type !== 'hidden'">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                        {{ showLabel(field.slug) }}
+                    </label>
+                    
+                    <TextInput v-if="field.type === 'varchar' " v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                    
+                    <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
+    
+                    <TextArea v-if="field.type === 'text' || field.type === 'longtext'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+                    
+                    <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
+                    
+                    <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options"/>
+                    <div class="error text-red-500" v-if="errors[field.slug]">{{strings.required}}</div>
+                </template>
             </div>
             
             <div class="mt-5">
@@ -65,15 +67,12 @@
         default:{type:Object}
     })
 
-    const _token = window.csrf_token;
     const app_url = window.app_url;
     const errors = ref([]);
 
     const fields = ref([]);
     const loader = ref(true);
-    const formData = ref({
-        _token
-    });
+    const formData = ref([]);
     
 
     onMounted(async ()=>{
@@ -88,6 +87,13 @@
             loader.value = false;
             fields.value = response.data;
             
+            const _token = response.data.find((item)=>{
+                return item.slug === '_token'
+            });
+
+            if(_token){
+                formData.value[_token.slug] = _token.value;
+            }
 
             clearFormData();
         } catch (error) {
@@ -114,7 +120,6 @@
         });
         
         formData.value = {...formData.value,...props.default}
-
     }
 
 

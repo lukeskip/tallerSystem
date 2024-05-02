@@ -22,7 +22,8 @@ class Utils
 
     public static function getFields($table,$id = false){
         $fields = Schema::getColumnListing($table);
-        $fieldsEnd = [];
+        $token = csrf_token();
+        $fieldsEnd = [['slug'=>'_token','type'=> 'hidden','value'=>$token]];
         $fieldsToExclude = ['created_at','updated_at','id','invoice_id','deleted_at','user_id','password','email_verified_at','remember_token'];
         $fieldsToHide = ['project_id'];
         
@@ -88,6 +89,8 @@ class Utils
             $roles =  Role::all()->select('id','name');
             $fieldsEnd[] = ['slug'=>'role','type'=> 'select','options'=>$roles];
         }
+
+        
 
         return $fieldsEnd;
     }
