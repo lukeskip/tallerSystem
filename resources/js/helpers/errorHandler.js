@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2'
+import { router } from '@inertiajs/vue3';
 const errorHandler = (error,emit = ()=>{} )=>{
 
     if(error.response.status !== 422){  
@@ -10,6 +11,7 @@ const errorHandler = (error,emit = ()=>{} )=>{
             text: error.message,
             footer: 'Por favor inténtalo de nuevo'
         }).then(()=>{
+            router.reload();
             if(error.response.status === 419 || error.response.status === 401){
                 window.location.reload();
             }
