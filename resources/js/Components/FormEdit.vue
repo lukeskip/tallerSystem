@@ -69,7 +69,6 @@
     const message = ref("");
     const formData = ref({
         ...props.default,
-        _token
     });
     
 
@@ -79,6 +78,14 @@
             const response = await axios(`${app_url}/${props.route}/${props.editId}/edit`);
             loader.value = false;
             fields.value = response.data.fields;
+            
+            const _token = response.data.fields.find((item)=>{
+                return item.slug === '_token'
+            });
+
+            if(_token){
+                formData.value[_token.slug] = _token.value;
+            }
             clearFormData();
             fillInfo(response.data.item);
     
@@ -101,7 +108,6 @@
             }     
             
         }        
-        console.log(formData.value);
     }
 
     const clearFormData = ()=>{
