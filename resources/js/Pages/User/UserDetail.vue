@@ -2,15 +2,13 @@
     <AuthenticatedLayout>
 
         <template #title>
-            {{ client.name }}
+            {{ user.name }}
         </template>
-        <template #subtitle>
-            {{ client.contact_name }}
-        </template>
+        
 
         <template #main> 
-            <div v-if="client.projects">
-                <TableComponent :items="client.projects" :root="'proyectos'" :actions="['edit','delete']" parentId='client_id'/>
+            <div v-if="user.projects">
+                <TableComponent :items="user.projects" :root="'proyectos'" :actions="['edit','delete']" parentId='client_id'/>
             </div>
             <div v-else>
                 <p>No hay proyectos disponibles.</p>
@@ -24,7 +22,7 @@
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import { Head, Link } from '@inertiajs/vue3';
 
-    const props = defineProps({ client:Object });
+    const props = defineProps({ user:Object });
 
    
 
