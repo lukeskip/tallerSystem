@@ -48,32 +48,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
-// Route::get('/send-mail', function () {
-//     $to = 'contacto@chekogarcia.com.mx';
-//     $subject = 'Correo de prueba';
-//     $body = 'Este es un correo de prueba enviado desde Laravel utilizando MailHog.';
-
-//     Mail::raw($body, function($message) use ($to, $subject) {
-//         $message->to($to)
-//                 ->subject($subject)
-//                 ->from('contacto@chekogarcia.com.mx', 'Sergio García');
-//     });
-
-//     return 'Correo enviado con éxito!';
-// });
-
-Route::get('/send-mail', function () {
-    echo env('APP_NAME');
-    $user = App\Models\User::find(1);
-    $token = Illuminate\Support\Facades\Password::getRepository()->create($user);
-    $user->notify(new App\Notifications\ChoosePasswordNotification($token));
-    return $user; 
-
-return 'Correo enviado con éxito!';
-});
-
-
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 // Route::get('/test/invoice/{invoice}', [PDFController::class, 'test'])->name('publish')->middleware('auth');
 
