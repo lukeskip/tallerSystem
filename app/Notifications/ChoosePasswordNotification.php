@@ -42,7 +42,7 @@ class ChoosePasswordNotification extends ResetPasswordNotification
             ->from($fromAddress,  $fromName)
             ->subject('Ahora tienes accesso a Taller 1100')
             ->line('Recibes este correo electrónico porque se ha creado una cuenta para ti, ahora debes seleccionar una contraseña')
-            ->action('Elegir Contraseña', url(config('app.url').route('password.reset', ['token' => $this->token], false)))->markdown('mails/default/mail/html/email');
+            ->action('Elegir Contraseña', url(config('app.url').route('password.reset', ['token' => $this->token], false)));
     }
 
     /**
