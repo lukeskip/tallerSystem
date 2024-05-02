@@ -1,34 +1,37 @@
 <template>
-    <template v-if="fields.length">
-        
-        <form @submit.prevent="handleSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-            <div>{{ message }}</div>
-            <div class="mt-2" v-for="field in fields">
-                <label v-if="field.type !== 'hidden'" class="block text-gray-700 text-sm font-bold mb-2">
-                    {{ showLabel(field.slug) }}
-                </label>
-                <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
-
-                <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
-                
-                <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
-                
-                <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options" :default="formData[field.slug]" />
-                <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
+    <Loader v-if="loader"/>
+    <div class="formWrapper bg-white shadow-md rounded px-8 pt-6 pb-8">
+        <template v-if="fields.length">
+            
+            <form @submit.prevent="handleSubmit()">
+                <div>{{ message }}</div>
+                <div class="mt-2" v-for="field in fields">
+                    <label v-if="field.type !== 'hidden'" class="block text-gray-700 text-sm font-bold mb-2">
+                        {{ showLabel(field.slug) }}
+                    </label>
+                    <TextInput v-if="field.type === 'varchar' || field.type === 'longtext' || field.type === 'text'" v-model="formData[field.slug]" :autocomplete="field.autocomplete"/>
+    
+                    <FileInput v-if="field.type === 'file' " v-on:file-selected="handleFileSelected"/>
+                    
+                    <NumberInput v-else-if="field.type === 'decimal' || field.type === 'int'"  v-model="formData[field.slug]"/>
+                    
+                    <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options" :default="formData[field.slug]" />
+                    <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
+                </div>
+    
+            <div class="mt-5">
+                    <PrimaryButton class="mx-2">
+                        Guardar
+                    </PrimaryButton>
+                    <SecondaryButton @click="emit('close')">
+                        Cancelar
+                    </SecondaryButton>
             </div>
-
-        <div class="mt-5">
-                <PrimaryButton class="mx-2">
-                    Guardar
-                </PrimaryButton>
-                <SecondaryButton @click="emit('close')">
-                    Cancelar
-                </SecondaryButton>
+            </form>
+        </template>
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else-if="!loader">
+            <p class="text-xl">No hay campos que mostrar</p>
         </div>
-        </form>
-    </template>
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8" v-else-if="!loader">
-        <p class="text-xl">No hay campos que mostrar</p>
     </div>
 </template>
 <script setup>
@@ -39,11 +42,12 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import { router } from '@inertiajs/vue3';
-    import {ref,onMounted,defineEmits} from 'vue';
+    import {ref,onBeforeMount,onMounted,defineEmits} from 'vue';
     import axios from 'axios';
     import strings from '@/utils/strings.js'
     import showLabel from '@/helpers/showLabel';
     import errorHandler from '@/helpers/errorHandler';
+    import Loader from '@/Components/Loader.vue'
     
     const emit  = defineEmits(['close']);
 
@@ -71,6 +75,9 @@
         ...props.default,
     });
     
+    onBeforeMount(()=>{
+        loader.value = true;
+    })
 
     onMounted(async()=>{
         try {

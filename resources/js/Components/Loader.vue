@@ -7,7 +7,6 @@
 <style>
 .loader{
    z-index: 10;
-   min-height: 50vh;
    height: 100%;
 }
 .h-half-screen {
