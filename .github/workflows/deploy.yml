@@ -37,22 +37,6 @@ jobs:
 
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.4
-          server: ${{secrets.FTP_HOST}}
-          username: ${{secrets.FTP_USERNAME}}
-          password: ${{secrets.FTP_PASSWORD}}
-          protocol: "ftps"
-          local-dir: ./
-          server-dir: /app/
-          exclude: |
-            **/vendor/**
-            !**/resources/views/vendor/**
-            **/node_modules/**
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install SSH key
-        uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
