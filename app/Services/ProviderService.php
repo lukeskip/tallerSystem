@@ -5,17 +5,31 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Utils\Utils;
 
 class ProviderService
 {
-    public function create(Request $request)
+    public function create($request)
     {
-        $validatedData = $this->validateData($request);
-        if($validatedData['status']){
-            $provider = Provider::create($validatedData['data']);  
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        }
+        
+        return $provider = Provider::create($request);  
+        
+    }
+
+    public function edit ($id){
+        $provider = $this->getById($id);
+
+        $provider = [
+                'name'=>['value'=>$provider['name'],'type'=>'string'],    
+                'contact_name'=>['value'=>$provider['contact_name'],'type'=>'string'],    
+                'phone'=>['value'=>$provider['phone'],'type'=>'string'],    
+                'address'=>['value'=>$provider['address'],'type'=>'string'],    
+                'email'=>['value'=>$provider['email'],'type'=>'string'],      
+        ];
+    
+        $fields = Utils::getFields('providers');
+        
+        return ["item"=>$provider,"fields"=>$fields];
     }
 
     public function update(Provider $provider, array $data)

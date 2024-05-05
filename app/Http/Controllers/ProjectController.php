@@ -62,7 +62,6 @@ class ProjectController extends Controller
 
         if($validatedData['status']){
             $validatedData['data']['user_id'] =  $request->user()->id; 
-            dump($validatedData);
             return $item = $this->service->store($validatedData['data']);    
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);

@@ -41,7 +41,7 @@ class UserService
         $user =  [
             'name'=> ['value'=>$user->name,'type'=>'string'],
             'email'=> ['value'=>$user->email,'type'=>'string'],
-            'role'=> ['value'=>$user->roles->first()->id,'type'=>'string'],
+            'role'=> ['value'=>$user->roles->first()->id ?? null,'type'=>'string'],
         ];
     
         $fields = Utils::getFields('users');
