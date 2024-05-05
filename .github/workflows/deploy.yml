@@ -31,3 +31,15 @@ jobs:
             **/vendor/**
             !**/resources/views/vendor/**
             **/node_modules/**
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: SSH command
+        run: |
+          ssh -o StrictHostKeyChecking=no chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && composer install'
