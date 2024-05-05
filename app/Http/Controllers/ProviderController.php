@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use App\Services\ProviderService;
+use App\Services\ValidateDataService;
 use Inertia\Inertia;
 use App\Utils\Utils;
 
@@ -19,6 +20,13 @@ class ProviderController extends Controller
         $this->middleware('can:delete provider', ['only' => ['destroy']]);
 
         $this->service = $providerService;
+        $this->rules = [
+            'name' => 'required|string|max:255',
+            'contact_name' => 'required|string|max:255',
+            'phone' => 'required|string',
+            'address' => 'required|string|max:255',
+            'email' => 'required|email',
+        ];
     }
     /**
      * Display a listing of the resource.
@@ -45,23 +53,36 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-       return  $this->service->create($request);
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if($validatedData['status']){
+            return  $this->service->create($validatedData['data']);   
+        }else{
+            return response()->json(['errors'=>$validatedData['errors']], 422);
+        } 
+       
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Provider $provider)
+    public function show($id)
     {
-        //
+        $provider = $this->service->getById($id);
+        return Inertia::render('Provider/ProviderDetail', [
+            'provider' => $provider,
+            
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Provider $provider)
+    public function edit($id)
     {
-        //
+        $fields = $this->service->edit($id);
+        return response()->json($fields);
     }
 
     /**
