@@ -45,7 +45,7 @@ class UserControllerTest extends TestCase
 
         $data = [
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'lukeskip5@gmail.com',
             'role' => 1,
             '_token' => csrf_token(),
         ];
