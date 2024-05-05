@@ -42,4 +42,4 @@ jobs:
 
       - name: SSH command
         run: |
-          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && ls'
+          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && composer install'
