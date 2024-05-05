@@ -42,4 +42,4 @@ jobs:
 
       - name: Copying DB and Testing
         run: |
-          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && /opt/cpanel/composer/bin/composer install && mysqldump -u${{ secrets.DATABASE_USER }} -p'${{ secrets.DATABASE_PASSWORD }}' chekogar_taller1100 > ~/backups/taller/dump.sql && mysql -u${{ secrets.DATABASE_USER }} -p'${{ secrets.DATABASE_PASSWORD }}' chekogar_taller_staging < ~/backups/taller/dump.sql && php artisan migrate:fresh --seed && php artisan test'
+          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx "cd taller1100.chekogarcia.com.mx/app && /opt/cpanel/composer/bin/composer install && mysqldump -u${{ secrets.DATABASE_USER }} -p'${{ secrets.DATABASE_PASSWORD }}' chekogar_taller1100 > ~/backups/taller/dump.sql && mysql -u${{ secrets.DATABASE_USER }} -p'${{ secrets.DATABASE_PASSWORD }}' chekogar_taller_staging < ~/backups/taller/dump.sql && php artisan migrate:fresh --seed && php artisan test"
