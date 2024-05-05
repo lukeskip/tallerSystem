@@ -40,6 +40,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: SSH command
+      - name: Copying DB and Testing
         run: |
-          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && /opt/cpanel/composer/bin/composer install && mysqldump -uchekogar_taller1100 -p'lQcq1NItW4j;' chekogar_taller1100 > backups/taller/dump.sql && mysql -uchekogar_taller1100 -p'lQcq1NItW4j;' chekogar_taller_staging < backups/taller/dump.sql && php artisan migrate:fresh --seed && php artisan test'
+          ssh -o StrictHostKeyChecking=no -p7822 chekogar@chekogarcia.com.mx 'cd taller1100.chekogarcia.com.mx/app && /opt/cpanel/composer/bin/composer install && mysqldump -uchekogar_taller1100 -p'lQcq1NItW4j;' chekogar_taller1100 > ~/backups/taller/dump.sql && mysql -uchekogar_taller1100 -p'lQcq1NItW4j;' chekogar_taller_staging < ~/backups/taller/dump.sql && php artisan migrate:fresh --seed && php artisan test'
