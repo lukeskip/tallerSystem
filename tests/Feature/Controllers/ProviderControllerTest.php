@@ -22,12 +22,10 @@ class ProviderControllerTest extends TestCase
     /** @test */
     public function it_can_list_providers()
     {
-        // Crear y autenticar un usuario con el rol "admin"
-        $user = UserFactory::new()->create();
-        $user->assignRole('admin');
+        
+        $user = User::find(1);
         $this->actingAs($user);
 
-        // Realizar la solicitud a la ruta 'proveedores.index'
         $response = $this->get(route('proveedores.index'));
 
         $response->assertInertia(function (AssertableInertia $page) {

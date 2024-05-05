@@ -21,8 +21,7 @@ class InvoiceControllerTest extends TestCase
     public function it_can_list_invoices()
     {
         // Crear y autenticar un usuario con el rol "admin"
-        $user = UserFactory::new()->create();
-        $user->assignRole('admin');
+        $user = User::find(1);
         $this->actingAs($user);
 
         // Realizar la solicitud a la ruta 'invoices.index'

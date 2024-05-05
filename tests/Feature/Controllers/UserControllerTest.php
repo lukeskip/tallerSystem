@@ -21,12 +21,10 @@ class UserControllerTest extends TestCase
     /** @test */
     public function it_can_list_users()
     {
-        // Crear y autenticar un usuario con el rol "admin"
-        $user = UserFactory::new()->create();
-        $user->assignRole('admin');
+
+        $user = User::find(1);
         $this->actingAs($user);
 
-        // Realizar la solicitud a la ruta 'usuarios.index'
         $response = $this->get(route('usuarios.index'));
 
         $response->assertInertia(function (AssertableInertia $page) {
@@ -39,8 +37,7 @@ class UserControllerTest extends TestCase
     public function it_can_create_a_user()
     {
         
-        $adminUser = User::factory()->create();
-        $adminUser->assignRole('admin');
+        $adminUser = User::find(1);
         $this->actingAs($adminUser);
 
         $data = [
@@ -60,7 +57,8 @@ class UserControllerTest extends TestCase
     public function it_can_show_a_user()
     {
         
-        $user = User::factory()->create();
+        $user = User::find(1);
+        $this->actingAs($user);
 
         $response = $this->get(route('usuarios.show', $user->id));
 
@@ -78,9 +76,9 @@ class UserControllerTest extends TestCase
     public function it_can_delete_a_user()
     {
         
-        $adminUser = User::factory()->create();
-        $adminUser->assignRole('admin');
-        $user = User::factory()->create();
+        $adminUser = User::find(1);
+
+        $user = User::where('email','lukeskip5@gmail.com')->first();
 
         $response = $this->actingAs($adminUser)->delete(route('usuarios.destroy', $user->id));
 
@@ -110,7 +108,7 @@ class UserControllerTest extends TestCase
 
     public function test_it_can_show_edit_form_user()
     {
-        $user = User::factory()->create();
+        $user = User::find(1);
 
         $response = $this->get(route('usuarios.edit', $user->id));
 
