@@ -97,6 +97,7 @@ class InvoiceService
                     "units"=>$item->units,
                     "category"=>$item->category,
                     "unit_price"=>Utils::publishMoney($item->unit_price),
+                    "unit_comission"=>Utils::publishMoney($item->unit_comission),
                     "total"=>"$".$item->total,
                     "comission"=>Utils::publishPercentage($item->comission),
                     "provider"=> $item->provider->name ?? '',

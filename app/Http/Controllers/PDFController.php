@@ -27,9 +27,9 @@ class PDFController extends Controller
                 'Concepto'=> $item['label'],
                 'Descripción'=> $item['description'],
                 'Unidades'=> $item['units'],
-                'V. Unitario'=> $item['unit_price'],
+                'V. Unitario'=> $item['total_comission'],
                 'category'=> $item['category'],
-                'Subtotal'=> $item['total_comission'],
+                'Subtotal'=> $item['unit_comission'],
             ];
         });
 
