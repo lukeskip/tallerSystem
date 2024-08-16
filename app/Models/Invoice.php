@@ -46,7 +46,7 @@ class Invoice extends Model
     public function getSubtotalAttribute()
     {   
         if($this->invoiceItems){
-            return $this->invoiceItems->sum('amount');
+            return $this->invoiceItems->sum('total_comission');
         }else{
             return 0;
         }
