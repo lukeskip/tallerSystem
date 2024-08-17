@@ -138,6 +138,13 @@
                             class="py-2 px-4 focus:outline-none"
                             @click="toggleTab(5)"
                         >
+                            Importar CSV
+                        </button>
+                        <button
+                            :class="{ 'bg-main-color text-white': activeTab === 6, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 6 }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(6)"
+                        >
                             Configuración
                         </button>
                     </div>
@@ -150,24 +157,28 @@
                         </div>
                         
                         <!-- Tab 2 -->
-                        <div v-if="activeTab === 2">
+                        <Container v-if="activeTab === 2">
                             <TableComponent :items="invoice.incomes" :inner="true" :root="'ingresos'" :searchField="'description'" :actions="['edit','delete']" parentId="invoice_id"/>
-                        </div>
+                        </Container>
 
                         <!-- Tab 3 -->
-                        <div v-if="activeTab === 3">
+                        <Container v-if="activeTab === 3">
                             <TableComponent :items="invoice.outcomes" :inner="true" :root="'egresos'" :actions="['edit','delete']" parentId="invoice_id"
                             :searchField="'description'"/>
-                        </div>
+                        </Container>
 
                         <!-- Tab 4 -->
-                        <div v-if="activeTab === 4">
+                        <Container v-if="activeTab === 4">
                             <TableComponent :items="invoice.debts" :inner="true" />
-                        </div>
+                        </Container>
                         <!-- Tab 5 -->
-                        <div v-if="activeTab ===5">
+                        <Container v-if="activeTab === 5">
+                           Importar
+                        </Container>
+                        <!-- Tab 6 -->
+                        <Container v-if="activeTab ===6">
                             <FormEdit :default="{project_id:invoice.project.id}"  :route="'cotizaciones'"  :editId="invoice.id"/>
-                        </div>
+                        </Container>
                         
                         
                     </div>
@@ -202,6 +213,7 @@
     import { Head, Link, router } from '@inertiajs/vue3';
     import TableComponentInvoiceItems from '@/Components/TableComponentInvoiceItems.vue';
     import TableComponent from '@/Components/TableComponent.vue';
+    import Container from '@/Components/Container.vue';
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
     import FormEdit from '@/Components/FormEdit.vue';
