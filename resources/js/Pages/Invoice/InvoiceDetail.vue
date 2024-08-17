@@ -173,7 +173,7 @@
                         </Container>
                         <!-- Tab 5 -->
                         <Container v-if="activeTab === 5">
-                           Importar
+                            <FormImport/>
                         </Container>
                         <!-- Tab 6 -->
                         <Container v-if="activeTab ===6">
@@ -217,6 +217,7 @@
     import Modal from '@/Components/Modal.vue';
     import Form from '@/Components/Form.vue';
     import FormEdit from '@/Components/FormEdit.vue';
+    import FormImport from '@/Components/FormImport.vue';
     import { ref, onMounted }from 'vue';
     import Swal from 'sweetalert2'
     import showLabel from '@/helpers/showLabel'
