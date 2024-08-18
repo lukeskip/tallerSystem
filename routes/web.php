@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/egresos', OutcomeController::class);
     Route::resource('/archivos', FileController::class);
     Route::resource('/usuarios', UserController::class);
+    Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
 });
 
 

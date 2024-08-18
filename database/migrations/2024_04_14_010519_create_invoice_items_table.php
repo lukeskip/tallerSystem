@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->string('label');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->decimal('unit_price', 10, 2);
             $table->integer('units');
             $table->string('category')->nullable();

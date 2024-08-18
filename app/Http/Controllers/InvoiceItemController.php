@@ -22,16 +22,7 @@ class InvoiceItemController extends Controller
         $this->middleware('can:delete invoice_item', ['only' => ['destroy']]);
 
         $this->service = $invoiceItemService;
-        $this->rules = [
-            'label' => 'required|string',
-            'description' => 'required|string',
-            'comission' => 'required|numeric|gt:0',
-            'units' => 'required|numeric',
-            'unit_price' => 'required|numeric|gt:0',
-            'provider_id'=> 'nullable',
-            'invoice_id'  => 'nullable',
-            'category'  => 'nullable'
-        ];
+        $this->rules = $this->service->rules();
     }
     /**
      * Display a listing of the resource.
@@ -116,5 +107,10 @@ class InvoiceItemController extends Controller
     public function destroy($id)
     {
         return $this->service->delete($id);
+    }
+
+    public function importCSV(Request $request, $id)
+    {   
+        return $this->service->importCSV($request,$id);
     }
 }

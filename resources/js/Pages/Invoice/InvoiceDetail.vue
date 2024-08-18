@@ -173,7 +173,7 @@
                         </Container>
                         <!-- Tab 5 -->
                         <Container v-if="activeTab === 5">
-                            <FormImport/>
+                            <FormImport :invoiceId="invoice.id"/>
                         </Container>
                         <!-- Tab 6 -->
                         <Container v-if="activeTab ===6">
@@ -226,10 +226,6 @@
     const props  = defineProps({
         invoice: { type: [Object, Array], default: {} },
         providers: { type: Array, default: [] },
-    });
-
-    onMounted(()=>{
-        console.log(props.invoice);
     });
 
 

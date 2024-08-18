@@ -13,6 +13,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "league/csv": "^9.16.0",
         "nesbot/carbon": "^2.72",
         "ramsey/uuid": "^4.7",
         "spatie/laravel-permission": "^6.7",

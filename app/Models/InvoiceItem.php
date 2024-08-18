@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Utils\Utils;
 use App\Models\Provider;
+use App\Models\Invoice;
 
 class InvoiceItem extends Model
 {
@@ -25,6 +26,11 @@ class InvoiceItem extends Model
 
     public function provider (){
         return $this->belongsTo(Provider::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class,"invoice_id");
     }
 
     public function getTotalComissionAttribute()
