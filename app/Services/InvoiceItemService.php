@@ -28,7 +28,6 @@ class InvoiceItemService
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'provider_id'=> 'nullable',
-            'invoice_id'  => 'required',
             'category'  => 'nullable'
         ];
     }
