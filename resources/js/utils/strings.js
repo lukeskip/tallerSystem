@@ -7,6 +7,8 @@ const strings = {
         label:"Concepto",
         amount:"Monto",
         amount_final:"Monto Final",
+        amount_paid:"Monto Pagado",
+        iva_amount:"Monto con IVA",
         comission:"Comisión",
         "Next &raquo;":"Siguiente >",
         "&laquo; Previous":"< Anterior",
