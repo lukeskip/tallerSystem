@@ -1,5 +1,5 @@
 <template>
-    <div class="formWrapper relative">
+    <div class="formWrapper relative bg-white shadow-md rounded px-8 pt-6 pb-8">
         <Loader v-if="loader"/>
         <template v-if="fields.length">
             
