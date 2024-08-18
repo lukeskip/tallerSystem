@@ -44,7 +44,7 @@
               <tr v-for="(item,index) in itemsRef" :key="item.id">
                 <template v-for="(value, key, index) in item" :key="key">
                     <td v-if="key !== 'id'">
-                      <template v-if="index === 1 && root !== ''">
+                      <template v-if="index === 1 && showLink(root) ">
                         <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
                       <template v-else-if="key !== 'id'"><span v-html="showLabel(value)"></span></template>
@@ -130,4 +130,12 @@ const submitSearchFilter = () => {
   itemsRef.value = filter(props.items,props.searchField,searchTerm.value);
 };
 
+const showLink = (root)=>{
+  const excludeModel = ['ingresos','egresos'];
+  if(root !=='' && !excludeModel.includes(root) ){
+    return true
+  }else{
+    false
+  }
+}
 </script>
