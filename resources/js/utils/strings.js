@@ -49,5 +49,6 @@ const strings = {
         delete_sure:"¿Estás seguro que quieres borrar este registro?",
         accept:"Aceptar",
         cancel:"Cancelar",
+        unit_comission:"Valor Unitario Comisión",
 };
 export default strings;
