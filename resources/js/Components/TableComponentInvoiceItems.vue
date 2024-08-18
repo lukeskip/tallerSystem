@@ -49,7 +49,7 @@
                         <div class="relative">
                           <div class="hasToolTip">
                             {{value}}
-                            <div class="toolTip">
+                            <div class="toolTip !top-[-30px] !left-[50px]" v-if="itemsRef[index]['description']">
                               {{itemsRef[index]['description']}}
                             </div>
                           </div>
@@ -60,7 +60,18 @@
                         <div class="relative">
                           <div class="hasToolTip">
                             {{value}}
-                            <div class="toolTip">
+                            <div class="toolTip !top-[-30px] !left-[50px]">
+                              {{itemsRef[index]['comission']}}
+                            </div>
+                          </div>
+                         
+                        </div>
+                      </template>
+                      <template v-else-if="key === 'unit_comission'">
+                        <div class="relative">
+                          <div class="hasToolTip">
+                            {{value}}
+                            <div class="toolTip !top-[-30px] !left-[50px]">
                               {{itemsRef[index]['comission']}}
                             </div>
                           </div>
