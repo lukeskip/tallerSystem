@@ -28,7 +28,7 @@ class Project extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class);
+        return $this->belongsToMany(File::class,'project_file');
     }
     
     public function client()

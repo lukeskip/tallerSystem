@@ -3,6 +3,8 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use App\Models\File;
+use App\Models\Project;
+use App\Models\InvoiceItem;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia; 
 use App\Utils\Utils;
@@ -34,11 +36,12 @@ class FileService
                     'resource_type'=> "auto"
                 ]);
     
-                dump($uploadedFileUrl->getPublicId());
+              
                 $request['url'] = $uploadedFileUrl->getSecurePath();
                 $request['public_id'] = $uploadedFileUrl->getPublicId();
                 $request['name'] = $fileName;
                 $request['extension'] = $extension;
+                
 
             } catch (Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 500);
@@ -48,7 +51,24 @@ class FileService
         $validatedData = $this->validateData($request);
         
         if($validatedData['status']){
-            return $file = File::create($validatedData['data']); 
+            $file =new File;
+            $file->url =$validatedData['data']['url'];
+            $file->public_id =$validatedData['data']['public_id'];
+            $file->name =$validatedData['data']['name'];
+            $file->extension =$validatedData['data']['extension'];
+            $file->save();
+            
+            if(!empty($validatedData['data']['project_id'])){
+                $project = Project::find($validatedData['data']['project_id']);
+                $project->files()->attach($file->id);
+            }
+            
+            if(!empty($validatedData['data']['invoice_item_id'])){
+                $InvoiceItem = InvoiceItem::find($validatedData['data']['invoice_item_id']);
+                $InvoiceItem->files()->attach($file->id);
+            }
+
+            return $file;
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
         }
@@ -107,11 +127,12 @@ class FileService
 
     protected function validateData($request){
         $validator = Validator::make($request->all(), [
-            'project_id' => 'required|numeric|gt:0',
             'url' => 'required|string',
             'name' => 'required|string',
             'extension' => 'required|string',
             'public_id' => 'required|string',
+            'project_id' => 'nullable',
+            'invoice_item_id' => 'nullable',
         ]);
     
         if ($validator->fails()) {

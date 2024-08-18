@@ -30,6 +30,8 @@ const strings = {
         email:"Email",
         category:"Categoría",
         file:"Folio",
+        files:"Archivos",
+        notes:"Notas",
         forgot:"¿Olvidaste tu contraseña?",
         type:"Tipo",
         cash:"Efectivo",

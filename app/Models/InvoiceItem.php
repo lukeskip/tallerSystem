@@ -28,6 +28,11 @@ class InvoiceItem extends Model
         return $this->belongsTo(Provider::class);
     }
 
+    public function files()
+    {
+        return $this->belongsToMany(File::class,'invoice_item_file');
+    }
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class,"invoice_id");
