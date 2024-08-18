@@ -104,14 +104,14 @@ class Invoice extends Model
     }
 
     public function getAmountPaidAttribute(){
-       return 0;
-    }
-    public function getDebtAttribute(){
-        if($this->outcomes){
+        if($this->incomes){
             return $this->incomes->sum('amount');
         }else{
             return 0;
         }
+    }
+    public function getDebtAttribute(){
+        return 0;
     }
 
     public function invoiceItems()
