@@ -220,7 +220,8 @@
     import FormImport from '@/Components/FormImport.vue';
     import { ref, onMounted }from 'vue';
     import Swal from 'sweetalert2'
-    import showLabel from '@/helpers/showLabel'
+    import showLabel from '@/helpers/showLabel';
+    import strings from '@/utils/strings';
 
 
     const props  = defineProps({
@@ -251,11 +252,10 @@
     
     const deleteHandle = ()=>{
         Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
+            title: strings['delete_sure'],
             showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
+            confirmButtonText: strings['accept'],
+            cancelButtonText: strings['cancel']
         }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {

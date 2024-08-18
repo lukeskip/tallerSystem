@@ -46,5 +46,8 @@ const strings = {
         provider:"Proveedor",
         status:"Estatus",
         iva:"IVA",
+        delete_sure:"¿Estás seguro que quieres borrar este registro?",
+        accept:"Aceptar",
+        cancel:"Cancelar",
 };
 export default strings;
