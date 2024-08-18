@@ -76,7 +76,7 @@ class InvoiceItemService
 
     public function getById($id,$edit = false)
     {
-       return  $invoice = InvoiceItem::find($id);
+       return  $invoiceItem = InvoiceItem::find($id);
        
     }
     

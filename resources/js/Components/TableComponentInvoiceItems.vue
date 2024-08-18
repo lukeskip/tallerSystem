@@ -47,11 +47,8 @@
                  
                       <template v-if="key === 'label'">
                         <div class="relative">
-                          <div class="hasToolTip">
-                            {{value}}
-                            <div class="toolTip !top-[-30px] !left-[50px]" v-if="itemsRef[index]['description']">
-                              {{itemsRef[index]['description']}}
-                            </div>
+                          <div>
+                            <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                           </div>
                          
                         </div>
