@@ -20,10 +20,6 @@ class Income extends Model
 
     use HasFactory;
 
-    public function outcomes (){
-        return $this->hasMany(Outcome::class);
-    }
-
     public function getFormatDateAttribute()
     {
         return Utils::formatDate($this->created_at);

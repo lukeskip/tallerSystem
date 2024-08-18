@@ -18,7 +18,6 @@ class Outcome extends Model
         'type',
         'image',
         'provider_id',
-        'income_id',
     ];
 
     use HasFactory;
