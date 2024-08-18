@@ -3,7 +3,7 @@ table {
     @apply w-full text-left rtl:text-right text-gray-800 mt-5;
 
     thead {
-        @apply sticky z-[9999] top-0 text-sm text-gray-700 text-white bg-main-color rounded uppercase bg-gray-50;
+        @apply sticky z-[999] top-0 text-sm text-gray-700 text-white bg-main-color rounded uppercase bg-gray-50;
         tr {
             th {
                 @apply px-6 py-3;
