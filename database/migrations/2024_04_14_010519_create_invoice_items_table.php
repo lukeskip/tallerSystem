@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2);
             $table->integer('units');
             $table->string('category')->nullable();
-            $table->integer('comission');
+            $table->integer('comission')->nullable()->default(0);
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();

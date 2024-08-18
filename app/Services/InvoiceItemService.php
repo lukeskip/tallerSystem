@@ -23,11 +23,12 @@ class InvoiceItemService
                                  ->where('category', $category);
                 })
             ],
-            'description' => 'string',
-            'comission' => 'required|numeric|gt:0',
+            'description' => 'nullable|string',
+            'comission' => 'nullable|numeric|min:0',
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'provider_id'=> 'nullable',
+            'invoice_id'=> 'string|nullable',
             'category'  => 'nullable'
         ];
     }
