@@ -21,5 +21,13 @@ class UserSeeder extends Seeder
 
         $user->assignRole('superadmin'); 
         
+        $user = User::create([
+            'name' => 'Lorena Marín',
+            'email' => 'lorena@somainteriores.com.mx',
+            'password' => bcrypt('test1234'),
+        ]);
+
+        $user->assignRole('superadmin'); 
+        
     }
 }
