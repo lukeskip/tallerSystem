@@ -76,7 +76,7 @@ class InvoiceItemService
 
     public function getById($id,$edit = false)
     {
-       return  $invoiceItem = InvoiceItem::with('files')->find($id);
+       return  $invoiceItem = InvoiceItem::with(['files','notes','invoice'])->find($id);
        
     }
     

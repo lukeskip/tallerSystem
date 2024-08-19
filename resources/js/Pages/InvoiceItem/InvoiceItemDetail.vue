@@ -5,17 +5,17 @@
         
             <template #headerLeft>
             <div>
-                    <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoiceItem.id}} </h1>
+                    <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoiceItem.invoice.id}} </h1>
                     <h2 class="text-xl font-bold uppercase">
-                        {{ invoiceItem.label }}
+                       concepto "{{ invoiceItem.label }}"
                     </h2>
                     
             </div>
                 
             </template>
             <template #headerRight>
-                <div class="flex space-x-1 justify-end mt-5">
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="">
+                <div class="flex space-x-1 justify-end mt-5" >
+                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalNote">
                         <i class="fa-solid fa-plus"></i>
                         Nota
                     </a>
@@ -37,6 +37,7 @@
                 
                 <div class="notes my-5">
                     <h3 class="text-xl font-bold">{{ strings['notes'] }}</h3>
+                    <NoteList v-if="invoiceItem.notes" :notes="invoiceItem.notes"/>
                 </div>
                 <div class="files my-5">
                     <h3 class="text-xl font-bold">{{ strings['files'] }}</h3>
@@ -46,6 +47,9 @@
             
                 <Modal :show="showModalFile" @close="showModalFile = false" >
                     <Form :default="{invoice_item_id:invoiceItem.id}"  :route="'archivos'" @close="toggleModalFile()"/>
+                </Modal>
+                <Modal :show="showModalNote" @close="showModalNote = false" >
+                    <Form :default="{invoice_item_id:invoiceItem.id}"  :route="'notas'" @close="toggleModalNote()"/>
                 </Modal>
 
             </template>
@@ -70,19 +74,25 @@
     import Form from '@/Components/Form.vue';
     import FormEdit from '@/Components/FormEdit.vue';
     import FileList from '@/Components/FileList.vue';
+    import NoteList from '@/Components/NoteList.vue';
     import { ref, onMounted }from 'vue';
     import Swal from 'sweetalert2'
     import strings from '@/utils/strings';
 
-    const showModalFile = ref(false);
     const props  = defineProps({
         invoiceItem: { type: [Object, Array]},
         notes: { type: [Object, Array]},
         files: { type: [Object, Array]}
     }); 
-
+    
+    const showModalFile = ref(false);
     const toggleModalFile = () => {
         showModalFile.value = !showModalFile.value;
+    };
+
+    const showModalNote = ref(false);
+    const toggleModalNote = () => {
+        showModalNote.value = !showModalNote.value;
     };
     
     const deleteHandle = ()=>{

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Utils\Utils;
 use App\Models\Provider;
 use App\Models\Invoice;
+use App\Models\Note;
 
 class InvoiceItem extends Model
 {
@@ -31,6 +32,11 @@ class InvoiceItem extends Model
     public function files()
     {
         return $this->belongsToMany(File::class,'invoice_item_file');
+    }
+
+    public function notes()
+    {
+        return $this->belongsToMany(Note::class);
     }
 
     public function invoice()

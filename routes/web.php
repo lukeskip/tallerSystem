@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\InvoiceItemController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutcomeController;
 use App\Http\Controllers\FileController;
@@ -44,8 +45,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/ingresos', IncomeController::class);
     Route::resource('/egresos', OutcomeController::class);
     Route::resource('/archivos', FileController::class);
+    Route::resource('/notas', NoteController::class);
     Route::resource('/usuarios', UserController::class);
     Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
+    Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
 });
 
 

@@ -35,6 +35,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'edit invoice','guard_name' => 'web']);
         Permission::create(['name' => 'delete invoice','guard_name' => 'web']);
 
+        Permission::create(['name' => 'create note','guard_name' => 'web']);
+        Permission::create(['name' => 'read note','guard_name' => 'web']);
+        Permission::create(['name' => 'edit note','guard_name' => 'web']);
+        Permission::create(['name' => 'delete note','guard_name' => 'web']);
+
         
         Permission::create(['name' => 'create invoice_item','guard_name' => 'web']);
         Permission::create(['name' => 'read invoice_item','guard_name' => 'web']);

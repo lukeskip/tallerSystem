@@ -61,6 +61,8 @@ class Utils
                 elseif($field === 'status'){
                     if($table === 'incomes' || $table === 'outcomes'){
                         $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')]]];
+                    }else if($table === 'notes'){
+                        $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')]]];
                     }else{
                         $fieldsEnd[] = ['slug'=>$field,'type'=> 'select','options'=>[['id'=>'pending','name'=>Utils::getLabel('pending')],['id'=>'completed','name'=>Utils::getLabel('completed')],['id'=>'rejected','name'=>Utils::getLabel('rejected')]]];
                     }
