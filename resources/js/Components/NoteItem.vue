@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-100 p-5 flex justify-between">
-       <div class="p-5"> {{item.content}}</div>
+       <div class="p-5" :class="item.status === 'completed' ? 'opacity-30 line-through' :null"> {{item.content}}</div>
        <div class="flex gap-2">
           <div>
             <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="handleStatus(item.id)">
