@@ -35,11 +35,11 @@
                     {{ invoiceItem.description }}
                 </div>
                 
-                <div class="notes my-5">
+                <div class="notes my-5" v-if="invoiceItem.notes.length">
                     <h3 class="text-xl font-bold">{{ strings['notes'] }}</h3>
                     <NoteList v-if="invoiceItem.notes" :notes="invoiceItem.notes"/>
                 </div>
-                <div class="files my-5">
+                <div class="files my-5" v-if="invoiceItem.files.length">
                     <h3 class="text-xl font-bold">{{ strings['files'] }}</h3>
                     <FileList v-if="invoiceItem.files" :files="invoiceItem.files"/>
                 </div>
