@@ -95,7 +95,7 @@ class Invoice extends Model
 
         if($this->iva > 0){
             $iva = $this->iva / 100;
-            $amountIVA = $this->getSubtotalAttribute() * $iva;
+            $amountIVA = $this->getSubtotalFeeAttribute() * $iva;
             return $amountIVA;
         }else{
             return 0;
