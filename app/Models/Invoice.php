@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Income;
 use App\Models\Outcome;
 use App\Models\InvoiceItem;
+use App\Models\Category;
 use Carbon\Carbon;
 use App\Utils\Utils;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,6 +37,11 @@ class Invoice extends Model
     public function project()
     {
         return $this->belongsTo(Project::class,"project_id");
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 
     public function getFormatDateAttribute()

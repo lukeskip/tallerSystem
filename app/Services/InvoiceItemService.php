@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\InvoiceItem;
 use App\Models\Invoice;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Utils\Utils;
 use League\Csv\Reader;
@@ -35,7 +36,22 @@ class InvoiceItemService
 
     public function store($request)
     {
-        return InvoiceItem::create($request);     
+        if (isset($request['category']) && $request['category']) {
+           
+            $category = Category::where('name', $request['category'])->first();
+            
+       
+            if (!$category) {
+                $category = Category::create([
+                    'name' => $request['category'],
+                    'invoice_id' => $request['invoice_id'],
+                ]);
+            }
+            
+            $request['category_id'] = $category->id;
+        }
+    
+        return InvoiceItem::create($request);   
     }
 
     public function create(){

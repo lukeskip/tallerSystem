@@ -8,6 +8,7 @@ use App\Utils\Utils;
 use App\Models\Provider;
 use App\Models\Invoice;
 use App\Models\Note;
+use App\Models\Category;
 
 class InvoiceItem extends Model
 {
@@ -42,6 +43,11 @@ class InvoiceItem extends Model
     public function invoice()
     {
         return $this->belongsTo(Invoice::class,"invoice_id");
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function getTotalComissionAttribute()
