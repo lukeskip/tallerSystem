@@ -53,5 +53,6 @@ const strings = {
         accept:"Aceptar",
         cancel:"Cancelar",
         unit_comission:"Valor Unitario Comisión",
+        user_id:"Usuario",
 };
 export default strings;

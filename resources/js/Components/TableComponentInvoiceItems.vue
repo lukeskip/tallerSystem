@@ -58,7 +58,7 @@
                           <div class="hasToolTip">
                             {{publishMoney(value)}}
                             <div class="toolTip !top-[-30px] !left-[50px]">
-                              {{itemsRef[index]['comission']}}
+                              {{itemsRef[index]['comission']}} {{ itemsRef[index]['user'] }}
                             </div>
                           </div>
                          
@@ -143,7 +143,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
-const columnsToHide = ['id','category','description','comission'];
+const columnsToHide = ['id','category','description','comission',"user"];
 
 
 onUpdated(()=>{

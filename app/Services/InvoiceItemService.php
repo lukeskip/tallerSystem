@@ -32,6 +32,7 @@ class InvoiceItemService
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
             'provider_id'=> 'nullable',
+            'user_id'=> 'nullable',
             'invoice_id'=> 'string|nullable',
             'category'  => 'nullable'
         ];
@@ -74,6 +75,7 @@ class InvoiceItemService
             'comission'=> ['value'=>$invoiceItem->comission,'type'=>'number'],
             'provider_id'=> ['value'=>$invoiceItem->provider_id,'type'=>'number'],
             'category'=> ['value'=>$invoiceItem->category?->name,'type'=>'string'],
+            'user_id'=> ['value'=>$invoiceItem->user_id,'type'=>'number'],
         ];
     
         $fields = Utils::getFields('invoice_items',$invoice_id);
@@ -100,7 +102,7 @@ class InvoiceItemService
             
             $request['category_id'] = $category->id;
         }
-
+ 
         $invoiceItem->update($request);
         return $invoiceItem;      
     }

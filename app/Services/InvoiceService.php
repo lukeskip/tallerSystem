@@ -99,6 +99,7 @@ class InvoiceService
                     "total"=>"$".$item->total,
                     "comission"=>Utils::publishPercentage($item->comission),
                     "provider"=> $item->provider->name ?? '',
+                    "user"=> $item->user->name ?? '',
                     "total_comission"=>$item->total_comission,
                 ];
             });
