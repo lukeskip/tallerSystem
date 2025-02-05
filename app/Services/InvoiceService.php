@@ -172,6 +172,21 @@ class InvoiceService
                 ];
             });
 
+            $comissions = $invoice->invoiceItems
+            ->groupBy('user_id')
+            ->map(function ($items, $userId) {
+                $user = $items->first()->user ?? null; 
+                if (!$user) {
+                    return null;
+                }
+                return [
+                    "user" => $user->name,
+                    "total" => Utils::publishMoney($items->sum('total_comission_amount')), 
+                ];
+            })
+            ->filter() 
+            ->values(); 
+
             return [
                 'id'=>$invoice->id,
                 'project'=>$invoice->project,
@@ -182,6 +197,7 @@ class InvoiceService
                 'executive' => $invoice->project->user->name ?? null,
                 'incomes' => $incomes,
                 'outcomes' => $outcomes,
+                'comissions' => $comissions,
                 'debts'=>$debtsByProvider,
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal"=>Utils::publishMoney($invoice->subtotal),

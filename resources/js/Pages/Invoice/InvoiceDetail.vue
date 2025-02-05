@@ -147,6 +147,13 @@
                         >
                             Configuración
                         </button>
+                        <button
+                            :class="{ 'bg-main-color text-white': activeTab === 7, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 7 }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(7)"
+                        >
+                            Comisiones
+                        </button>
                     </div>
 
                     <!-- Tabs content -->
@@ -178,6 +185,11 @@
                         <!-- Tab 6 -->
                         <Container v-if="activeTab ===6">
                             <FormEdit :default="{project_id:invoice.project.id}"  :route="'cotizaciones'"  :editId="invoice.id"/>
+                        </Container>
+                         <!-- Tab 7 -->
+                         <Container v-if="activeTab === 7">
+                            <TableComponent :items="invoice.comissions" :inner="true" parentId="invoice_id"
+                            :searchField="'description'"/>
                         </Container>
                         
                         
