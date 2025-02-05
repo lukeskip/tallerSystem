@@ -57,10 +57,8 @@ class InvoiceService
     public function getItemCategories($id){
         $invoice = Invoice::find($id);
         $categories = [];
-        foreach ($invoice->invoiceItems as $item) {
-            if ($item->category && !in_array($item->category, $categories)) {
-                $categories[] = $item->category;
-            }
+        foreach ($invoice->categories as $category) {
+            $categories[] = $category->name;
         }
         return $categories;
     }
@@ -80,7 +78,7 @@ class InvoiceService
     {
         $invoice = Invoice::with(['incomes','project','outcomes','invoiceItems' => function ($query) {
             $query
-            ->orderBy('category', 'asc')
+            ->orderBy('category_id', 'asc')
             ->orderBy('created_at', 'desc');
         }])->find($id);
 
@@ -95,13 +93,13 @@ class InvoiceService
                     "label"=>$item->label,
                     "description"=>$item->description,
                     "units"=>$item->units,
-                    "category"=>$item->category,
+                    "category"=>$item->category->name ?? '',
                     "unit_price"=>Utils::publishMoney($item->unit_price),
                     "unit_comission"=>Utils::publishMoney($item->unit_comission),
                     "total"=>"$".$item->total,
                     "comission"=>Utils::publishPercentage($item->comission),
                     "provider"=> $item->provider->name ?? '',
-                    "total_comission"=>Utils::publishMoney($item->total_comission),
+                    "total_comission"=>$item->total_comission,
                 ];
             });
 

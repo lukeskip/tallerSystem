@@ -19,11 +19,12 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->decimal('unit_price', 10, 2);
             $table->integer('units');
-            $table->string('category')->nullable();
             $table->integer('comission')->nullable()->default(0);
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('category_id')->nullable();
             $table->timestamps();
         });
     }

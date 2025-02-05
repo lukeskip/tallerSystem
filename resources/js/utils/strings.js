@@ -40,6 +40,7 @@ const strings = {
         reference:"Referencia",
         unit_type:"Tipo de unidad",
         provider_id:"Proveedor",
+        category_id:"Category",
         image:"Imagen",
         client:"Cliente",
         provider_name:"Proveedor",

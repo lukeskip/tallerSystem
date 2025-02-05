@@ -68,10 +68,10 @@ class Utils
                     }
                 }
                 
-                elseif($field === 'category' && $table === 'invoice_items' && $id){
+                elseif($field === 'category_id' && $table === 'invoice_items' && $id){
                     $InvoiceService = new InvoiceService();
                     $categories = $InvoiceService->getItemCategories($id);
-                    $fieldsEnd[] = ['slug'=>$field,'type'=> Schema::getColumnType($table, $field),'autocomplete'=>$categories];
+                    $fieldsEnd[] = ['slug'=>"category",'type'=> 'varchar','autocomplete'=>$categories];
                 }
                 
                 elseif(in_array($field, $fieldsToHide)){

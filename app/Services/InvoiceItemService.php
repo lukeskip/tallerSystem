@@ -13,15 +13,18 @@ use Illuminate\Validation\Rule;
 class InvoiceItemService
 {   
 
-    public function rules ($invoice_id = null, $category = null){
+    public function rules ($invoice_id = null, $categoryName = null){
+        $category = Category::where('name', $categoryName)->first();
+        $categoryId = $category ? $category->id : null;
+
         return $rules = [
             'label' => [
                 'required',
                 'string',
                 Rule::unique('invoice_items')
-                ->where(function ($query) use ($invoice_id,$category) {
+                ->where(function ($query) use ($invoice_id,$categoryId) {
                     return $query->where('invoice_id', $invoice_id)
-                                 ->where('category', $category);
+                                 ->where('category_id', $categoryId);
                 })
             ],
             'description' => 'nullable|string',
@@ -38,8 +41,9 @@ class InvoiceItemService
     {
         if (isset($request['category']) && $request['category']) {
            
-            $category = Category::where('name', $request['category'])->first();
-            
+            $category = Category::where('name', $request['category'])
+                        ->where('invoice_id', $request['invoice_id'])
+                        ->first();
        
             if (!$category) {
                 $category = Category::create([
@@ -50,7 +54,7 @@ class InvoiceItemService
             
             $request['category_id'] = $category->id;
         }
-    
+        
         return InvoiceItem::create($request);   
     }
 
@@ -69,7 +73,7 @@ class InvoiceItemService
             'units'=> ['value'=>$invoiceItem->units,'type'=>'number'],
             'comission'=> ['value'=>$invoiceItem->comission,'type'=>'number'],
             'provider_id'=> ['value'=>$invoiceItem->provider_id,'type'=>'number'],
-            'category'=> ['value'=>$invoiceItem->category,'type'=>'string'],
+            'category'=> ['value'=>$invoiceItem->category?->name,'type'=>'string'],
         ];
     
         $fields = Utils::getFields('invoice_items',$invoice_id);
@@ -80,6 +84,23 @@ class InvoiceItemService
     public function update($id, $request)
     {
         $invoiceItem = InvoiceItem::find($id);
+
+        if (isset($request['category']) && $request['category']) {
+           
+            $category = Category::where('name', $request['category'])
+                        ->where('invoice_id', $invoiceItem->invoice_id)
+                        ->first();
+       
+            if (!$category) {
+                $category = Category::create([
+                    'name' => $request['category'],
+                    'invoice_id' => $invoiceItem->invoice_id,
+                ]);
+            }
+            
+            $request['category_id'] = $category->id;
+        }
+
         $invoiceItem->update($request);
         return $invoiceItem;      
     }
