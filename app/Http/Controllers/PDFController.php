@@ -27,9 +27,9 @@ class PDFController extends Controller
                 'Concepto'=> $item['label'],
                 'Descripción'=> $item['description'],
                 'Unidades'=> $item['units'],
-                'V. Unitario'=> $item['total_comission'],
+                'V. Unitario'=> $item['unit_price'],
                 'category'=> $item['category'],
-                'Subtotal'=> $item['unit_comission'],
+                'Subtotal'=> $item['total'],
             ];
         });
 
@@ -61,46 +61,7 @@ class PDFController extends Controller
         $pdf->loadView('pdf.invoice', $data);
         return $pdf->stream($fileName);
 
-        // return $pdf->download($fileName);
-
     }
 
-    public function test($id){
-        $InvoiceService = new InvoiceService();
-
-        $invoice = $InvoiceService->getById($id); 
-
-        $invoiceItems = $invoice['invoiceItems']->map(function ($item){
-            return [
-                'Concepto'=> $item['label'],
-                'Descripción'=> $item['description'],
-                'Unidades'=> $item['units'],
-                'V. Unitario'=> $item['unit_price'],
-                'category'=> $item['category'],
-                'Subtotal'=> $item['total_comission'],
-            ];
-        });
-
-
-        dump($invoice['incomes']);
-        $incomes = $invoice['incomes']->map(function ($item){
-            return [
-                'Descripción'=> $item['description'],
-                'Monto'=> $item['amount'],
-                'Fecha'=>$item['format_date']
-            ];
-        });
-        
-
-        
-        $data = [
-            'invoice' => $invoice,
-            'invoiceItems' => $invoiceItems,
-            'incomes' => $incomes,
-        ];
-
-        return view('pdf.invoice', $data)->render();
-        
-
-    }
+   
 }

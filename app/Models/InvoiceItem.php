@@ -83,6 +83,10 @@ class InvoiceItem extends Model
         $total = ($this->unit_price * $this->units) ;
         return $total;
     }
+    public function getCategoryNameAttribute()
+    {   
+        return $this->category->name;
+    }
 
     public function getAmountAttribute()
     {    
