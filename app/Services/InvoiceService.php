@@ -194,6 +194,7 @@ class InvoiceService
             return [
                 'id'=>$invoice->id,
                 'project'=>$invoice->project,
+                'categories'=>$invoice->categories,
                 'status'=>$invoice->status,
                 'comission'=>$invoice->project->comission,
                 'client'=>$invoice->project->client->name,
