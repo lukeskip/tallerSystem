@@ -2,40 +2,56 @@
     <div v-if="invoice">
         <Head :title="`Cotización ${invoice?.total}`"/>
         <AuthenticatedLayout>
-        
+            <template #headerCenter>
+                <div class="flex space-x-1 justify-end mt-5">
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+                            <i class="fa-solid fa-plus"></i>
+                            Concepto
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
+                            <i class="fa-solid fa-plus"></i>
+                                Ingreso
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
+                            <i class="fa-solid fa-plus"></i>
+                                Egreso
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalCategories">
+                            <i class="fa-solid fa-plus"></i>
+                                Categorías
+                        </a>
+                    </div>
+                   <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-red-800 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                   </div>
+                    <div>
+                        <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800" as="button">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+            </template>
             <template #headerLeft>
-            <div>
-                    <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoice.id}} </h1>
-                    <h2 class="text-xl font-bold uppercase">
-                        {{ invoice.project.name }} / {{ invoice.client }}
-                    </h2>
-                    <h3>
-                        {{ invoice.format_date }} / Estatus: {{ showLabel(invoice.status) }}
-                    </h3>
-            </div>
-                
+                <div>
+                        <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoice.id}} </h1>
+                        <h2 class="text-xl font-bold uppercase">
+                            {{ invoice.project.name }} / {{ invoice.client }}
+                        </h2>
+                        <h3>
+                            {{ invoice.format_date }} / Estatus: {{ showLabel(invoice.status) }}
+                        </h3>
+                </div>
             </template>
             <template #headerRight>
-                <div class="flex space-x-1 justify-end mt-5">
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
-                        <i class="fa-solid fa-plus"></i>
-                        Concepto
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
-                        <i class="fa-solid fa-plus"></i>
-                            Ingreso
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
-                        <i class="fa-solid fa-plus"></i>
-                            Egreso
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-red-800 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
-                    <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800" as="button">
-                        <i class="fa-solid fa-download"></i>
-                    </a>
-                </div>
                 <div class="">
                     <table class="w-full mt-5 text-right">
                         <tr class="bg-secondary-color border p-4">
@@ -206,6 +222,9 @@
                 <Modal :show="showModalOutcome" @close="showModalOutcome = false" >
                     <Form :default="{invoice_id:invoice.id}" :route="'egresos'" @close="toggleModalOutcome()"/>
                 </Modal>
+                <Modal :show="showModalCategories" @close="showModalCategories = false" >
+                    hola
+                </Modal>
 
             </template>
         </AuthenticatedLayout>
@@ -259,6 +278,10 @@
     const showModalOutcome = ref(false);
     const toggleModalOutcome = () => {
         showModalOutcome.value = !showModalOutcome.value;
+    };
+    const showModalCategories = ref(false);
+    const toggleModalCategories = () => {
+        showModalCategories.value = !showModalCategories.value;
     };
 
     

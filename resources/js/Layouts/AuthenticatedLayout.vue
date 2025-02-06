@@ -128,22 +128,25 @@ const showingNavigationDropdown = ref(false);
             <main>
                 <div class="container mx-auto px-4 max-w-screen-xl">
                     
-                    <header class="z-50 py-4 mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
-                        <div class="text-left flex justify-start items-center">
-                            
-                            <div>
-                                <h1 class="text-xl font-bold text-main-color uppercase"><slot name="title" /></h1>
-                                <h2><slot name="subtitle" /></h2>
-                                <h3><slot name="subtitle2" /></h3>
-                                <h4><slot name="subtitle3" /></h4>
+                    <header class="z-50 py-4 mb-4">
+                        <slot name="headerCenter" />
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
+                            <div class="text-left flex justify-start items-center">
+                                
+                                <div>
+                                    <h1 class="text-xl font-bold text-main-color uppercase"><slot name="title" /></h1>
+                                    <h2><slot name="subtitle" /></h2>
+                                    <h3><slot name="subtitle2" /></h3>
+                                    <h4><slot name="subtitle3" /></h4>
+                                </div>
+                                
+                                <slot name="headerLeft" />
+    
                             </div>
-                            
-                            <slot name="headerLeft" />
-
-                        </div>
-                        <div>
-                            <slot name="headerRight" />
-                            <div class="flex space-x-1 justify-end"><slot name="submenu"/></div>
+                            <div>
+                                <slot name="headerRight" />
+                                <div class="flex space-x-1 justify-end"><slot name="submenu"/></div>
+                            </div>
                         </div>
 
                     </header>
