@@ -17,6 +17,12 @@
                     
                     <Select v-else-if="field.type === 'select'"  v-model="formData[field.slug]" :options="field.options" :default="formData[field.slug]" />
                     <div class="error" v-if="errors[field.slug]">{{strings.required}}</div>
+                    <div v-if="field.slug === 'comission' " class="mt-2">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            Comission Amount
+                        </label>
+                        <NumberInput v-model="formData.comission_amount" />
+                    </div>
                 </div>
     
             <div class="mt-5">
@@ -42,7 +48,7 @@
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import { router } from '@inertiajs/vue3';
-    import {ref,onBeforeMount,onMounted,defineEmits} from 'vue';
+    import {ref,onBeforeMount,onMounted,defineEmits,watch} from 'vue';
     import axios from 'axios';
     import strings from '@/utils/strings.js'
     import showLabel from '@/helpers/showLabel';
@@ -73,6 +79,7 @@
     const message = ref("");
     const formData = ref({
         ...props.default,
+        comission_amount: props.default?.comission_amount ?? 0
     });
     
     onBeforeMount(()=>{
@@ -129,6 +136,40 @@
         });
     }
 
+    let debounceTimer = null;
+
+    watch(() => [formData.value.unit_price, formData.value.units, formData.value.comission], () => {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(() => {
+            if (formData.value.comission !== undefined) {
+                const unitPrice = parseFloat(formData.value.unit_price) || 0;
+                const units = parseInt(formData.value.units) || 0;
+                const comissionPercentage = parseFloat(formData.value.comission) / 100 || 0;
+
+                formData.value.comission_amount = Number(((unitPrice * units) * comissionPercentage).toFixed(2));
+            }
+        }, 500);
+    }, { deep: true });
+
+ 
+    watch(() => formData.value.comission_amount, () => {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(() => {
+            if (formData.value.comission_amount !== undefined) {
+                const unitPrice = parseFloat(formData.value.unit_price) || 0;
+                const units = parseInt(formData.value.units) || 0;
+                const total = unitPrice * units;
+
+                if (total > 0) {
+                    formData.value.comission = Number(((formData.value.comission_amount / total) * 100).toFixed(2));
+                } else {
+                    formData.value.comission = 0;
+                }
+            }
+        }, 500);
+    });
 
     const handleSubmit = async (stay = false)=>{
         try {  

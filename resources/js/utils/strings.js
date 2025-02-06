@@ -20,6 +20,7 @@ const strings = {
         contact_name:"Nombre de Contacto",
         units:"Unidades",
         unit_price:"Valor Unitario",
+        unit_cost:"Costo Unitario",
         total_comission:"Total con comisión",
         required:'Este campo es requerido',
         delete:"Borrar",
@@ -54,5 +55,8 @@ const strings = {
         cancel:"Cancelar",
         unit_comission:"Valor Unitario Comisión",
         user_id:"Usuario",
+        percentage_profit:"Porcentaje de Utilidad",
+        total_profit:"Utilidad",
+        agent_comission:"Comisión de Agente",
 };
 export default strings;

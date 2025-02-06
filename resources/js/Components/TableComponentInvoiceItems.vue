@@ -143,7 +143,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
-const columnsToHide = ['id','category','description','comission',"user"];
+const columnsToHide = ['id','category','description','comission',"user","total_raw"];
 
 
 onUpdated(()=>{
@@ -165,7 +165,7 @@ function getData (data){
 function getCategoryTotal(category) {
   const total = itemsRef.value
     .filter(item => item.category === category)
-    .reduce((acc, item) => acc + item.total_comission, 0);
+    .reduce((acc, item) => acc + item.total_raw, 0);
 
   return publishMoney(total);
 }

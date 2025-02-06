@@ -24,6 +24,7 @@ class InvoiceController extends Controller
             'iva' => 'nullable',
             'fee' => 'nullable',
             'project_id' => 'required|numeric|gt:0',
+            'agent_comission' => 'required|numeric|gt:0',
         ];
     }
     /**

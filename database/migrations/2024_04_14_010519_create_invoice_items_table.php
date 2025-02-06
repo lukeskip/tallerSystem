@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('label');
             $table->longText('description')->nullable();
             $table->decimal('unit_price', 10, 2);
+            $table->decimal('unit_cost', 10, 2)->default(0);
             $table->integer('units');
-            $table->integer('comission')->nullable()->default(0);
             $table->string('invoice_id'); 
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreignId('provider_id')->nullable();

@@ -23,6 +23,7 @@ class Invoice extends Model
         'id',
         'project_id',
         'status',
+        'agent_comission',
         'iva',
         'fee',
     ];
@@ -52,7 +53,7 @@ class Invoice extends Model
     public function getSubtotalAttribute()
     {   
         if($this->invoiceItems){
-            return $this->invoiceItems->sum('total_comission');
+            return $this->invoiceItems->sum('total');
         }else{
             return 0;
         }

@@ -29,6 +29,7 @@ class InvoiceService
             'status'=> ['value'=>$invoice->status,'type'=>'select'],
             'iva'=> ['value'=>$invoice->iva,'type'=>'number'],
             'fee'=> ['value'=>$invoice->fee,'type'=>'number'],
+            'agent_comission'=> ['value'=>$invoice->agent_comission,'type'=>'number'],
         ];
     
         $fields = Utils::getFields('invoices');
@@ -49,7 +50,6 @@ class InvoiceService
         if(!$request['iva']){
             $request['iva'] = 0;
         }
-
         return $invoice->update($request);
      
     }
@@ -86,7 +86,7 @@ class InvoiceService
        
         
         if($invoice){
-
+            
             $invoiceItems = $invoice->invoiceItems->map(function ($item) {
                 return [
                     "id"=>$item->id,
@@ -94,13 +94,14 @@ class InvoiceService
                     "description"=>$item->description,
                     "units"=>$item->units,
                     "category"=>$item->category->name ?? '',
+                    "unit_cost"=>Utils::publishMoney($item->unit_cost),
                     "unit_price"=>Utils::publishMoney($item->unit_price),
-                    "unit_comission"=>Utils::publishMoney($item->unit_comission),
-                    "total"=>"$".$item->total,
-                    "comission"=>Utils::publishPercentage($item->comission),
+                    "percentage_profit"=>Utils::publishPercentage($item->percentage_profit),
+                    "total_profit"=>Utils::publishMoney($item->total_profit),
+                    "total"=>Utils::publishMoney($item->total),
+                    "total_raw"=>$item->total,
                     "provider"=> $item->provider->name ?? '',
                     "user"=> $item->user->name ?? '',
-                    "total_comission"=>$item->total_comission,
                 ];
             });
 
@@ -174,14 +175,17 @@ class InvoiceService
 
             $comissions = $invoice->invoiceItems
             ->groupBy('user_id')
-            ->map(function ($items, $userId) {
+            ->map(function ($items, $userId) use($invoice) {
                 $user = $items->first()->user ?? null; 
                 if (!$user) {
                     return null;
                 }
+                $profit = $items->sum('total_profit');
+                $comission = $profit * $invoice->agent_comission / 100;
+   
                 return [
                     "user" => $user->name,
-                    "total" => Utils::publishMoney($items->sum('total_comission_amount')), 
+                    "total" => Utils::publishMoney($comission), 
                 ];
             })
             ->filter() 

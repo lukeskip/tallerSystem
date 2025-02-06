@@ -24,6 +24,7 @@ class InvoiceItem extends Model
         'user_id',
         'units',
         'unit_price',
+        'unit_cost',
         'unit_type',
     ];
     use HasFactory;
@@ -57,35 +58,34 @@ class InvoiceItem extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getTotalComissionAttribute()
+    public function getTotalProfitAttribute()
     {   
-        $comission = $this->comission / 100;
-        $comisionAmount = $comission * ($this->unit_price * $this->units);
-        $total = ($this->unit_price * $this->units) + $comisionAmount;
+        $unitCost = $this->unit_cost;
+        $unitPrice = $this->unit_price;
+        $total = $unitPrice - $unitCost;
         return $total;
     }
-    public function getTotalComissionAmountAttribute()
+    
+    public function getPercentageProfitAttribute()
     {   
-        $comission = $this->comission / 100;
-        $comisionAmount = $comission * ($this->unit_price * $this->units);
-        return $comisionAmount;
+        if($this->unit_cost == 0){
+            return 0;
+        }
+        $unitCost = $this->unit_cost;
+        $unitPrice = $this->unit_price;
+        $total = $unitPrice - $unitCost;
+        $percentage = ($total / $unitCost) * 100;
+        return $percentage;
     }
-    public function getUnitComissionAttribute()
-    {   
-        $comission = $this->comission / 100;
-        $comisionAmount = $comission * ($this->unit_price * $this->units);
-        $total = $this->unit_price  + $comisionAmount;
-        return $total;
-    }
+    
     public function getTotalAttribute()
     {   
-        
         $total = ($this->unit_price * $this->units) ;
-        return number_format($total,2);
+        return $total;
     }
+
     public function getAmountAttribute()
-    {   
-        
+    {    
         $total = ($this->unit_price * $this->units) ;
         return $total;
     }

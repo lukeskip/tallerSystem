@@ -25,4 +25,8 @@ class Category extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+    public function getTotalAttribute()
+    {
+        return $this->invoiceItems->sum('total');
+    }
 }
