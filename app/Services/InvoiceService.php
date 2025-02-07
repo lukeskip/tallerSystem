@@ -191,6 +191,7 @@ class InvoiceService
                 $comission = $profit * $invoice->agent_comission / 100;
    
                 return [
+                    "id" => $userId,
                     "user" => $user->name,
                     "total" => Utils::publishMoney($comission), 
                 ];
@@ -287,5 +288,41 @@ class InvoiceService
 
         return $invoices;
     }
+
+    public function comissionsByUser($invoiceId, $userId)
+{
+    $invoice = Invoice::with(['invoiceItems.category', 'invoiceItems.provider', 'invoiceItems.user'])
+        ->find($invoiceId);
+
+        if (!$invoice) {
+            return [];
+        }
+
+        $comissions = $invoice->invoiceItems
+            ->where('user_id', $userId)
+            ->map(function ($item) use ($invoice) {
+                return [
+                    "id" => $item->id,
+                    "label" => $item->label,
+                    "description" => $item->description,
+                    "units" => $item->units,
+                    "category" => $item->category->name ?? '',
+                    "unit_cost" => Utils::publishMoney($item->unit_cost),
+                    "unit_price" => Utils::publishMoney($item->unit_price),
+                    "percentage_profit" => Utils::publishPercentage($item->percentage_profit),
+                    "total_profit" => Utils::publishMoney($item->total_profit),
+                    "total" => Utils::publishMoney($item->total),
+                    "total_raw" => $item->total,
+                    "provider" => $item->provider->name ?? '',
+                    "agent_comission_percentage" => Utils::publishPercentage($invoice->agent_comission),
+                    "agent_comission" => Utils::publishMoney($item->agent_comission),
+                    "agent_comission_raw" => $item->agent_comission,
+                ];
+            })
+            ->values();
+
+        return $comissions;
+    }
+
 
 }

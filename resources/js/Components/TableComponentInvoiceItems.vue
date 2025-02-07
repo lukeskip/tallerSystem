@@ -143,7 +143,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
-const columnsToHide = ['id','category','description','comission',"total_raw"];
+const columnsToHide = ['id','category','description','comission',"total_raw","agent_comission_raw"];
 
 
 onUpdated(()=>{

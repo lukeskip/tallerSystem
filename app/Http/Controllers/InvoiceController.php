@@ -8,10 +8,11 @@ use App\Services\InvoiceService;
 use Inertia\Inertia;
 use App\Utils\Utils;
 use App\Services\ValidateDataService;
+use App\Services\UserService;
 
 class InvoiceController extends Controller
 {
-    public function __construct(InvoiceService $invoiceService)
+    public function __construct(InvoiceService $invoiceService, UserService $userService)
     {
         $this->middleware('can:read invoice', ['only' => ['index', 'show']]);
         $this->middleware('can:create invoice', ['only' => ['create', 'store']]);
@@ -19,6 +20,7 @@ class InvoiceController extends Controller
         $this->middleware('can:delete invoice', ['only' => ['destroy']]);
 
         $this->service = $invoiceService;
+        $this->userService = $userService;
         $this->rules = [
             'status' => 'required|string',
             'iva' => 'nullable',
@@ -111,5 +113,18 @@ class InvoiceController extends Controller
     {
         $projectID = $this->service->delete($id);
         return Inertia::location(route('proyectos.show',$projectID)); 
+    }
+
+    public function comissionsByUser($invoiceId, $userId)
+    {
+        $comissions = $this->service->comissionsByUser($invoiceId, $userId);
+        $user = $this->userService->getById($userId);
+     
+        return Inertia::render('Comissions/ComissionDetail', [
+            'comissions' => $comissions,
+            'user' => $user,
+            'total'=> Utils::publishMoney($comissions->sum('agent_comission_raw'))
+            
+        ]);
     }
 }

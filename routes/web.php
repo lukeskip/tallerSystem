@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/proyectos', ProjectController::class);
     Route::resource('/clientes', ClientController::class);
     Route::resource('/cotizaciones', InvoiceController::class);
+    Route::get('/cotizaciones/{invoiceId}/{userId}', [InvoiceController::class, 'comissionsByUser'])->name("cotizaciones.comissionsByUser.show");
     Route::resource('/proveedores', ProviderController::class);
     Route::resource('/conceptos', InvoiceItemController::class);
     Route::resource('/ingresos', IncomeController::class);

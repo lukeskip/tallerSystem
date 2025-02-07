@@ -77,6 +77,20 @@ class InvoiceItem extends Model
         $percentage = ($total / $unitCost) * 100;
         return $percentage;
     }
+
+    public function getAgentComissionAttribute()
+    {   
+        if($this->user){
+            $comission = $this->total_profit * $this->invoice->agent_comission / 100;
+            if($comission < 0){
+                $comission = 0;
+            }
+        }else{
+            $comission = 0;
+        }
+
+        return $comission;
+    }
     
     public function getTotalAttribute()
     {   

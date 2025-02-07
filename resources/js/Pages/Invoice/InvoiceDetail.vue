@@ -176,7 +176,7 @@
                     <div class="border-t border-gray-200 rounded">
                         <!-- Tab 1 -->
                         <div v-if="activeTab === 1">
-                            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" :searchField="'label'" parentId="invoice_id"/>
+                            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" :searchField="'label'" parent="invoice_id"/>
                         </div>
                         
                         <!-- Tab 2 -->
@@ -204,8 +204,8 @@
                         </Container>
                          <!-- Tab 7 -->
                          <Container v-if="activeTab === 7">
-                            <TableComponent :items="invoice.comissions" :inner="true" parentId="invoice_id"
-                            :searchField="'description'"/>
+                            <TableComponent :items="invoice.comissions" :inner="true" :ownerId="invoice.id"
+                            :searchField="'description'" :root="`cotizaciones.comissionsByUser`"/>
                         </Container>
                         
                         

@@ -59,5 +59,6 @@ const strings = {
         total_profit:"Utilidad",
         agent_comission:"Comisión de Agente",
         agent:"Agente de ventas",
+        agent_comission_percentage:"Porcentaje de comisión de agente",
 };
 export default strings;
