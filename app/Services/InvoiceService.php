@@ -108,7 +108,7 @@ class InvoiceService
                         "total"=>Utils::publishMoney($item->total),
                         "total_raw"=>$item->total,
                         "provider"=> $item->provider->name ?? '',
-                        "user"=> $item->user->name ?? '',
+                        "agent"=> $item->user->name ?? '',
                     ];
                 });
 
