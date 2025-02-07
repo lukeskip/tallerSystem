@@ -42,7 +42,7 @@ class Invoice extends Model
 
     public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->hasMany(Category::class)->orderBy('order');
     }
 
     public function getFormatDateAttribute()

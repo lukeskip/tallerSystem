@@ -223,7 +223,7 @@
                     <Form :default="{invoice_id:invoice.id}" :route="'egresos'" @close="toggleModalOutcome()"/>
                 </Modal>
                 <Modal :show="showModalCategories" @close="showModalCategories = false" >
-                    hola
+                    <CategoryOrder :categories="invoice.categories"/>
                 </Modal>
 
             </template>
@@ -249,10 +249,11 @@
     import Form from '@/Components/Form.vue';
     import FormEdit from '@/Components/FormEdit.vue';
     import FormImport from '@/Components/FormImport.vue';
-    import { ref, onMounted }from 'vue';
+    import { ref }from 'vue';
     import Swal from 'sweetalert2'
     import showLabel from '@/helpers/showLabel';
     import strings from '@/utils/strings';
+    import CategoryOrder from '@/Components/CategoryOrder.vue';
 
 
     const props  = defineProps({

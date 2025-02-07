@@ -76,34 +76,41 @@ class InvoiceService
 
     public function getById($id)
     {
-        $invoice = Invoice::with(['incomes','project','outcomes','invoiceItems' => function ($query) {
-            $query
-            ->orderBy('category_id', 'asc')
-            ->orderBy('created_at', 'desc');
-        }])->find($id);
-
+        $invoice = Invoice::with([
+            'incomes',
+            'project',
+            'outcomes',
+            'invoiceItems' => function ($query) {
+                $query
+                    ->join('categories', 'invoice_items.category_id', '=', 'categories.id') 
+                    ->orderBy('categories.order', 'asc') 
+                    ->orderBy('invoice_items.category_id', 'asc')
+                    ->orderBy('invoice_items.created_at', 'desc')
+                    ->select('invoice_items.*');
+            }
+        ])->find($id);
         
-       
         
         if($invoice){
             
-            $invoiceItems = $invoice->invoiceItems->map(function ($item) {
-                return [
-                    "id"=>$item->id,
-                    "label"=>$item->label,
-                    "description"=>$item->description,
-                    "units"=>$item->units,
-                    "category"=>$item->category->name ?? '',
-                    "unit_cost"=>Utils::publishMoney($item->unit_cost),
-                    "unit_price"=>Utils::publishMoney($item->unit_price),
-                    "percentage_profit"=>Utils::publishPercentage($item->percentage_profit),
-                    "total_profit"=>Utils::publishMoney($item->total_profit),
-                    "total"=>Utils::publishMoney($item->total),
-                    "total_raw"=>$item->total,
-                    "provider"=> $item->provider->name ?? '',
-                    "user"=> $item->user->name ?? '',
-                ];
-            });
+            $invoiceItems = $invoice->invoiceItems
+                ->map(function ($item) {
+                    return [
+                        "id"=>$item->id,
+                        "label"=>$item->label,
+                        "description"=>$item->description,
+                        "units"=>$item->units,
+                        "category"=>$item->category->name ?? '',
+                        "unit_cost"=>Utils::publishMoney($item->unit_cost),
+                        "unit_price"=>Utils::publishMoney($item->unit_price),
+                        "percentage_profit"=>Utils::publishPercentage($item->percentage_profit),
+                        "total_profit"=>Utils::publishMoney($item->total_profit),
+                        "total"=>Utils::publishMoney($item->total),
+                        "total_raw"=>$item->total,
+                        "provider"=> $item->provider->name ?? '',
+                        "user"=> $item->user->name ?? '',
+                    ];
+                });
 
             $debtsByProvider = $invoice->invoiceItems()
                 ->with('provider')
