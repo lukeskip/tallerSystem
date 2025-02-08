@@ -32,12 +32,12 @@ class Invoice extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class,"client_id");
+        return $this->belongsTo(Client::class, "client_id");
     }
 
     public function project()
     {
-        return $this->belongsTo(Project::class,"project_id");
+        return $this->belongsTo(Project::class, "project_id");
     }
 
     public function categories()
@@ -51,73 +51,72 @@ class Invoice extends Model
     }
 
     public function getSubtotalAttribute()
-    {   
-        if($this->invoiceItems){
+    {
+        if ($this->invoiceItems) {
             return $this->invoiceItems->sum('total');
-        }else{
+        } else {
             return 0;
         }
-        
     }
 
-    public function getTotalAttribute (){
+    public function getTotalAttribute()
+    {
         $subtotal = $this->getSubtotalAttribute();
         $ivaAmount = $this->getIvaAmountAttribute();
         $feeAmount = $this->getFeeAmountAttribute();
-        
-        return $subtotal + $ivaAmount + $feeAmount;
 
+        return $subtotal + $ivaAmount + $feeAmount;
     }
 
     public function getBalanceAttribute()
-    {   
-        
+    {
+
         $total = $this->getTotalAttribute();
         $totalIncomes = $this->getAmountPaidAttribute();
 
-        return $balance = $total - $totalIncomes; 
-        
+        return $balance = $total - $totalIncomes;
     }
     public function getFeeAmountAttribute()
-    {   
-        
-        if($this->fee > 0){
+    {
+
+        if ($this->fee > 0) {
             $fee = $this->fee / 100;
             $amountFee = $this->getSubtotalAttribute() * $fee;
 
             return $amountFee;
-        }else{
+        } else {
             return 0;
-        } 
-        
+        }
     }
     public function getSubtotalFeeAttribute()
-    {   
+    {
         $subtotal = $this->getSubtotalAttribute();
         $fee = $this->getFeeAmountAttribute();
         return $subtotal + $fee;
     }
 
-    public function getIvaAmountAttribute(){
+    public function getIvaAmountAttribute()
+    {
 
-        if($this->iva > 0){
+        if ($this->iva > 0) {
             $iva = $this->iva / 100;
             $amountIVA = $this->getSubtotalFeeAttribute() * $iva;
             return $amountIVA;
-        }else{
+        } else {
             return 0;
         }
-    
     }
 
-    public function getAmountPaidAttribute(){
-        if($this->incomes){
+    public function getAmountPaidAttribute()
+    {
+        if ($this->incomes) {
             return $this->incomes->sum('amount');
-        }else{
+        } else {
             return 0;
         }
     }
-    public function getDebtAttribute(){
+    public function getDebtAttribute()
+    {
         return 0;
     }
 

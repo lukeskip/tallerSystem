@@ -29,13 +29,14 @@ class InvoiceItem extends Model
     ];
     use HasFactory;
 
-    public function provider (){
+    public function provider()
+    {
         return $this->belongsTo(Provider::class);
     }
 
     public function files()
     {
-        return $this->belongsToMany(File::class,'invoice_item_file');
+        return $this->belongsToMany(File::class, 'invoice_item_file');
     }
 
     public function notes()
@@ -45,7 +46,7 @@ class InvoiceItem extends Model
 
     public function invoice()
     {
-        return $this->belongsTo(Invoice::class,"invoice_id");
+        return $this->belongsTo(Invoice::class, "invoice_id");
     }
 
     public function category()
@@ -58,17 +59,22 @@ class InvoiceItem extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function setUnitCostAttribute($value)
+    {
+        $this->attributes['unit_cost'] = is_numeric($value) ? $value : 0.00;
+    }
+
     public function getTotalProfitAttribute()
-    {   
+    {
         $unitCost = $this->unit_cost;
         $unitPrice = $this->unit_price;
         $total = $unitPrice - $unitCost;
         return $total;
     }
-    
+
     public function getPercentageProfitAttribute()
-    {   
-        if($this->unit_cost == 0){
+    {
+        if ($this->unit_cost == 0) {
             return 0;
         }
         $unitCost = $this->unit_cost;
@@ -79,32 +85,32 @@ class InvoiceItem extends Model
     }
 
     public function getAgentComissionAttribute()
-    {   
-        if($this->user){
+    {
+        if ($this->user) {
             $comission = $this->total_profit * $this->invoice->agent_comission / 100;
-            if($comission < 0){
+            if ($comission < 0) {
                 $comission = 0;
             }
-        }else{
+        } else {
             $comission = 0;
         }
 
         return $comission;
     }
-    
+
     public function getTotalAttribute()
-    {   
-        $total = ($this->unit_price * $this->units) ;
+    {
+        $total = ($this->unit_price * $this->units);
         return $total;
     }
     public function getCategoryNameAttribute()
-    {   
+    {
         return $this->category->name;
     }
 
     public function getAmountAttribute()
-    {    
-        $total = ($this->unit_price * $this->units) ;
+    {
+        $total = ($this->unit_price * $this->units);
         return $total;
     }
 
@@ -112,6 +118,4 @@ class InvoiceItem extends Model
     {
         return Utils::formatDate($this->created_at);
     }
-
-    
 }

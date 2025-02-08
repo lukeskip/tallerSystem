@@ -1,7 +1,4 @@
 <template>
-    <div v-if="message" class="bg-green-100 p-5 mb-5">
-        {{ message }}
-    </div>
     <Loader v-if="loader" />
     <form @submit.prevent="handleSubmit()" v-if="!loader">
         <div class="">
@@ -13,9 +10,14 @@
 
         <div class="mt-5">
             <PrimaryButton class="mx-2"> Guardar </PrimaryButton>
-            <SecondaryButton onclick="cancelHandle"> Cancelar </SecondaryButton>
+            <SecondaryButton :onclick="cancelHandle">
+                Cancelar
+            </SecondaryButton>
         </div>
     </form>
+    <div v-if="message" class="bg-green-100 p-5 my-5">
+        {{ message }}
+    </div>
     <div v-if="errors.length" class="mt-5 bg-gray-100 p-5">
         <h2 class="font-bold my-5">
             Errores al importar archivo, las siguientes celdas no fueron
@@ -23,7 +25,18 @@
         </h2>
         <ul>
             <li v-for="error in errors">
-                Celda {{ error.cell }}: {{ error.errors.label.join(",") }}
+                Celda {{ error.cell }}: {{ error.label }} -
+                {{ error.errors.label.join(",") }}
+            </li>
+        </ul>
+    </div>
+    <div v-if="updated.length" class="mt-5 bg-gray-100 p-5">
+        <h2 class="font-bold my-5">
+            Las siguientes celdas fueron actualizadas ({{ updated.length }}):
+        </h2>
+        <ul>
+            <li v-for="record in updated">
+                Celda {{ record.cell }}: {{ record.label }}
             </li>
         </ul>
     </div>
@@ -43,6 +56,7 @@ const props = defineProps({
 const formData = ref({});
 const message = ref("");
 const errors = ref([]);
+const updated = ref([]);
 const loader = ref(false);
 
 const handleSubmit = async () => {
@@ -60,16 +74,16 @@ const handleSubmit = async () => {
         );
 
         message.value = response.data.message;
-        cancelHandle();
         loader.value = false;
+        updated.value = response.data?.updated;
         router.reload();
     } catch (error) {
         if (error.response.data.errors) {
             errors.value = error.response.data.errors;
         }
+        message.value = error.response.data.message;
         loader.value = false;
         router.reload();
-        cancelHandle();
     }
 };
 
@@ -77,7 +91,7 @@ const handleFileSelected = (file) => {
     formData.value["file"] = file;
 };
 const cancelHandle = (file) => {
-    error.value = [];
+    errors.value = [];
     formData.value["file"] = "";
 };
 </script>
