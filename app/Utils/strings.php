@@ -7,6 +7,7 @@ return [
     'comission'=>'Comisión',
     'unit_type'=>'Tipo de unidad',
     'provider_id'=>'Proveedor',
+    'category_id'=>'Category',
     'client_id'=>'Cliente',
     'name'=>'Nombre',
     'address'=>'Dirección',

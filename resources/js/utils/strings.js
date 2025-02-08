@@ -20,6 +20,7 @@ const strings = {
         contact_name:"Nombre de Contacto",
         units:"Unidades",
         unit_price:"Valor Unitario",
+        unit_cost:"Costo Unitario",
         total_comission:"Total con comisión",
         required:'Este campo es requerido',
         delete:"Borrar",
@@ -40,6 +41,7 @@ const strings = {
         reference:"Referencia",
         unit_type:"Tipo de unidad",
         provider_id:"Proveedor",
+        category_id:"Category",
         image:"Imagen",
         client:"Cliente",
         provider_name:"Proveedor",
@@ -52,5 +54,11 @@ const strings = {
         accept:"Aceptar",
         cancel:"Cancelar",
         unit_comission:"Valor Unitario Comisión",
+        user_id:"Usuario",
+        percentage_profit:"Porcentaje de Utilidad",
+        total_profit:"Utilidad",
+        agent_comission:"Comisión de Agente",
+        agent:"Agente de ventas",
+        agent_comission_percentage:"Porcentaje de comisión de agente",
 };
 export default strings;

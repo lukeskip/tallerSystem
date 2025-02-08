@@ -2,40 +2,56 @@
     <div v-if="invoice">
         <Head :title="`Cotización ${invoice?.total}`"/>
         <AuthenticatedLayout>
-        
+            <template #headerCenter>
+                <div class="flex space-x-1 justify-end mt-5">
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
+                            <i class="fa-solid fa-plus"></i>
+                            Concepto
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
+                            <i class="fa-solid fa-plus"></i>
+                                Ingreso
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
+                            <i class="fa-solid fa-plus"></i>
+                                Egreso
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalCategories">
+                            <i class="fa-solid fa-plus"></i>
+                                Categorías
+                        </a>
+                    </div>
+                   <div>
+                        <a href="#" class="inline-block py-2 px-4 bg-red-800 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                   </div>
+                    <div>
+                        <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800" as="button">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+            </template>
             <template #headerLeft>
-            <div>
-                    <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoice.id}} </h1>
-                    <h2 class="text-xl font-bold uppercase">
-                        {{ invoice.project.name }} / {{ invoice.client }}
-                    </h2>
-                    <h3>
-                        {{ invoice.format_date }} / Estatus: {{ showLabel(invoice.status) }}
-                    </h3>
-            </div>
-                
+                <div>
+                        <h1 class="text-3xl font-bold text-main-color uppercase">Cotización {{invoice.id}} </h1>
+                        <h2 class="text-xl font-bold uppercase">
+                            {{ invoice.project.name }} / {{ invoice.client }}
+                        </h2>
+                        <h3>
+                            {{ invoice.format_date }} / Estatus: {{ showLabel(invoice.status) }}
+                        </h3>
+                </div>
             </template>
             <template #headerRight>
-                <div class="flex space-x-1 justify-end mt-5">
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModal">
-                        <i class="fa-solid fa-plus"></i>
-                        Concepto
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalIncome">
-                        <i class="fa-solid fa-plus"></i>
-                            Ingreso
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="toggleModalOutcome">
-                        <i class="fa-solid fa-plus"></i>
-                            Egreso
-                    </a>
-                    <a href="#" class="inline-block py-2 px-4 bg-red-800 text-white font-semibold rounded-md shadow-md hover:bg-blue-600" @click="deleteHandle">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
-                    <a target="_blank" :href="route('publish',invoice.id)" class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800" as="button">
-                        <i class="fa-solid fa-download"></i>
-                    </a>
-                </div>
                 <div class="">
                     <table class="w-full mt-5 text-right">
                         <tr class="bg-secondary-color border p-4">
@@ -147,13 +163,20 @@
                         >
                             Configuración
                         </button>
+                        <button
+                            :class="{ 'bg-main-color text-white': activeTab === 7, 'bg-gray-100 text-gray-800 hover:bg-gray-200': activeTab !== 7 }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(7)"
+                        >
+                            Comisiones
+                        </button>
                     </div>
 
                     <!-- Tabs content -->
                     <div class="border-t border-gray-200 rounded">
                         <!-- Tab 1 -->
                         <div v-if="activeTab === 1">
-                            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" :searchField="'label'" parentId="invoice_id"/>
+                            <TableComponentInvoiceItems :items="invoice.invoiceItems" :inner="true" :root="'conceptos'" :actions="['edit','delete']" :searchField="'label'" parent="invoice_id"/>
                         </div>
                         
                         <!-- Tab 2 -->
@@ -179,6 +202,11 @@
                         <Container v-if="activeTab ===6">
                             <FormEdit :default="{project_id:invoice.project.id}"  :route="'cotizaciones'"  :editId="invoice.id"/>
                         </Container>
+                         <!-- Tab 7 -->
+                         <Container v-if="activeTab === 7">
+                            <TableComponent :items="invoice.comissions" :inner="true" :ownerId="invoice.id"
+                            :searchField="'description'" :root="`cotizaciones.comissionsByUser`"/>
+                        </Container>
                         
                         
                     </div>
@@ -193,6 +221,9 @@
                 </Modal>
                 <Modal :show="showModalOutcome" @close="showModalOutcome = false" >
                     <Form :default="{invoice_id:invoice.id}" :route="'egresos'" @close="toggleModalOutcome()"/>
+                </Modal>
+                <Modal :show="showModalCategories" @close="showModalCategories = false" >
+                    <CategoryOrder :categories="invoice.categories"/>
                 </Modal>
 
             </template>
@@ -218,10 +249,11 @@
     import Form from '@/Components/Form.vue';
     import FormEdit from '@/Components/FormEdit.vue';
     import FormImport from '@/Components/FormImport.vue';
-    import { ref, onMounted }from 'vue';
+    import { ref }from 'vue';
     import Swal from 'sweetalert2'
     import showLabel from '@/helpers/showLabel';
     import strings from '@/utils/strings';
+    import CategoryOrder from '@/Components/CategoryOrder.vue';
 
 
     const props  = defineProps({
@@ -247,6 +279,10 @@
     const showModalOutcome = ref(false);
     const toggleModalOutcome = () => {
         showModalOutcome.value = !showModalOutcome.value;
+    };
+    const showModalCategories = ref(false);
+    const toggleModalCategories = () => {
+        showModalCategories.value = !showModalCategories.value;
     };
 
     

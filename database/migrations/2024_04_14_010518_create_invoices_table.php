@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->string('id')->primary(); 
+            $table->string('id')->primary();
             $table->string('status')->default('pending');
             $table->decimal('iva')->default(16);
             $table->decimal('fee')->default(10);
+            $table->decimal('agent_comission')->default(30)->nullable();
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

@@ -38,7 +38,7 @@
             <template v-for="(item,index) in itemsRef" :key="item.id">
               <tr class="category" v-if="itemsRef[1] && labelCategory(item.category) && lastCategory !== ''">
                     <td :colspan="Object.keys(itemsRef[1]).length">
-                      {{ lastCategory }}
+                      {{ lastCategory }} {{ getCategoryTotal(lastCategory) }}
                     </td>
               </tr>
               <tr>
@@ -56,9 +56,9 @@
                       <template v-else-if="key === 'total_comission'">
                         <div class="relative">
                           <div class="hasToolTip">
-                            {{value}}
+                            {{publishMoney(value)}}
                             <div class="toolTip !top-[-30px] !left-[50px]">
-                              {{itemsRef[index]['comission']}}
+                              {{itemsRef[index]['comission']}} {{ itemsRef[index]['user'] }}
                             </div>
                           </div>
                          
@@ -114,8 +114,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Form from '@/Components/Form.vue';
 import filter from '@/helpers/filter';
-
-
+import publishMoney from '@/helpers/publishMoney';
 
 const props = defineProps({
     items: {
@@ -144,7 +143,7 @@ const props = defineProps({
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref('');
 let lastCategory = '';
-const columnsToHide = ['id','category','description','comission'];
+const columnsToHide = ['id','category','description','comission',"total_raw","agent_comission_raw"];
 
 
 onUpdated(()=>{
@@ -161,6 +160,14 @@ function getData (data){
   }else{
     return data.data;
   }
+}
+
+function getCategoryTotal(category) {
+  const total = itemsRef.value
+    .filter(item => item.category === category)
+    .reduce((acc, item) => acc + item.total_raw, 0);
+
+  return publishMoney(total);
 }
 
 function labelCategory(category) {

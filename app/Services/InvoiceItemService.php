@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\InvoiceItem;
 use App\Models\Invoice;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use App\Utils\Utils;
 use League\Csv\Reader;
@@ -10,62 +12,94 @@ use App\Services\ValidateDataService;
 use Illuminate\Validation\Rule;
 
 class InvoiceItemService
-{   
+{
 
-    public function rules ($invoice_id = null, $category = null){
-        return $rules = [
+    public function rules()
+    {
+        return [
             'label' => [
                 'required',
                 'string',
-                Rule::unique('invoice_items')
-                ->where(function ($query) use ($invoice_id,$category) {
-                    return $query->where('invoice_id', $invoice_id)
-                                 ->where('category', $category);
-                })
             ],
             'description' => 'nullable|string',
-            'comission' => 'nullable|numeric|min:0',
             'units' => 'required|numeric',
             'unit_price' => 'required|numeric|gt:0',
-            'provider_id'=> 'nullable',
-            'invoice_id'=> 'string|nullable',
+            'unit_cost' => 'numeric|gte:0|nullable',
+            'provider_id' => 'nullable',
+            'user_id' => 'nullable',
+            'invoice_id' => 'string|nullable',
             'category'  => 'nullable'
         ];
     }
 
     public function store($request)
     {
-        return InvoiceItem::create($request);     
+        if (isset($request['category']) && $request['category']) {
+
+            $category = Category::where('name', $request['category'])
+                ->where('invoice_id', $request['invoice_id'])
+                ->first();
+
+            if (!$category) {
+                $category = Category::create([
+                    'name' => $request['category'],
+                    'invoice_id' => $request['invoice_id'],
+                ]);
+            }
+
+            $request['category_id'] = $category->id;
+        }
+
+        return InvoiceItem::create($request);
     }
 
-    public function create(){
+    public function create()
+    {
         return $fields = Utils::getFields('invoice_items');
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $invoiceItem =  InvoiceItem::find($id);
         $invoice_id = $invoiceItem->invoice_id;
         $invoiceItem =  [
-            'label'=> ['value'=>$invoiceItem->label,'type'=>'string'],
-            'description'=> ['value'=>$invoiceItem->description,'type'=>'string'],
-            'unit_price'=> ['value'=>$invoiceItem->unit_price,'type'=>'number'],
-            'unit_type'=> ['value'=>$invoiceItem->unit_type,'type'=>'string'],
-            'units'=> ['value'=>$invoiceItem->units,'type'=>'number'],
-            'comission'=> ['value'=>$invoiceItem->comission,'type'=>'number'],
-            'provider_id'=> ['value'=>$invoiceItem->provider_id,'type'=>'number'],
-            'category'=> ['value'=>$invoiceItem->category,'type'=>'string'],
+            'label' => ['value' => $invoiceItem->label, 'type' => 'string'],
+            'description' => ['value' => $invoiceItem->description, 'type' => 'string'],
+            'unit_price' => ['value' => $invoiceItem->unit_price, 'type' => 'number'],
+            'unit_cost' => ['value' => $invoiceItem->unit_cost, 'type' => 'number'],
+            'unit_type' => ['value' => $invoiceItem->unit_type, 'type' => 'string'],
+            'units' => ['value' => $invoiceItem->units, 'type' => 'number'],
+            'provider_id' => ['value' => $invoiceItem->provider_id, 'type' => 'number'],
+            'category' => ['value' => $invoiceItem->category?->name, 'type' => 'string'],
+            'user_id' => ['value' => $invoiceItem->user_id, 'type' => 'number'],
         ];
-    
-        $fields = Utils::getFields('invoice_items',$invoice_id);
-        return ["item"=>$invoiceItem,"fields"=>$fields];
-        
+
+        $fields = Utils::getFields('invoice_items', $invoice_id);
+        return ["item" => $invoiceItem, "fields" => $fields];
     }
 
     public function update($id, $request)
     {
         $invoiceItem = InvoiceItem::find($id);
+
+        if (isset($request['category']) && $request['category']) {
+
+            $category = Category::where('name', $request['category'])
+                ->where('invoice_id', $invoiceItem->invoice_id)
+                ->first();
+
+            if (!$category) {
+                $category = Category::create([
+                    'name' => $request['category'],
+                    'invoice_id' => $invoiceItem->invoice_id,
+                ]);
+            }
+
+            $request['category_id'] = $category->id;
+        }
+
         $invoiceItem->update($request);
-        return $invoiceItem;      
+        return $invoiceItem;
     }
 
     public function delete($id)
@@ -74,75 +108,88 @@ class InvoiceItemService
         $invoiceItem->delete();
     }
 
-    public function getById($id,$edit = false)
+    public function getById($id, $edit = false)
     {
-       return  $invoiceItem = InvoiceItem::with(['files','notes','invoice'])->find($id);
-       
+        return  $invoiceItem = InvoiceItem::with(['files', 'notes', 'invoice'])->find($id);
     }
-    
+
     public function getAll()
     {
         return InvoiceItem::all();
     }
 
-    public function importCSV ($request,$invoiceId){
-        
-         $file = $request->file('file');
-    
-         $csv = Reader::createFromPath($file->getPathname(), 'r');
-         
-         $records = $csv->getRecords();
+    public function importCSV($request, $invoiceId)
+    {
 
-         $isFirstRecord = true;
-         $count = 0;
-         $countSuccess = 0;
-         $errors = [];
-        
-         foreach ($records as $record) {
+        $file = $request->file('file');
+
+        $csv = Reader::createFromPath($file->getPathname(), 'r');
+
+        $records = $csv->getRecords();
+        $count = 0;
+        $countSuccess = 0;
+        $errors = [];
+        $updatedRecords = [];
+
+        foreach ($records as $record) {
             if ($count === 0) {
                 $count++;
-                continue; 
+                continue;
             }
 
             $request = [
-                'label'=> $record[0],
-                'category'=> $record[1],
-                'unit_price'=> $record[2],
-                'units'=> $record[3],
-                'comission'=> $record[4],
-                'description'=> $record[5],
-                'invoice_id'=> $invoiceId,
+                'label' => $record[0],
+                'unit_price' => $record[1],
+                'units' => $record[2],
+                'category' => $record[3],
+                'unit_cost' => $record[4] ?? 0,
+                'invoice_id' => $invoiceId,
             ];
 
-            
-
-            $validatedData = new ValidateDataService($request, $this->rules($invoiceId,$request['category']));
+            $validatedData = new ValidateDataService($request, $this->rules());
             $validatedData = $validatedData->getValidatedData();
-        
-            if($validatedData['status']){
-                
-                $invoiceItem = InvoiceItem::create($validatedData['data']);   
-                if($invoiceItem){
-                    $countSuccess++;
-                } else{
-                    $invoiceItem;
+
+            if ($validatedData['status']) {
+
+                $category = Category::where('name', $request['category'])
+                    ->where('invoice_id', $invoiceId)
+                    ->first();
+
+                if (!$category) {
+                    $category = Category::create([
+                        'name' => $request['category'],
+                        'invoice_id' => $invoiceId,
+                    ]);
                 }
-            }else{
-                $errors[] = ["cell"=> $count,'errors'=>$validatedData['errors']];
-            }   
+
+                $validatedData['data']['category_id'] = $category->id;
+
+                $invoiceItem = InvoiceItem::where('label', $request['label'])
+                    ->where('invoice_id', $invoiceId)
+                    ->where('category_id', $category->id)
+                    ->first();
+
+                if ($invoiceItem) {
+                    $invoiceItem->update($validatedData['data']);
+                    $updatedRecords[] = ["cell" => $count + 1, "label" => $request['label']];
+                } else {
+                    $invoiceItem = InvoiceItem::create($validatedData['data']);
+                    $countSuccess++;
+                }
+            } else {
+                $errors[] = ["cell" => $count + 1, "label" => $request['label'], 'errors' => $validatedData['errors']];
+            }
 
             $count++;
-            
         }
-        
-        if($errors){
+
+        if ($errors) {
             return response()->json(
-                ['message'=>"Importado con los siguientes errores",'errors'=>$errors], 422);
-        }else{
-            return response()->json(['message'=>"importado con éxito, se crearon $countSuccess registros"], 200);
-
+                ['message' => "Registros importados: $countSuccess. Se encontraron los siguientes errores", 'errors' => $errors, "updated" => $updatedRecords],
+                422
+            );
+        } else {
+            return response()->json(['message' => "importado con éxito, se crearon $countSuccess registros", "updated" => $updatedRecords], 200);
         }
-
- 
     }
 }

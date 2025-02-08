@@ -12,6 +12,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OutcomeController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/proyectos', ProjectController::class);
     Route::resource('/clientes', ClientController::class);
     Route::resource('/cotizaciones', InvoiceController::class);
+    Route::get('/cotizaciones/{invoiceId}/{userId}', [InvoiceController::class, 'comissionsByUser'])->name("cotizaciones.comissionsByUser.show");
     Route::resource('/proveedores', ProviderController::class);
     Route::resource('/conceptos', InvoiceItemController::class);
     Route::resource('/ingresos', IncomeController::class);
@@ -49,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/usuarios', UserController::class);
     Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
     Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
+    Route::put('/categorias-order/', [CategoryController::class, 'categoriesOrder'])->name("categories-order");
 });
 
 
