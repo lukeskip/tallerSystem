@@ -14,7 +14,7 @@ class InvoiceItemService
 {   
 
     public function rules ($invoice_id = null, $categoryName = null){
-        $category = Category::where('name', $categoryName)->first();
+        $category = Category::where('name', $categoryName)->where('invoice_id',$invoice_id)->first();
         $categoryId = $category ? $category->id : null;
 
         return $rules = [
