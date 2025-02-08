@@ -187,8 +187,7 @@ class InvoiceService
                 if (!$user) {
                     return null;
                 }
-                $profit = $items->sum('total_profit');
-                $comission = $profit * $invoice->agent_comission / 100;
+                $comission = $items->sum('agent_comission');
    
                 return [
                     "id" => $userId,

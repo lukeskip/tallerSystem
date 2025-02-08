@@ -47,7 +47,7 @@
                       <template v-if="index === 1 && showLink(root) && !ownerId">
                         <Link :href="route(`${root}.show`,item.id)">{{ value }}</Link>
                       </template>
-                      <template v-if="index === 1 && showLink(root) && ownerId">
+                      <template v-else-if="index === 1 && showLink(root) && ownerId">
                         <Link :href="route(`${root}.show`,[ownerId,item.id])">{{ value }}</Link>
                       </template>
                       <template v-else-if="key !== 'id'"><span v-html="showLabel(value)"></span></template>
