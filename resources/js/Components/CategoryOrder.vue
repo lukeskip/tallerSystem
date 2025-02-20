@@ -82,8 +82,17 @@ const detectClick = (category) => {
 
 const scrollToCategory = (category) => {
     const categoryElement = document.getElementById(category.name);
+
     if (categoryElement) {
-        categoryElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        const offset = 100;
+        const elementPosition =
+            categoryElement.getBoundingClientRect().top + window.scrollY;
+        const finalPosition = elementPosition - offset;
+
+        window.scrollTo({
+            top: finalPosition,
+            behavior: "smooth",
+        });
     }
 };
 </script>
