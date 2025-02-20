@@ -3,7 +3,7 @@
         <Head :title="`Cotización ${invoice?.total}`" />
         <AuthenticatedLayout>
             <template #headerCenter>
-                <div class="flex space-x-1 justify-end mt-5 sticky top-5">
+                <div ref="menu" class="flex space-x-1 justify-end mt-5 menu">
                     <div>
                         <a
                             href="#"
@@ -326,7 +326,7 @@
 </template>
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import TableComponentInvoiceItems from "@/Components/TableComponentInvoiceItems.vue";
 import TableComponent from "@/Components/TableComponent.vue";
 import Container from "@/Components/Container.vue";
@@ -334,7 +334,7 @@ import Modal from "@/Components/Modal.vue";
 import Form from "@/Components/Form.vue";
 import FormEdit from "@/Components/FormEdit.vue";
 import FormImport from "@/Components/FormImport.vue";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import Swal from "sweetalert2";
 import showLabel from "@/helpers/showLabel";
 import strings from "@/utils/strings";
@@ -381,4 +381,38 @@ const deleteHandle = () => {
         }
     });
 };
+
+const handleScroll = () => {
+    const menu = document.querySelector(".menu");
+    if (menu) {
+        if (window.scrollY > 100) {
+            menu.classList.add(
+                "p-5",
+                "fixed",
+                "bottom-5",
+                "right-5",
+                "z-50",
+                "shadow-lg",
+                "bg-secondary-color"
+            );
+        } else {
+            menu.classList.remove(
+                "p-5",
+                "fixed",
+                "bottom-5",
+                "right-5",
+                "shadow-lg",
+                "bg-secondary-color"
+            );
+        }
+    }
+};
+
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
+});
 </script>
