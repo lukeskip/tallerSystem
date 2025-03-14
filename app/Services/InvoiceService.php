@@ -169,7 +169,7 @@ class InvoiceService
             $outcomes = $invoice->outcomes->map(function ($item) {
                 return [
                     "id" => $item->id,
-                    "provider" => $item->provider->name,
+                    "provider" => $item->provider?->name,
                     "description" => $item->description,
                     "type" => $item->type,
                     "amount" => Utils::publishMoney($item->amount),
