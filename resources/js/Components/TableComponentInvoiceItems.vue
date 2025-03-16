@@ -14,11 +14,16 @@
         <form
             v-if="inner"
             @submit.prevent="submitSearchFilter"
-            class="flex justify-end space-x-4"
+            class="flex justify-end space-x-4 mt-4"
         >
+            <multiselect
+                v-model="selected"
+                :options="categories"
+                placeholder=""
+            />
             <div class="flex mb-2 gap-1">
                 <TextInput v-model="searchTerm" :name="'search'" />
-                <PrimaryButton> Buscar en esta cotización </PrimaryButton>
+                <PrimaryButton> Buscar </PrimaryButton>
             </div>
         </form>
 
@@ -131,19 +136,23 @@
 </template>
 
 <script setup>
-import { ref, onUpdated, watch } from "vue";
+import { ref, onUpdated, watch, nextTick } from "vue";
 import showLabel from "@/helpers/showLabel.js";
 import { Link, router } from "@inertiajs/vue3";
 import Pagination from "@/Components/Pagination.vue";
 import ActionButton from "@/Components/ActionButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import Form from "@/Components/Form.vue";
+import Multiselect from "@/Components/Multiselect.vue";
 import filter from "@/helpers/filter";
 import publishMoney from "@/helpers/publishMoney";
 
 const props = defineProps({
     items: {
+        type: [Array, Object],
+        required: true,
+    },
+    categories: {
         type: [Array, Object],
         required: true,
     },
@@ -164,6 +173,7 @@ const props = defineProps({
     },
 });
 
+const selected = ref([]);
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref("");
 let lastCategory = "";
@@ -177,7 +187,7 @@ const columnsToHide = [
 ];
 
 onUpdated(() => {
-    if (searchTerm.value === "") {
+    if (searchTerm.value === "" && selected.value.length === 0) {
         itemsRef.value = getData(props.items);
         lastCategory = "";
     }
@@ -213,6 +223,20 @@ const submitSearch = (root) => {
 const submitSearchFilter = () => {
     itemsRef.value = filter(props.items, "label", searchTerm.value);
 };
+
+watch(selected, () => {
+    if (selected.value.length === 0) {
+        itemsRef.value = getData(props.items);
+    } else {
+        const filteredData = getData(props.items).filter((item) => {
+            return selected.value.some((category) => {
+                return category.name === item.category;
+            });
+        });
+
+        itemsRef.value = [...filteredData];
+    }
+});
 </script>
 <style>
 .hasToolTip {

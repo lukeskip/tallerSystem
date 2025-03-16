@@ -275,6 +275,13 @@ class InvoiceService
 
         return $providers;
     }
+    public function getCategoriesByInvoice($id)
+    {
+        $invoice = Invoice::find($id);
+        $categories = $invoice->categories;
+
+        return $categories;
+    }
 
     public function getInvoices()
     {
