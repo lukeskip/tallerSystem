@@ -77,9 +77,11 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $providers = $this->service->getProviders();
+        $categories = $this->service->getCategoriesByInvoice($id);
         $invoice = $this->service->getById($id);
         return Inertia::render('Invoice/InvoiceDetail', [
             'invoice' => $invoice,
+            'categories' => $categories,
             'providers' => $providers
         ]);
     }

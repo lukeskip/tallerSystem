@@ -222,6 +222,7 @@
                                 :actions="['edit', 'delete']"
                                 :searchField="'label'"
                                 parent="invoice_id"
+                                :categories="categories"
                             />
                         </div>
 
@@ -343,6 +344,7 @@ import CategoryOrder from "@/Components/CategoryOrder.vue";
 const props = defineProps({
     invoice: { type: [Object, Array], default: {} },
     providers: { type: Array, default: [] },
+    categories: { type: Array, default: [] },
 });
 
 const activeTab = ref(1);
