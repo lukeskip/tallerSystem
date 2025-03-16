@@ -10,8 +10,9 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Carbon\Carbon;
 
 class OutcomeService
-{   
-    public function create(){
+{
+    public function create()
+    {
         return $fields = Utils::getFields('outcomes');
     }
 
@@ -20,26 +21,27 @@ class OutcomeService
         $income = Outcome::create($request);
     }
 
-    public function update($id,$request)
+    public function update($id, $request)
     {
         $outcome = Outcome::find($id);
-        $outcome->update($request);    
+        $outcome->update($request);
     }
 
-    public function edit ($id){
+    public function edit($id)
+    {
         $outcome = $this->getById($id);
 
         $outcome = [
-            'description'=> ['value'=>$outcome['description'],'type'=>'string'],
-            'amount'=> ['value'=>$outcome['amount'],'type'=>'number'],
-            'type'=> ['value'=>$outcome['type'],'type'=>'string'],
-            'reference'=> ['value'=>$outcome['reference'],'type'=>'string'],
-            'status'=> ['value'=>$outcome['status'],'type'=>'string'],
-            'invoice_id'=> ['value'=>$outcome['invoice_id'],'type'=>'hidden'],
-            'provider_id'=> ['value'=>$outcome['provider_id'],'type'=>'number'],
+            'description' => ['value' => $outcome['description'], 'type' => 'string'],
+            'amount' => ['value' => $outcome['amount'], 'type' => 'number'],
+            'type' => ['value' => $outcome['type'], 'type' => 'string'],
+            'reference' => ['value' => $outcome['reference'], 'type' => 'string'],
+            'status' => ['value' => $outcome['status'], 'type' => 'string'],
+            'invoice_id' => ['value' => $outcome['invoice_id'], 'type' => 'hidden'],
+            'provider_id' => ['value' => $outcome['provider_id'], 'type' => 'number'],
         ];
         $fields = Utils::getFields('outcomes');
-        return ["item"=>$outcome,"fields"=>$fields];
+        return ["item" => $outcome, "fields" => $fields];
     }
 
     public function delete($id)
@@ -72,8 +74,8 @@ class OutcomeService
     public function getAll($request)
     {
 
-        $outcomes = Outcome::orderBy('id','desc');
-        
+        $outcomes = Outcome::orderBy('id', 'desc');
+
         if ($request &&  $request->input('search')) {
             $outcomes->where('description', 'like', '%' . $request->input('search') . '%');
         }
@@ -87,15 +89,15 @@ class OutcomeService
             $lastDayOfMonth = $currentDate->endOfMonth()->format('Y-m-d H:i:s');
 
             $outcomes->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
-            ->orderBy('created_at','desc');
+                ->orderBy('created_at', 'desc');
         }
-        
+
         $outcomes = $outcomes->paginate();
 
         return $outcomes->map(function ($outcome) {
             return [
                 'id' => $outcome->id,
-                'provider' => $outcome->provider->name,
+                'provider' => $outcome->provider?->name,
                 'description' => $outcome->description,
                 'amount' => $outcome->amount,
                 'type' => $outcome->type,
@@ -106,5 +108,4 @@ class OutcomeService
             ];
         });
     }
-
 }
