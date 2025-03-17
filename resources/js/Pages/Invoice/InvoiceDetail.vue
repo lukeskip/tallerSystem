@@ -113,9 +113,15 @@
                             </td>
                         </tr>
                         <tr class="bg-terciary-color border p-4">
-                            <td class="p-2">Pagado:</td>
+                            <td class="p-2">Pagado por el cliente:</td>
                             <td class="p-2">
                                 {{ invoice.amount_paid }}
+                            </td>
+                        </tr>
+                        <tr class="bg-terciary-color border p-4">
+                            <td class="p-2">Egresos:</td>
+                            <td class="p-2">
+                                {{ invoice.outcomes_total }}
                             </td>
                         </tr>
                         <tr class="bg-secondary-color p-4">
