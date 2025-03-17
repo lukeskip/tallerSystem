@@ -2,7 +2,7 @@ const menu = [
     {
         slug:'proyectos.index',
         icon:'<i class="fa-solid fa-folder"></i>',
-        label:'Projectos'
+        label:'Proyectos'
     },
     {
         slug:'clientes.index',

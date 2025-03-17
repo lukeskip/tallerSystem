@@ -37,6 +37,7 @@ const strings = {
         type:"Tipo",
         cash:"Efectivo",
         transfer:"Transferencia",
+        card:"Tarjeta",
         check:"Cheque",
         reference:"Referencia",
         unit_type:"Tipo de unidad",
