@@ -118,16 +118,16 @@
                                 {{ invoice.amount_paid }}
                             </td>
                         </tr>
-                        <tr class="bg-terciary-color border p-4">
-                            <td class="p-2">Egresos:</td>
-                            <td class="p-2">
-                                {{ invoice.outcomes_total }}
-                            </td>
-                        </tr>
                         <tr class="bg-secondary-color p-4">
                             <td class="p-2">Balance:</td>
                             <td class="p-2">
                                 {{ invoice.balance }}
+                            </td>
+                        </tr>
+                        <tr class="bg-terciary-color border p-4">
+                            <td class="p-2">Egresos:</td>
+                            <td class="p-2">
+                                {{ invoice.outcomes_total }}
                             </td>
                         </tr>
                     </table>
