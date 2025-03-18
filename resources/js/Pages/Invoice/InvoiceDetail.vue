@@ -253,6 +253,7 @@
                                 :actions="['edit', 'delete']"
                                 parentId="invoice_id"
                                 :searchField="'description'"
+                                :columnsToHide="['amount_raw']"
                             />
                         </Container>
 
