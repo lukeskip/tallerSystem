@@ -38,6 +38,14 @@
                             v-model="formData[field.slug]"
                         />
 
+                        <NumberInput
+                            v-else-if="field.type === 'money'"
+                            v-model="formData[field.slug]"
+                            type="money"
+                            step="0.01"
+                            min="0"
+                        />
+
                         <Select
                             v-else-if="field.type === 'select'"
                             v-model="formData[field.slug]"
@@ -151,7 +159,11 @@ const clearFormData = () => {
             formData.value[field.slug] = ref(field.default || "");
         }
 
-        if (field.type === "decimal" || field.type === "int") {
+        if (
+            field.type === "decimal" ||
+            field.type === "int" ||
+            field.type === "money"
+        ) {
             formData.value[field.slug] = ref(field.default || 0);
         }
         if (field.type === "select") {

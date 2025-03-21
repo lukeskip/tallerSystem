@@ -65,8 +65,8 @@ class InvoiceItemService
         $invoiceItem =  [
             'label' => ['value' => $invoiceItem->label, 'type' => 'string'],
             'description' => ['value' => $invoiceItem->description, 'type' => 'string'],
-            'unit_price' => ['value' => $invoiceItem->unit_price, 'type' => 'number'],
-            'unit_cost' => ['value' => $invoiceItem->unit_cost, 'type' => 'number'],
+            'unit_price' => ['value' => $invoiceItem->unit_price, 'type' => 'money'],
+            'unit_cost' => ['value' => $invoiceItem->unit_cost, 'type' => 'money'],
             'unit_type' => ['value' => $invoiceItem->unit_type, 'type' => 'string'],
             'units' => ['value' => $invoiceItem->units, 'type' => 'number'],
             'provider_id' => ['value' => $invoiceItem->provider_id, 'type' => 'number'],
