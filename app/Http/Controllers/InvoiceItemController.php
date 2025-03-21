@@ -13,6 +13,8 @@ use App\Services\ValidateDataService;
 class InvoiceItemController extends Controller
 {
     protected $invoiceItemService;
+    protected $rules;
+    protected $service;
 
     public function __construct(InvoiceItemService $invoiceItemService)
     {
@@ -30,11 +32,10 @@ class InvoiceItemController extends Controller
     public function index()
     {
         $invoiceItems = $this->service->getAll();
-        
+
         return Inertia::render('InvoiceItems/Index', [
             'invoiceItems' => $invoiceItems,
         ]);
-        
     }
 
     /**
@@ -42,14 +43,14 @@ class InvoiceItemController extends Controller
      */
     public function create()
     {
-        
-        if(isset($_GET['parentId'])){
+
+        if (isset($_GET['parentId'])) {
             $id = $_GET['parentId'];
-        }else{
+        } else {
             $id = false;
         }
-        
-        $fields = Utils::getFields('invoice_items',$id);
+
+        $fields = Utils::getFields('invoice_items', $id);
         return response()->json($fields);
     }
 
@@ -61,19 +62,18 @@ class InvoiceItemController extends Controller
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            return $item = $this->service->store($validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        } 
-        
+        if ($validatedData['status']) {
+            return $item = $this->service->store($validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
     }
 
     /**
      * Display the specified resource.
      */
     public function show($id)
-    {   
+    {
         $invoiceItem = $this->service->getById($id);
         return Inertia::render('InvoiceItem/InvoiceItemDetail', [
             'invoiceItem' => $invoiceItem,
@@ -97,10 +97,10 @@ class InvoiceItemController extends Controller
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            $item = $this->service->update($id,$validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
+        if ($validatedData['status']) {
+            $item = $this->service->update($id, $validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
         }
     }
 
@@ -113,7 +113,7 @@ class InvoiceItemController extends Controller
     }
 
     public function importCSV(Request $request, $id)
-    {   
-        return $this->service->importCSV($request,$id);
+    {
+        return $this->service->importCSV($request, $id);
     }
 }

@@ -33,6 +33,14 @@
                         v-model="formData[field.slug]"
                     />
 
+                    <NumberInput
+                        v-else-if="field.type === 'money'"
+                        v-model="formData[field.slug]"
+                        type="money"
+                        step="0.01"
+                        min="0"
+                    />
+
                     <Select
                         v-else-if="field.type === 'select'"
                         v-model="formData[field.slug]"

@@ -49,6 +49,8 @@ class Utils
                     $clientService = new ClientService();
                     $clients = $clientService->getClients();
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => $clients];
+                } elseif ($field === 'unit_cost' || $field === "unit_price") {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'money'];
                 } elseif ($field === 'image') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'file'];
                 } elseif ($field === 'type' && ($table === 'incomes' || $table === 'outcomes')) {
