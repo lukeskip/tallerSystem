@@ -68,7 +68,8 @@ class InvoiceItem extends Model
     {
         $unitCost = $this->unit_cost;
         $unitPrice = $this->unit_price;
-        $total = $unitPrice - $unitCost;
+        $units = $this->units;
+        $total = ($unitPrice - $unitCost) * $units;
         return $total;
     }
 
