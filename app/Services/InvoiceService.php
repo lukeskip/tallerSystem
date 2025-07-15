@@ -84,7 +84,7 @@ class InvoiceService
             'outcomes',
             'invoiceItems' => function ($query) {
                 $query
-                    ->join('categories', 'invoice_items.category_id', '=', 'categories.id')
+                    ->leftJoin('categories', 'invoice_items.category_id', '=', 'categories.id')
                     ->orderBy('categories.order', 'asc')
                     ->orderBy('invoice_items.category_id', 'asc')
                     ->orderBy('invoice_items.created_at', 'desc')
