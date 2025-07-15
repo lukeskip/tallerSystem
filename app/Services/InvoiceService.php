@@ -280,7 +280,7 @@ class InvoiceService
     public function getCategoriesByInvoice($id)
     {
         $invoice = Invoice::find($id);
-        $categories = $invoice?->categories;
+        $categories = $invoice?->categories ?? [];
 
         return $categories;
     }
