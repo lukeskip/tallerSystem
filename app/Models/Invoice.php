@@ -26,6 +26,7 @@ class Invoice extends Model
         'agent_comission',
         'iva',
         'fee',
+        'hasIva',
     ];
 
     use HasFactory;

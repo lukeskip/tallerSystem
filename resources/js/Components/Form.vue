@@ -4,6 +4,7 @@
         <template v-if="fields.length">
             <form @submit.prevent="handleSubmit()">
                 <div class="mt-2" v-for="field in fields">
+                    asdfasdfasdfasdf
                     <template v-if="field.type !== 'hidden'">
                         <label
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -51,6 +52,12 @@
                             v-model="formData[field.slug]"
                             :options="field.options"
                         />
+                        
+                        <Checkbox
+                            v-else-if="field.type === 'boolean'"
+                            v-model:checked="formData[field.slug]"
+                        />
+                        
                         <div
                             class="error text-red-500"
                             v-if="errors[field.slug]"
@@ -86,6 +93,7 @@ import FileInput from "@/Components/FileInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import Select from "@/Components/Select.vue";
+import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { router } from "@inertiajs/vue3";
@@ -168,6 +176,9 @@ const clearFormData = () => {
         }
         if (field.type === "select") {
             formData.value[field.slug] = ref(field.default || null);
+        }
+        if (field.type === "boolean") {
+            formData.value[field.slug] = ref(field.default || false);
         }
     });
 

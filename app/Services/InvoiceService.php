@@ -33,6 +33,7 @@ class InvoiceService
             'status' => ['value' => $invoice->status, 'type' => 'select'],
             'iva' => ['value' => $invoice->iva, 'type' => 'number'],
             'fee' => ['value' => $invoice->fee, 'type' => 'number'],
+            'hasIva' => ['value' => $invoice->hasIva, 'type' => 'boolean'],
             'agent_comission' => ['value' => $invoice->agent_comission, 'type' => 'number'],
         ];
 
@@ -54,6 +55,9 @@ class InvoiceService
         if (!$request['iva']) {
             $request['iva'] = 0;
         }
+
+        $request['hasIva'] = isset($request['hasIva']) ? (bool) $request['hasIva'] : false;
+
         return $invoice->update($request);
     }
 
@@ -220,6 +224,7 @@ class InvoiceService
                 "total" => Utils::publishMoney($invoice->total),
                 "iva_amount" => Utils::publishMoney($invoice->iva_amount),
                 "iva" => Utils::publishPercentage($invoice->iva),
+                "hasIva" => $invoice->hasIva,
                 "fee" => Utils::publishPercentage($invoice->fee),
                 "subtotal_fee" => Utils::publishMoney($invoice->subtotal_fee),
                 "amount_paid" => Utils::publishMoney($invoice->amount_paid),

@@ -47,6 +47,12 @@
                         :options="field.options"
                         :default="formData[field.slug]"
                     />
+                    
+                    <Checkbox
+                        v-else-if="field.type === 'boolean'"
+                        v-model:checked="formData[field.slug]"
+                    />
+                    
                     <div class="error" v-if="errors[field.slug]">
                         {{ strings.required }}
                     </div>
@@ -73,6 +79,7 @@ import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import FileInput from "@/Components/FileInput.vue";
 import Select from "@/Components/Select.vue";
+import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { router } from "@inertiajs/vue3";
@@ -137,11 +144,15 @@ onMounted(async () => {
 });
 
 const fillInfo = (fieldsEdit) => {
+    
     for (let key in fieldsEdit) {
+        console.log(fieldsEdit[key]["value"]);
         if (fieldsEdit[key]["type"] === "number") {
             formData.value[key] = Number(
                 fieldsEdit[key]["value"] || fieldsEdit[key]["value"]
             );
+        } else if (fieldsEdit[key]["type"] === "boolean") {
+            formData.value[key] = Boolean(fieldsEdit[key]["value"]);
         } else {
             formData.value[key] = fieldsEdit[key]["value"];
         }
@@ -164,6 +175,10 @@ const clearFormData = () => {
             field.type === "int"
         ) {
             formData.value[field.slug] = ref(0);
+        }
+        
+        if (field.type === "boolean") {
+            formData.value[field.slug] = ref(false);
         }
     });
 };
