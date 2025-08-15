@@ -29,6 +29,7 @@ class InvoiceController extends Controller
             'status' => 'required|string',
             'iva' => 'nullable',
             'fee' => 'nullable',
+            'hasIva' => 'nullable',
             'project_id' => 'required|numeric|gt:0',
             'agent_comission' => 'numeric|gt:0',
         ];
@@ -100,9 +101,16 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        // Preparar los datos antes de la validación
+        $requestData = $request->all();
+        
+        // Si hasIva no está presente en el request, lo establecemos como false
+        if (!array_key_exists('hasIva', $requestData)) {
+            $requestData['hasIva'] = false;
+        }
+        
+        $validatedData = new ValidateDataService($requestData, $this->rules);
         $validatedData = $validatedData->getValidatedData();
-
         if ($validatedData['status']) {
             $this->service->update($id, $validatedData['data']);
             return response()->json(['message' => "actualizado con éxito"]);

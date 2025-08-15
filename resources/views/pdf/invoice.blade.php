@@ -167,6 +167,7 @@
                         {{$invoice['subtotal_fee']}}
                     </td>
                 </tr>
+                @if($invoice['hasIva'])
                 <tr>
                     <td style=" width:80%">
                         IVA ({{$invoice['iva']}}):
@@ -175,6 +176,7 @@
                         {{$invoice['iva_amount']}}
                     </td>
                 </tr>
+                @endif
                 <tr style="background-color:#af984e;">
                     <td style="width:80%;color:white">
                         Total:

@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use App\Services\InvoiceService;
 use PDF;
 
-
-
-
 class PDFController extends Controller
 {
     
