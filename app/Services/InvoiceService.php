@@ -33,6 +33,7 @@ class InvoiceService
             'status' => ['value' => $invoice->status, 'type' => 'select'],
             'iva' => ['value' => $invoice->iva, 'type' => 'number'],
             'fee' => ['value' => $invoice->fee, 'type' => 'number'],
+            'hasIva' => ['value' => $invoice->hasIva, 'type' => 'boolean'],
             'agent_comission' => ['value' => $invoice->agent_comission, 'type' => 'number'],
         ];
 
