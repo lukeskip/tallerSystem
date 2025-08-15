@@ -73,10 +73,17 @@ class Utils
                     $InvoiceService = new InvoiceService();
                     $users = User::all();
                     $fieldsEnd[] = ['slug' => "user_id", 'type' => 'select', 'options' => $users];
+                } elseif ($field === 'hasIva' && $table === 'invoices') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];
                 } else {
-                    $fieldsEnd[] = ['slug' => $field, 'type' => Schema::getColumnType($table, $field)];
+                    try {
+                        $columnType = Schema::getColumnType($table, $field);
+                        $fieldsEnd[] = ['slug' => $field, 'type' => $columnType];
+                    } catch (\Exception $e) {
+                        $fieldsEnd[] = ['slug' => $field, 'type' => 'string'];
+                    }
                 }
             } else {
                 unset($fields[$index]);
