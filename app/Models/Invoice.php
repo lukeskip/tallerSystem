@@ -63,8 +63,9 @@ class Invoice extends Model
     public function getTotalAttribute()
     {
         $subtotal = $this->getSubtotalAttribute();
-        $ivaAmount = $this->getIvaAmountAttribute();
+        $ivaAmount = $this->hasIva ? $this->getIvaAmountAttribute() : 0;
         $feeAmount = $this->getFeeAmountAttribute();
+
 
         return $subtotal + $ivaAmount + $feeAmount;
     }
