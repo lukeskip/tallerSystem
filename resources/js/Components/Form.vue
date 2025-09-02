@@ -4,7 +4,6 @@
         <template v-if="fields.length">
             <form @submit.prevent="handleSubmit()">
                 <div class="mt-2" v-for="field in fields">
-                    asdfasdfasdfasdf
                     <template v-if="field.type !== 'hidden'">
                         <label
                             class="block text-gray-700 text-sm font-bold mb-2"
@@ -52,12 +51,12 @@
                             v-model="formData[field.slug]"
                             :options="field.options"
                         />
-                        
+
                         <Checkbox
                             v-else-if="field.type === 'boolean'"
                             v-model:checked="formData[field.slug]"
                         />
-                        
+
                         <div
                             class="error text-red-500"
                             v-if="errors[field.slug]"
