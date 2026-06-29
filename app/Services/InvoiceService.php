@@ -45,6 +45,15 @@ class InvoiceService
     public function store($request)
     {
         $request['id'] = Utils::generateInvoiceId();
+
+        if (!isset($request['iva']) || !$request['iva']) {
+            $request['iva'] = 0;
+        }
+
+        if (!isset($request['fee']) || !$request['fee']) {
+            $request['fee'] = 0;
+        }
+
         return $invoice =  Invoice::create($request);
     }
 
@@ -52,8 +61,12 @@ class InvoiceService
     {
 
         $invoice = Invoice::find($id);
-        if (!$request['iva']) {
+        if (!isset($request['iva']) || !$request['iva']) {
             $request['iva'] = 0;
+        }
+
+        if (!isset($request['fee']) || !$request['fee']) {
+            $request['fee'] = 0;
         }
 
         $request['hasIva'] = isset($request['hasIva']) ? (bool) $request['hasIva'] : false;
