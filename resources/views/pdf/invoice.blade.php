@@ -83,9 +83,9 @@
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
                             @php
-                                $isPriceColumn = in_array($key, ['V. Unitario', 'Subtotal', 'Unit Price']);
+                                $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades']);
                             @endphp
-                            <th style="border:0;padding:5px;text-align:{{ $isPriceColumn ? 'center' : 'left' }};font-size:12px;">
+                            <th style="border:0;padding:5px;text-align:{{ $isCenteredColumn ? 'center' : 'left' }};font-size:12px;">
                                 <h3 style="color:white">{{ $key }}</h3>
                             </th>
                         @endif
@@ -113,9 +113,9 @@
                         @foreach($item as $key => $value)
                             @if($key !== 'id' && $key !== 'category')
                                 @php
-                                    $isPriceColumn = in_array($key, ['V. Unitario', 'Subtotal', 'Unit Price']);
+                                    $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades']);
                                 @endphp
-                                <td style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
+                                <td style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isCenteredColumn ? 'center' : 'left' }}">
                                     {{ $value }}
                                 </td>
                             @endif
