@@ -73,6 +73,7 @@ class InvoiceItemService
             'provider_id' => ['value' => $invoiceItem->provider_id, 'type' => 'number'],
             'category' => ['value' => $invoiceItem->category?->name, 'type' => 'string'],
             'user_id' => ['value' => $invoiceItem->user_id, 'type' => 'number'],
+            'image' => ['value' => $invoiceItem->files->first()?->url, 'type' => 'file'],
         ];
 
         $fields = Utils::getFields('invoice_items', $invoice_id);

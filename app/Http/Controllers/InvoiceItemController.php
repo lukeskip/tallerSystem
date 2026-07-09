@@ -107,6 +107,16 @@ class InvoiceItemController extends Controller
 
         if ($validatedData['status']) {
             $item = $this->service->update($id, $validatedData['data']);
+            if ($request->has('remove_file') && $request->remove_file == 'true') {
+                $fileService = app(\App\Services\FileService::class);
+                if ($item->files) {
+                    foreach ($item->files as $oldFile) {
+                        $item->files()->detach($oldFile->id);
+                        $fileService->delete($oldFile->id);
+                    }
+                }
+            }
+
             if ($request->hasFile('file')) {
                 $fileService = app(\App\Services\FileService::class);
                 

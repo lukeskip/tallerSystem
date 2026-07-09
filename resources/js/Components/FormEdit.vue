@@ -23,7 +23,9 @@
 
                     <FileInput
                         v-if="field.type === 'file'"
+                        :initialUrl="formData[field.slug]"
                         v-on:file-selected="handleFileSelected"
+                        v-on:file-removed="handleFileRemoved"
                     />
 
                     <NumberInput
@@ -222,5 +224,11 @@ const handleSubmit = async (stay = false) => {
 
 const handleFileSelected = (file) => {
     formData.value["file"] = file;
+    formData.value["remove_file"] = false;
+};
+
+const handleFileRemoved = () => {
+    formData.value["file"] = null;
+    formData.value["remove_file"] = true;
 };
 </script>
