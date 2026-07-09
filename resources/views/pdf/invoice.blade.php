@@ -82,7 +82,10 @@
                 <tr style="background-color:#af984e; ">
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
-                            <th style="border:0;padding:5px;text-align:left;font-size:12px;">
+                            @php
+                                $isPriceColumn = in_array($key, ['V. Unitario', 'Subtotal', 'Unit Price']);
+                            @endphp
+                            <th style="border:0;padding:5px;text-align:{{ $isPriceColumn ? 'center' : 'left' }};font-size:12px;">
                                 <h3 style="color:white">{{ $key }}</h3>
                             </th>
                         @endif
@@ -109,7 +112,10 @@
                         style="background-color: {{ $index % 2 == 0 ? '#ffffff' : '#f3f4f6' }}; border-bottom: 1px solid #d1d5db;">
                         @foreach($item as $key => $value)
                             @if($key !== 'id' && $key !== 'category')
-                                <td style="padding:5px 5px; border:solid 1px #d1d5db">
+                                @php
+                                    $isPriceColumn = in_array($key, ['V. Unitario', 'Subtotal', 'Unit Price']);
+                                @endphp
+                                <td style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
                                     {{ $value }}
                                 </td>
                             @endif
@@ -131,7 +137,10 @@
                 <tr>
                     @foreach($incomes->first() as $key => $value)
                         @if($key !== 'id')
-                            <th style="border:0;padding:5px">
+                            @php
+                                $isPriceColumn = in_array($key, ['Monto', 'Amount']);
+                            @endphp
+                            <th style="border:0;padding:5px;text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
                                 {{ $key }}
                             </th>
                         @endif
@@ -144,7 +153,10 @@
                         style="background-color: {{ $index % 2 == 0 ? '#ffffff' : '#f3f4f6' }}; border-bottom: 1px solid #d1d5db;">
                         @foreach($item as $key => $value)
                             @if($key !== 'id')
-                                <td style="padding:10px 5px; border:solid 1px #d1d5db">
+                                @php
+                                    $isPriceColumn = in_array($key, ['Monto', 'Amount']);
+                                @endphp
+                                <td style="padding:10px 5px; border:solid 1px #d1d5db; text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
                                     {{ $value }}
                                 </td>
                             @endif

@@ -29,22 +29,30 @@ class PDFController extends Controller
         ];
 
         $isEnglish = $publishOptions['language'] !== 'es';
+        $exchangeRate = $publishOptions['exchange_rate'] ?: 1;
+        $currencyCode = $publishOptions['currency'] ?: 'MXN';
 
-        $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish) {
+        $formatMoney = function($amount) use ($exchangeRate, $currencyCode) {
+            $cleanAmount = is_string($amount) ? (float) str_replace(['$', ','], '', $amount) : floatval($amount);
+            $converted = $cleanAmount / floatval($exchangeRate);
+            return '$' . number_format($converted, 2) . ' ' . $currencyCode;
+        };
+
+        $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish, $formatMoney) {
             return [
                 $isEnglish ? 'Item' : 'Concepto' => $item['label'],
                 $isEnglish ? 'Description' : 'Descripción' => $item['description'],
                 $isEnglish ? 'Qty' : 'Unidades' => $item['units'],
-                $isEnglish ? 'Unit Price' : 'V. Unitario' => $item['unit_price'],
+                $isEnglish ? 'Unit Price' : 'V. Unitario' => $formatMoney($item['unit_price'] ?? 0),
                 'category' => $item['category'],
-                'Subtotal' => $item['total'],
+                'Subtotal' => $formatMoney($item['total'] ?? 0),
             ];
         })->toArray();
 
-        $incomes = $invoice['incomes']->map(function ($item) use ($isEnglish) {
+        $incomes = $invoice['incomes']->map(function ($item) use ($isEnglish, $formatMoney) {
             return [
                 $isEnglish ? 'Description' : 'Descripción' => $item['description'],
-                $isEnglish ? 'Amount' : 'Monto' => $item['amount'],
+                $isEnglish ? 'Amount' : 'Monto' => $formatMoney($item['amount'] ?? 0),
                 $isEnglish ? 'Date' : 'Fecha' => $item['date']
             ];
         })->toArray();
@@ -72,6 +80,14 @@ class PDFController extends Controller
 
         $invoiceItems = collect($invoiceItems);
         $incomes = collect($incomes);
+
+        $invoice['subtotal'] = $formatMoney($invoice['subtotal'] ?? 0);
+        $invoice['fee_amount'] = $formatMoney($invoice['fee_amount'] ?? 0);
+        $invoice['total'] = $formatMoney($invoice['total'] ?? 0);
+        $invoice['iva_amount'] = $formatMoney($invoice['iva_amount'] ?? 0);
+        $invoice['subtotal_fee'] = $formatMoney($invoice['subtotal_fee'] ?? 0);
+        $invoice['amount_paid'] = $formatMoney($invoice['amount_paid'] ?? 0);
+        $invoice['balance'] = $formatMoney($invoice['balance'] ?? 0);
 
         $data = [
             'invoice' => $invoice,
