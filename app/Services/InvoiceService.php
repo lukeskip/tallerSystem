@@ -28,8 +28,8 @@ class InvoiceService
 
     public function edit($id)
     {
-        $invoice =  Invoice::find($id);
-        $invoice =  [
+        $invoice = Invoice::find($id);
+        $invoice = [
             'status' => ['value' => $invoice->status, 'type' => 'select'],
             'iva' => ['value' => $invoice->iva, 'type' => 'number'],
             'fee' => ['value' => $invoice->fee, 'type' => 'number'],
@@ -54,7 +54,7 @@ class InvoiceService
             $request['fee'] = 0;
         }
 
-        return $invoice =  Invoice::create($request);
+        return $invoice = Invoice::create($request);
     }
 
     public function update($id, $request)
@@ -154,7 +154,7 @@ class InvoiceService
                     $iva = $invoice->iva / 100;
                     $amountIVA = $totalAmount * $iva;
                 } else {
-                    $amountIVA =  0;
+                    $amountIVA = 0;
                 }
 
                 $item['id'] = $item['provider_id'];
@@ -253,7 +253,7 @@ class InvoiceService
 
         $invoices = Invoice::with('project')->orderBy('id', 'desc');
 
-        if ($request &&  $request->input('search')) {
+        if ($request && $request->input('search')) {
             $invoices->where('id', 'like', '%' . $request->input('search') . '%')
                 ->orWhereHas('project', function ($query) use ($request) {
                     $query->where('name', 'like', '%' . $request->input('search') . '%');
@@ -351,4 +351,19 @@ class InvoiceService
 
         return $comissions;
     }
+
+    public function duplicateInvoice($id)
+    {
+
+        $invoice = Invoice::find($id);
+        if (!$invoice) {
+            return null;
+        }
+        $newInvoice = $invoice->replicate();
+        $newInvoice->id = Utils::generateInvoiceId();
+        $newInvoice->save();
+        $newInvoice->invoiceItems()->createMany($invoice->invoiceItems->toArray());
+        return $newInvoice;
+    }
+
 }

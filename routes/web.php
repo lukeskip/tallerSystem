@@ -34,7 +34,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
 
-Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/clientes', ClientController::class);
     Route::resource('/cotizaciones', InvoiceController::class);
     Route::get('/cotizaciones/{invoiceId}/{userId}', [InvoiceController::class, 'comissionsByUser'])->name("cotizaciones.comissionsByUser.show");
+    Route::post('/cotizaciones/duplicate/{id}', [InvoiceController::class, 'duplicateInvoice'])->name("cotizaciones.duplicate");
     Route::resource('/proveedores', ProviderController::class);
     Route::resource('/conceptos', InvoiceItemController::class);
     Route::resource('/ingresos', IncomeController::class);
@@ -64,4 +65,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
