@@ -101,6 +101,7 @@ class InvoiceService
             'outcomes',
             'invoiceItems' => function ($query) {
                 $query
+                    ->with('files')
                     ->leftJoin('categories', 'invoice_items.category_id', '=', 'categories.id')
                     ->orderBy('categories.order', 'asc')
                     ->orderBy('invoice_items.category_id', 'asc')
@@ -116,6 +117,7 @@ class InvoiceService
                 ->map(function ($item) {
                     return [
                         "id" => $item->id,
+                        "image" => $item->files->first()?->url ?? null,
                         "label" => $item->label,
                         "description" => $item->description,
                         "units" => $item->units,

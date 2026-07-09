@@ -63,7 +63,15 @@ class InvoiceItemController extends Controller
         $validatedData = $validatedData->getValidatedData();
 
         if ($validatedData['status']) {
-            return $item = $this->service->store($validatedData['data']);
+            $item = $this->service->store($validatedData['data']);
+            
+            if ($request->hasFile('file')) {
+                $request->merge(['invoice_item_id' => $item->id]);
+                $fileService = app(\App\Services\FileService::class);
+                $fileService->create($request);
+            }
+
+            return $item;
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);
         }
@@ -99,6 +107,21 @@ class InvoiceItemController extends Controller
 
         if ($validatedData['status']) {
             $item = $this->service->update($id, $validatedData['data']);
+            if ($request->hasFile('file')) {
+                $fileService = app(\App\Services\FileService::class);
+                
+                if ($item->files) {
+                    foreach ($item->files as $oldFile) {
+                        $item->files()->detach($oldFile->id);
+                        $fileService->delete($oldFile->id);
+                    }
+                }
+
+                $request->merge(['invoice_item_id' => $item->id]);
+                $fileService->create($request);
+            }
+
+            return $item;
         } else {
             return response()->json(['errors' => $validatedData['errors']], 422);
         }

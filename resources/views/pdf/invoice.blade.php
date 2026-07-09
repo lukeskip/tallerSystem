@@ -86,10 +86,10 @@
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
                             @php
-                                $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades']);
+                                $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades', 'image']);
                             @endphp
                             <th style="border:0;padding:5px;text-align:{{ $isCenteredColumn ? 'center' : 'left' }};font-size:12px;">
-                                <h3 style="color:white">{{ $key }}</h3>
+                                <h3 style="color:white">{{ $key === 'image' ? 'Imagen' : $key }}</h3>
                             </th>
                         @endif
                     @endforeach
@@ -116,11 +116,17 @@
                         @foreach($item as $key => $value)
                             @if($key !== 'id' && $key !== 'category')
                                 @php
-                                    $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades']);
+                                    $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades', 'image']);
                                 @endphp
                                 <td
                                     style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isCenteredColumn ? 'center' : 'left' }}">
-                                    {{ $value }}
+                                    @if($key === 'image' && $value)
+                                        <img src="{{ $value }}" style="max-width: 78px; max-height: 78px;">
+                                    @elseif($key === 'image')
+                                        -
+                                    @else
+                                        {{ $value }}
+                                    @endif
                                 </td>
                             @endif
                         @endforeach

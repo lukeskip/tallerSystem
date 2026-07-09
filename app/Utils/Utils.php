@@ -95,6 +95,9 @@ class Utils
             $fieldsEnd[] = ['slug' => 'role', 'type' => 'select', 'options' => $roles];
         }
 
+        if ($table === 'invoice_items') {
+            $fieldsEnd[] = ['slug' => 'image', 'type' => 'file'];
+        }
 
 
         return $fieldsEnd;
