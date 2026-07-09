@@ -105,6 +105,14 @@
                                         </div>
                                     </div>
                                 </template>
+                                <template v-else-if="key === 'image'">
+                                    <div v-if="value" @click="lightboxImage = value" class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 shadow-sm mx-auto cursor-pointer hover:opacity-80 transition-opacity">
+                                        <img :src="value" class="w-full h-full object-cover" alt="Avatar" />
+                                    </div>
+                                    <div v-else class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 shadow-sm mx-auto">
+                                        <i class="fa-solid fa-image text-gray-400"></i>
+                                    </div>
+                                </template>
                                 <template v-else>
                                     <div class="relative">
                                         {{ value }}
@@ -132,6 +140,15 @@
         <template v-if="itemsRef.length && items.links">
             <Pagination :pagination="items.links" />
         </template>
+        
+        <div v-if="lightboxImage" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-75" @click="lightboxImage = null">
+            <div class="relative max-w-4xl max-h-[90vh] p-4">
+                <button class="absolute top-0 right-0 text-white text-3xl p-4 hover:text-gray-300" @click.stop="lightboxImage = null">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                <img :src="lightboxImage" class="max-w-full max-h-[85vh] object-contain rounded shadow-lg" @click.stop />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -176,6 +193,7 @@ const props = defineProps({
 const selected = ref([]);
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref("");
+const lightboxImage = ref(null);
 let lastCategory = "";
 const columnsToHide = [
     "id",

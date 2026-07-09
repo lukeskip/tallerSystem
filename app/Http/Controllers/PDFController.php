@@ -41,6 +41,7 @@ class PDFController extends Controller
 
         $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish, $formatMoney) {
             return [
+                'image' => $item['image'],
                 $isEnglish ? 'Item' : 'Concepto' => $item['label'],
                 $isEnglish ? 'Description' : 'Descripción' => $item['description'],
                 $isEnglish ? 'Qty' : 'Unidades' => $item['units'],

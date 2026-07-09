@@ -28,7 +28,8 @@ class InvoiceItemService
             'provider_id' => 'nullable',
             'user_id' => 'nullable',
             'invoice_id' => 'string|nullable',
-            'category'  => 'nullable'
+            'category'  => 'nullable',
+            'file' => 'nullable|file'
         ];
     }
 

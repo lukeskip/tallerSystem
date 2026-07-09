@@ -42,6 +42,12 @@
             </label>
             <Select v-model="provider" :options="providers"/>
         </div>
+        <div class="mt-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+                Imagen (opcional):
+            </label>
+            <FileInput name="file" @file-selected="handleFileSelected" />
+        </div>
         
        <div class="mt-5">
             <PrimaryButton class="mx-2">
@@ -62,6 +68,7 @@
     import Select from '@/Components/Select.vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import FileInput from '@/Components/FileInput.vue';
     import {ref} from 'vue';
     import { router } from '@inertiajs/vue3';
     import axios from 'vue-axios';
@@ -83,7 +90,14 @@
     const units = ref(0);
     const unit_price = ref(0);
     const unit_type= ref("");
+    const file = ref(null);
     const _token = window.csrf_token;
+
+    const emit = defineEmits(['close']);
+
+    const handleFileSelected = (selectedFile) => {
+        file.value = selectedFile;
+    }
 
 
     const handleSubmit = ()=>{
@@ -97,6 +111,7 @@
             units:units.value,
             provider_id:provider.value,
             invoice_id: props.invoiceId,
+            file: file.value,
             _token})
         
         emit('close');
