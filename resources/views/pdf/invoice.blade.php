@@ -11,16 +11,15 @@
 
         .totals {
             margin: 80px 0;
-            margin-left: 80%;
+            margin-left: 50%;
         }
 
         .totals td {
             padding: 5px 3px;
-            width: 20%;
             text-align: right;
             font-size: 1em;
             font-weight: bold;
-            letter-spacing: 3px;
+            letter-spacing: 1px;
         }
 
         .totals td:first-child {
@@ -65,7 +64,10 @@
             </svg>
         </div>
         <div style="text-align:right;">
-            <h2 style="margin:0;font-size:1em;">{{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Quote' : 'Cotización' }} {{$invoice['id']}}</h2>
+            <h2 style="margin:0;font-size:1em;">
+                {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Quote' : 'Cotización' }}
+                {{$invoice['id']}}
+            </h2>
             <h2 style="margin:0;font-size:1em;">{{$title}}</h2>
             <h2 style="margin:0;color:black;font-size:1em;">{{$invoice['project']['name']}}</h2>
             <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
@@ -115,7 +117,8 @@
                                 @php
                                     $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades']);
                                 @endphp
-                                <td style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isCenteredColumn ? 'center' : 'left' }}">
+                                <td
+                                    style="padding:5px 5px; border:solid 1px #d1d5db; text-align:{{ $isCenteredColumn ? 'center' : 'left' }}">
                                     {{ $value }}
                                 </td>
                             @endif
@@ -156,7 +159,8 @@
                                 @php
                                     $isPriceColumn = in_array($key, ['Monto', 'Amount']);
                                 @endphp
-                                <td style="padding:10px 5px; border:solid 1px #d1d5db; text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
+                                <td
+                                    style="padding:10px 5px; border:solid 1px #d1d5db; text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
                                     {{ $value }}
                                 </td>
                             @endif
@@ -171,60 +175,60 @@
     <div>
         <table style="font-size:12px;border-collapse: collapse; width:100%" class="totals">
             <tr style="background:#f3f4f6;">
-                <td style="width:80%">
+                <td style="width:60%">
                     Subtotal:
                 </td>
-                <td style="">
+                <td style="width:40%">
                     {{$invoice['subtotal']}}
                 </td>
             </tr>
             <tr style="background:white">
-                <td style=" width:80%">
+                <td style="width:60%">
                     Fee ({{$invoice['fee']}}):
                 </td>
-                <td style="">
+                <td style="width:40%">
                     {{$invoice['fee_amount']}}
                 </td>
             </tr>
             <tr style="background:#f3f4f6">
-                <td style=" width:80%">
+                <td style="width:60%">
                     Subtotal:
                 </td>
-                <td style="">
+                <td style="width:40%">
                     {{$invoice['subtotal_fee']}}
                 </td>
             </tr>
             @if($invoice['hasIva'])
                 <tr>
-                    <td style=" width:80%">
+                    <td style="width:60%">
                         IVA ({{$invoice['iva']}}):
                     </td>
-                    <td style="">
+                    <td style="width:40%">
                         {{$invoice['iva_amount']}}
                     </td>
                 </tr>
             @endif
             <tr style="background-color:#af984e;">
-                <td style="width:80%;color:white">
+                <td style="width:60%;color:white">
                     Total:
                 </td>
-                <td style="color:white">
+                <td style="width:40%;color:white">
                     {{$invoice['total']}}
                 </td>
             </tr>
             <tr>
-                <td style=" width:80%">
+                <td style="width:60%">
                     {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Paid' : 'Pagado' }}:
                 </td>
-                <td style="">
+                <td style="width:40%">
                     {{$invoice['amount_paid']}}
                 </td>
             </tr>
             <tr style="background:#f3f4f6">
-                <td style="width:80%">
+                <td style="width:60%">
                     {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Balance Due' : 'Balance' }}:
                 </td>
-                <td style="">
+                <td style="width:40%">
                     {{$invoice['balance']}}
                 </td>
             </tr>
@@ -233,38 +237,38 @@
     <table style="font-size:12px;border-collapse: collapse; width:100%">
         <tbody>
             @if(isset($publishOptions['language']) && $publishOptions['language'] !== 'es')
-            <tr>
-                <td>* Quote valid for 8 days</td>
-            </tr>
-            <tr>
-                <td>* 70% advance payment required for the total order</td>
-            </tr>
-            <tr>
-                <td>* Notify when paying the advance if you will require an invoice</td>
-            </tr>
-            <tr>
-                <td>* Any changes to this quote made by the client must be paid immediately for execution</td>
-            </tr>
-            <tr>
-                <td>* Delivery times subject to supplier confirmation</td>
-            </tr>
+                <tr>
+                    <td>* Quote valid for 8 days</td>
+                </tr>
+                <tr>
+                    <td>* 70% advance payment required for the total order</td>
+                </tr>
+                <tr>
+                    <td>* Notify when paying the advance if you will require an invoice</td>
+                </tr>
+                <tr>
+                    <td>* Any changes to this quote made by the client must be paid immediately for execution</td>
+                </tr>
+                <tr>
+                    <td>* Delivery times subject to supplier confirmation</td>
+                </tr>
             @else
-            <tr>
-                <td>* Cotización válida por 8 días</td>
-            </tr>
-            <tr>
-                <td>* Se requiere anticipo de 70% del total del pedido</td>
-            </tr>
-            <tr>
-                <td>* Notificar al pagar el anticipo si va a requerir factura</td>
-            </tr>
-            <tr>
-                <td>* Cualquier cambio ajeno a esta cotización realizado por el cliente, el pago deberá ser cubierto por
-                    él al momento, para su ejecución</td>
-            </tr>
-            <tr>
-                <td>* Tiempos de entrega sujetos a confirmación de proveedores</td>
-            </tr>
+                <tr>
+                    <td>* Cotización válida por 8 días</td>
+                </tr>
+                <tr>
+                    <td>* Se requiere anticipo de 70% del total del pedido</td>
+                </tr>
+                <tr>
+                    <td>* Notificar al pagar el anticipo si va a requerir factura</td>
+                </tr>
+                <tr>
+                    <td>* Cualquier cambio ajeno a esta cotización realizado por el cliente, el pago deberá ser cubierto por
+                        él al momento, para su ejecución</td>
+                </tr>
+                <tr>
+                    <td>* Tiempos de entrega sujetos a confirmación de proveedores</td>
+                </tr>
             @endif
         </tbody>
     </table>
