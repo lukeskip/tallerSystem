@@ -103,12 +103,12 @@ class InvoiceController extends Controller
     {
         // Preparar los datos antes de la validación
         $requestData = $request->all();
-        
+
         // Si hasIva no está presente en el request, lo establecemos como false
         if (!array_key_exists('hasIva', $requestData)) {
             $requestData['hasIva'] = false;
         }
-        
+
         $validatedData = new ValidateDataService($requestData, $this->rules);
         $validatedData = $validatedData->getValidatedData();
         if ($validatedData['status']) {
@@ -139,5 +139,11 @@ class InvoiceController extends Controller
             'total' => Utils::publishMoney($comissions->sum('agent_comission_raw'))
 
         ]);
+    }
+
+    public function duplicateInvoice(Request $request)
+    {
+        $newInvoice = $this->service->duplicateInvoice($request->id);
+        return Inertia::location(route('cotizaciones.show', $newInvoice->id));
     }
 }

@@ -55,10 +55,9 @@
                     </div>
                     <div>
                         <a
-                            target="_blank"
-                            :href="route('publish', invoice.id)"
+                            href="#"
                             class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800"
-                            as="button"
+                            @click.prevent="toggleModalPublish"
                         >
                             <i class="fa-solid fa-download"></i>
                         </a>
@@ -323,6 +322,12 @@
                 >
                     <CategoryOrder :categories="invoice.categories" />
                 </Modal>
+                <Modal
+                    :show="showModalPublish"
+                    @close="showModalPublish = false"
+                >
+                    <FormPublish :invoiceId="invoice.id" @close="toggleModalPublish" />
+                </Modal>
             </template>
         </AuthenticatedLayout>
     </div>
@@ -347,6 +352,7 @@ import Swal from "sweetalert2";
 import showLabel from "@/helpers/showLabel";
 import strings from "@/utils/strings";
 import CategoryOrder from "@/Components/CategoryOrder.vue";
+import FormPublish from "@/Components/FormPublish.vue";
 
 const props = defineProps({
     invoice: { type: [Object, Array], default: {} },
@@ -375,6 +381,11 @@ const toggleModalOutcome = () => {
 const showModalCategories = ref(false);
 const toggleModalCategories = () => {
     showModalCategories.value = !showModalCategories.value;
+};
+
+const showModalPublish = ref(false);
+const toggleModalPublish = () => {
+    showModalPublish.value = !showModalPublish.value;
 };
 
 const deleteHandle = () => {

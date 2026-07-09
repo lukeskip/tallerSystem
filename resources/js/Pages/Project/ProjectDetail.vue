@@ -84,7 +84,7 @@
             <TableComponent
                 :items="{ data: project.invoices }"
                 :root="'cotizaciones'"
-                :actions="[]"
+                :actions="['duplicate']"
             />
 
             <FileList v-if="project.files" :files="project.files" />

@@ -9,6 +9,11 @@
             <i class="fa-solid fa-pen-to-square"></i>
         </button>
     </template>
+    <template v-else-if="action ==='duplicate'">
+        <button @click="handleDuplicate(id)">
+            <i class="fa-solid fa-copy"></i>
+        </button>
+    </template>
 
     <Modal :show="showModal" @close="showModal = false" >
         <FormEdit :route="root" @close="toggleModal()" :editId="id" :parentId="parentId"/>
@@ -73,6 +78,14 @@
 
     const handleEdit = ()=>{
         toggleModal();
+    }
+
+    const handleDuplicate = (id)=>{
+        try {
+            router.post(`/${props.root}/duplicate/${id}`);
+        } catch (error) {
+            errorHandler(error);
+        }
     }
 
 
