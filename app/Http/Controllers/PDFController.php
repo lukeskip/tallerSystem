@@ -26,6 +26,7 @@ class PDFController extends Controller
             'currency' => $request->input('currency', 'MXN'),
             'exchange_rate' => $request->input('exchange_rate', 1),
             'language' => $request->input('language', 'es'),
+            'date' => $request->input('date', date('Y-m-d')),
         ];
 
         $isEnglish = $publishOptions['language'] !== 'es';

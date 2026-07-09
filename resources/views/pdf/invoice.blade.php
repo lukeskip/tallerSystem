@@ -69,7 +69,8 @@
                 {{$invoice['id']}}
             </h2>
             <h2 style="margin:0;font-size:1em;">{{$title}}</h2>
-            <h2 style="margin:0;color:black;font-size:1em;">{{$invoice['project']['name']}}</h2>
+            <h3 style="margin:0;color:gray;font-size:.8em;">{{ date('d/m/Y', strtotime($publishOptions['date'] ?? date('Y-m-d'))) }}</h3>
+            <h2 style="margin:0;color:black;font-size:1em;margin-top:10px;">{{$invoice['project']['name']}}</h2>
             <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
             @if($invoice['executive'])
                 <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">Ejecutivo {{$invoice['executive']}}</h3>

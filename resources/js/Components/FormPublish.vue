@@ -8,6 +8,11 @@
         </div>
         
         <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Fecha</label>
+            <TextInput type="date" v-model="publishForm.date" />
+        </div>
+        
+        <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">Moneda</label>
             <Select v-model="publishForm.currency" :options="currencyOptions" :default="'MXN'" />
         </div>
@@ -56,7 +61,8 @@ const publishForm = ref({
     title: '',
     currency: 'MXN',
     exchange_rate: 1,
-    language: 'es'
+    language: 'es',
+    date: new Date().toISOString().split('T')[0]
 });
 
 const currencyOptions = [
@@ -95,6 +101,7 @@ const publishUrl = computed(() => {
         currency: publishForm.value.currency,
         exchange_rate: publishForm.value.exchange_rate,
         language: publishForm.value.language,
+        date: publishForm.value.date,
     });
     return `${baseUrl}?${params.toString()}`;
 });
