@@ -71,7 +71,7 @@ watch(() => publishForm.value.currency, async (newCurrency) => {
             const res = await fetch(`https://open.er-api.com/v6/latest/${newCurrency}`);
             const data = await res.json();
             if (data && data.rates && data.rates.MXN) {
-                // Redondeamos a 2 decimales para que sea amigable en el input
+                // Round to 2 decimals to make it user-friendly in the input
                 publishForm.value.exchange_rate = Math.round(data.rates.MXN * 100) / 100;
             }
         } catch (e) {
@@ -88,7 +88,7 @@ const languageOptions = [
 ];
 
 const publishUrl = computed(() => {
-    // Generamos la ruta nativa y le adjuntamos los parametros
+    // Generate the native route and append the parameters
     const baseUrl = route('publish', props.invoiceId);
     const params = new URLSearchParams({
         title: publishForm.value.title,
