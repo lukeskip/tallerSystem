@@ -10,7 +10,7 @@ use PDF;
 class PDFController extends Controller
 {
 
-    public function publish($id)
+    public function publish(Request $request, $id)
     {
         $InvoiceService = new InvoiceService();
 
@@ -39,10 +39,18 @@ class PDFController extends Controller
             ];
         });
 
+        $publishOptions = [
+            'title' => $request->input('title', 'Cotización'),
+            'currency' => $request->input('currency', 'MXN'),
+            'exchange_rate' => $request->input('exchange_rate', 1),
+            'language' => $request->input('language', 'es'),
+        ];
+
         $data = [
             'invoice' => $invoice,
             'invoiceItems' => $invoiceItems,
             'incomes' => $incomes,
+            'publishOptions' => $publishOptions,
         ];
 
         $font_data = array(
