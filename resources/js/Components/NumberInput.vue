@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed, nextTick } from "vue";
+import { onMounted, ref, computed, nextTick, watch } from "vue";
 
 const props = defineProps({
     type: {
@@ -104,6 +104,20 @@ const handleInput = (event) => {
         });
     }
 };
+
+watch(() => model.value, (newVal) => {
+    let currentNumeric = parseFloat(displayValue.value.replace(/[^\d.]/g, ""));
+    if (isNaN(currentNumeric)) currentNumeric = 0;
+    
+    let newNumeric = parseFloat(newVal);
+    if (isNaN(newNumeric)) newNumeric = 0;
+
+    // Solo actualizamos la vista si el valor numérico difiere, 
+    // lo que significa que el cambio vino de una asignación externa.
+    if (newNumeric !== currentNumeric) {
+        displayValue.value = formatMoney(newVal);
+    }
+});
 
 onMounted(() => {
     if (input.value.hasAttribute("autofocus")) {

@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import NumberInput from "@/Components/NumberInput.vue";
@@ -61,8 +61,26 @@ const publishForm = ref({
 
 const currencyOptions = [
     { id: 'MXN', name: 'MXN' },
-    { id: 'USD', name: 'USD' }
+    { id: 'USD', name: 'USD' },
+    { id: 'EUR', name: 'EUR' }
 ];
+
+watch(() => publishForm.value.currency, async (newCurrency) => {
+    if (newCurrency === 'USD' || newCurrency === 'EUR') {
+        try {
+            const res = await fetch(`https://open.er-api.com/v6/latest/${newCurrency}`);
+            const data = await res.json();
+            if (data && data.rates && data.rates.MXN) {
+                // Redondeamos a 2 decimales para que sea amigable en el input
+                publishForm.value.exchange_rate = Math.round(data.rates.MXN * 100) / 100;
+            }
+        } catch (e) {
+            console.error("Error obteniendo el tipo de cambio:", e);
+        }
+    } else {
+        publishForm.value.exchange_rate = 1;
+    }
+});
 
 const languageOptions = [
     { id: 'es', name: 'Español' },
