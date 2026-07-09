@@ -40,7 +40,7 @@ class PDFController extends Controller
         });
 
         $publishOptions = [
-            'title' => $request->input('title', 'Cotización'),
+            'title' => $request->input('title'),
             'currency' => $request->input('currency', 'MXN'),
             'exchange_rate' => $request->input('exchange_rate', 1),
             'language' => $request->input('language', 'es'),
@@ -60,7 +60,7 @@ class PDFController extends Controller
         );
 
 
-        $fileName = 'cotización_' . $invoice['id'] . '.pdf';
+        $fileName = 'cotización_' . $invoice['id'] . '_' . $publishOptions['title'] . '.pdf';
         $pdf = PDF::Make();
         $pdf->addCustomFont($font_data);
         $pdf->showImageErrors = true;
