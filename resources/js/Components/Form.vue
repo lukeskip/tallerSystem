@@ -193,7 +193,7 @@ const handleSubmit = async (stay = false) => {
         const newFormData = new FormData();
 
         for (const key in formData.value) {
-            newFormData.append(key, formData.value[key] || "");
+            newFormData.append(key, formData.value[key] ?? "");
         }
 
         const response = await axios.post(`/${props.route}`, newFormData);
