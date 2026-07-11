@@ -10,7 +10,7 @@
         }
 
         .totals {
-            margin: 80px 0;
+            margin: 20px 0;
             margin-left: 50%;
         }
 
@@ -178,8 +178,9 @@
         </table>
     @endif
 
-    <div>
-        <table style="font-size:12px;border-collapse: collapse; width:100%" class="totals">
+    <div style="page-break-inside: avoid;">
+        <div>
+            <table style="font-size:12px;border-collapse: collapse; width:100%" class="totals">
             <tr style="background:#f3f4f6;">
                 <td style="width:60%">
                     Subtotal:
@@ -278,6 +279,7 @@
             @endif
         </tbody>
     </table>
+    </div>
 </body>
 
 </html>
