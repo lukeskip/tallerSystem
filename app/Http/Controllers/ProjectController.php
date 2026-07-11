@@ -25,7 +25,7 @@ class ProjectController extends Controller
         $this->rules = [
             'name' => 'required|string',
             'address' => 'required|string',
-            'comission' => 'required|numeric|gt:0',
+            'comission' => 'required|numeric|min:0',
             'client_id'=> 'numeric|gt:0'
         ];
     }

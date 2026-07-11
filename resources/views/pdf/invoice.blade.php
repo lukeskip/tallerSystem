@@ -69,11 +69,14 @@
                 {{$invoice['id']}}
             </h2>
             <h2 style="margin:0;font-size:1em;">{{$title}}</h2>
-            <h3 style="margin:0;color:gray;font-size:.8em;">{{ date('d/m/Y', strtotime($publishOptions['date'] ?? date('Y-m-d'))) }}</h3>
+            <h3 style="margin:0;color:gray;font-size:.8em;">
+                {{ date('d/m/Y', strtotime($publishOptions['date'] ?? date('Y-m-d'))) }}</h3>
             <h2 style="margin:0;color:black;font-size:1em;margin-top:10px;">{{$invoice['project']['name']}}</h2>
             <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
             @if($invoice['executive'])
-                <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Executive' : 'Ejecutivo' }} {{$invoice['executive']}}</h3>
+                <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">
+                    {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Executive' : 'Ejecutivo' }}
+                    {{$invoice['executive']}}</h3>
             @endif
         </div>
     </div>
@@ -81,15 +84,14 @@
 
     @if($invoiceItems->count() > 0)
         <table style="font-size:12px;border-collapse: collapse; width:100%">
-            <thead style="background-color:#af984e; color:white;text-transform: uppercase;">
-                <tr style="background-color:#af984e; ">
+            <thead style="background-color:#524627; color:white;text-transform: uppercase;">
+                <tr style="background-color:#524627; ">
                     @foreach($invoiceItems->first() as $key => $value)
                         @if($key !== 'id' && $key !== 'category')
-                            @php
-                                $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades', 'image']);
-                            @endphp
-                            <th style="border:0;padding:5px;text-align:{{ $isCenteredColumn ? 'center' : 'left' }};font-size:12px;">
-                                <h3 style="color:white">{{ $key === 'image' ? 'Imagen' : $key }}</h3>
+                            <th style="border:0;padding:5px;text-align:center;font-size:12px;">
+                                <h3 style="color:white;margin:0;">
+                                    {{ $key === 'image' ? (isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Image' : 'Imagen') : $key }}
+                                </h3>
                             </th>
                         @endif
                     @endforeach
@@ -143,14 +145,11 @@
     @if($incomes->count() > 0)
         <h2>{{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Payments' : 'Pagos' }}</h2>
         <table style="font-size:12px;border-collapse: collapse; width:100%">
-            <thead style="background-color:#af984e; color:white;text-transform: uppercase;font-size:14px;">
+            <thead style="background-color:black; color:white;text-transform: uppercase;font-size:14px;">
                 <tr>
                     @foreach($incomes->first() as $key => $value)
                         @if($key !== 'id')
-                            @php
-                                $isPriceColumn = in_array($key, ['Monto', 'Amount']);
-                            @endphp
-                            <th style="border:0;padding:5px;text-align:{{ $isPriceColumn ? 'center' : 'left' }}">
+                            <th style="border:0;padding:5px;text-align:center;">
                                 {{ $key }}
                             </th>
                         @endif

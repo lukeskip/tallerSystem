@@ -33,10 +33,11 @@ class PDFController extends Controller
         $exchangeRate = $publishOptions['exchange_rate'] ?: 1;
         $currencyCode = $publishOptions['currency'] ?: 'MXN';
 
-        $formatMoney = function($amount) use ($exchangeRate, $currencyCode) {
+        $formatMoney = function($amount, $includeCurrency = true) use ($exchangeRate, $currencyCode) {
             $cleanAmount = is_string($amount) ? (float) str_replace(['$', ','], '', $amount) : floatval($amount);
             $converted = $cleanAmount / floatval($exchangeRate);
-            return '$' . number_format($converted, 2) . ' ' . $currencyCode;
+            $formatted = '$' . number_format($converted, 2);
+            return $includeCurrency ? $formatted . ' ' . $currencyCode : $formatted;
         };
 
         $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish, $formatMoney) {
@@ -45,16 +46,16 @@ class PDFController extends Controller
                 $isEnglish ? 'Item' : 'Concepto' => $item['label'],
                 $isEnglish ? 'Description' : 'Descripción' => $item['description'],
                 $isEnglish ? 'Qty' : 'Unidades' => $item['units'],
-                $isEnglish ? 'Unit Price' : 'V. Unitario' => $formatMoney($item['unit_price'] ?? 0),
+                $isEnglish ? 'Unit Price' : 'V. Unitario' => $formatMoney($item['unit_price'] ?? 0, false),
                 'category' => $item['category'],
-                'Subtotal' => $formatMoney($item['total'] ?? 0),
+                'Subtotal' => $formatMoney($item['total'] ?? 0, false),
             ];
         })->toArray();
 
         $incomes = $invoice['incomes']->map(function ($item) use ($isEnglish, $formatMoney) {
             return [
                 $isEnglish ? 'Description' : 'Descripción' => $item['description'],
-                $isEnglish ? 'Amount' : 'Monto' => $formatMoney($item['amount'] ?? 0),
+                $isEnglish ? 'Amount' : 'Monto' => $formatMoney($item['amount'] ?? 0, false),
                 $isEnglish ? 'Date' : 'Fecha' => $item['date']
             ];
         })->toArray();
