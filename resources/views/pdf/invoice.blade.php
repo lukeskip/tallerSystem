@@ -73,7 +73,7 @@
             <h2 style="margin:0;color:black;font-size:1em;margin-top:10px;">{{$invoice['project']['name']}}</h2>
             <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
             @if($invoice['executive'])
-                <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">Ejecutivo {{$invoice['executive']}}</h3>
+                <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Executive' : 'Ejecutivo' }} {{$invoice['executive']}}</h3>
             @endif
         </div>
     </div>

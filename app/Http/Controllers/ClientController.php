@@ -23,10 +23,10 @@ class ClientController extends Controller
         $this->service = $clientService;
         $this->rules = [
             'name' => 'required|string|max:255',
-            'contact_name' => 'required|string|max:255',
-            'phone' => 'required|string',
+            'contact_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string',
             'address' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
         ];
     }
     /**
@@ -37,7 +37,7 @@ class ClientController extends Controller
         $clients = $this->service->getAll($request);
         return Inertia::render('Client/Clients', [
             'clients' => $clients,
-        ]); 
+        ]);
     }
 
     /**
@@ -54,15 +54,15 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            return $item = $this->service->store($validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        } 
+        if ($validatedData['status']) {
+            return $item = $this->service->store($validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
     }
 
     /**
@@ -73,7 +73,7 @@ class ClientController extends Controller
         $client = $this->service->getById($id);
         return Inertia::render('Client/ClientDetail', [
             'client' => $client,
-            
+
         ]);
     }
 
@@ -94,12 +94,12 @@ class ClientController extends Controller
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
-        if($validatedData['status']){
-            $item = $this->service->update($id,$validatedData['data']);    
-        }else{
-            return response()->json(['errors'=>$validatedData['errors']], 422);
-        } 
-        
+        if ($validatedData['status']) {
+            $item = $this->service->update($id, $validatedData['data']);
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
+
     }
 
     /**
@@ -110,5 +110,5 @@ class ClientController extends Controller
         return $this->service->delete($id);
     }
 
-    
+
 }
