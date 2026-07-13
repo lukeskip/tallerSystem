@@ -1,18 +1,23 @@
 <template>
     <template v-if="action ==='delete'">
-        <button class="mx-5" @click="handleDelete(id)">
+        <button class="mx-3" @click="handleDelete(id)">
             <i class="fa-solid fa-trash"></i>
         </button>
     </template>
     <template v-else-if="action ==='edit'">
-        <button @click="handleEdit(id)">
+        <button class="mx-3" @click="handleEdit(id)">
             <i class="fa-solid fa-pen-to-square"></i>
         </button>
     </template>
     <template v-else-if="action ==='duplicate'">
-        <button @click="handleDuplicate(id)">
+        <button class="mx-3" @click="handleDuplicate(id)">
             <i class="fa-solid fa-copy"></i>
         </button>
+    </template>
+    <template v-else-if="action ==='download'">
+        <a class="mx-3" :href="`/${root === 'ordenes' ? 'download/order' : 'download/invoice'}/${id}`" target="_blank">
+            <i class="fa-solid fa-download"></i>
+        </a>
     </template>
 
     <Modal :show="showModal" @close="showModal = false" >

@@ -258,8 +258,8 @@
                                 :items="invoice.orders"
                                 :inner="true"
                                 :root="'ordenes'"
-                                :searchField="'description'"
-                                :actions="['edit', 'delete']"
+                                :searchField="['description', 'categories']"
+                                :actions="['edit', 'delete', 'download']"
                                 parentId="invoice_id"
                             />
                         </Container>

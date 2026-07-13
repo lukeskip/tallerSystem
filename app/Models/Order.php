@@ -37,6 +37,11 @@ class Order extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function files()
+    {
+        return $this->belongsToMany(File::class);
+    }
+
     public function getTotalAttribute()
     {
         $baseTotal = $this->unit_cost * $this->units;

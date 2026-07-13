@@ -100,7 +100,7 @@ class InvoiceService
             'project',
             'outcomes',
             'orders' => function ($query) {
-                $query->with(['provider', 'categories']);
+                $query->with(['provider', 'categories', 'files']);
             },
             'invoiceItems' => function ($query) {
                 $query
@@ -208,6 +208,7 @@ class InvoiceService
                 $item->setRelation('invoice', $invoice);
                 return [
                     "id" => $item->id,
+                    "image" => $item->files->first()?->url ?? null,
                     "description" => $item->description,
                     "provider" => $item->provider->name ?? '',
                     "unit_cost" => Utils::publishMoney($item->unit_cost),

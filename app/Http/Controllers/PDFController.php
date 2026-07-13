@@ -116,5 +116,36 @@ class PDFController extends Controller
 
     }
 
+    public function publishOrder(Request $request, $id)
+    {
+        $orderService = new \App\Services\OrderService();
+        $order = $orderService->getById($id);
 
+        if (!$order) {
+            return abort(404, 'El recurso no fue encontrado.');
+        }
+
+        $orderModel = \App\Models\Order::with(['provider', 'categories', 'invoice', 'files'])->find($id);
+        $order['provider_name'] = $orderModel->provider ? $orderModel->provider->name : null;
+        $order['categories'] = $orderModel->categories->toArray();
+        $order['total'] = $orderModel->total;
+        $order['image'] = $orderModel->files->first()?->url;
+
+        $data = [
+            'order' => $order,
+        ];
+
+        $font_data = array(
+            'Figtree' => [
+                'R' => 'Figtree-VariableFont_wght.ttf',
+            ]
+        );
+
+        $fileName = 'orden_' . $order['id'] . '.pdf';
+        $pdf = PDF::Make();
+        $pdf->addCustomFont($font_data);
+        $pdf->showImageErrors = true;
+        $pdf->loadView('pdf.order', $data);
+        return $pdf->stream($fileName);
+    }
 }

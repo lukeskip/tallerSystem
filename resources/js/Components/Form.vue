@@ -57,6 +57,20 @@
                             v-model:checked="formData[field.slug]"
                         />
 
+                        <div v-else-if="field.type === 'categories'">
+                            <VueMultiselect
+                                v-model="formData[field.slug]"
+                                :options="field.options"
+                                :multiple="true"
+                                :taggable="true"
+                                @tag="addTag($event, field.slug)"
+                                tag-placeholder="Presiona Enter para crear nueva etiqueta"
+                                placeholder="Busca o añade una categoría"
+                                label="name"
+                                track-by="id"
+                            />
+                        </div>
+
                         <div
                             class="error text-red-500"
                             v-if="errors[field.slug]"
@@ -95,6 +109,8 @@ import Select from "@/Components/Select.vue";
 import ToggleSwitch from "@/Components/ToggleSwitch.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import VueMultiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.css';
 import { router } from "@inertiajs/vue3";
 import { ref, onBeforeMount, onMounted, defineEmits, watch } from "vue";
 import axios from "axios";
@@ -156,6 +172,21 @@ const handleFileSelected = (file) => {
     formData.value["file"] = file;
 };
 
+const addTag = (newTag, fieldSlug) => {
+    const tag = {
+        name: newTag,
+        id: newTag
+    };
+    const field = fields.value.find(f => f.slug === fieldSlug);
+    if (field) {
+        field.options.push(tag);
+    }
+    if (!formData.value[fieldSlug]) {
+        formData.value[fieldSlug] = [];
+    }
+    formData.value[fieldSlug].push(tag);
+};
+
 const clearFormData = () => {
     fields.value.map((field) => {
         if (
@@ -197,11 +228,22 @@ const handleSubmit = async (stay = false) => {
             const fieldDef = fields.value.find(f => f.slug === key);
             
             if (fieldDef && fieldDef.type === 'boolean') {
-                // Handle Ref unwrapping just in case, and boolean conversion
                 if (val && typeof val === 'object' && val.value !== undefined) {
                     val = val.value;
                 }
                 val = (val === true || val === 'true' || val === 1) ? 1 : 0;
+            }
+            if (Array.isArray(val)) {
+                val.forEach((item, index) => {
+                    if (typeof item === 'object' && item !== null && !(item instanceof File)) {
+                        for (const subKey in item) {
+                            newFormData.append(`${key}[${index}][${subKey}]`, item[subKey]);
+                        }
+                    } else {
+                        newFormData.append(`${key}[]`, item);
+                    }
+                });
+                continue;
             }
             newFormData.append(key, val ?? "");
         }

@@ -31,6 +31,11 @@ class File extends Model
         return $this->belongsToMany(InvoiceItem::class);
     }
     
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+    
     public function getFormatDateAttribute()
     {
         return Utils::formatDate($this->created_at);
