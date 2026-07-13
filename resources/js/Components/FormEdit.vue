@@ -50,7 +50,7 @@
                         :default="formData[field.slug]"
                     />
                     
-                    <Checkbox
+                    <ToggleSwitch
                         v-else-if="field.type === 'boolean'"
                         v-model:checked="formData[field.slug]"
                     />
@@ -81,7 +81,7 @@ import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import FileInput from "@/Components/FileInput.vue";
 import Select from "@/Components/Select.vue";
-import Checkbox from "@/Components/Checkbox.vue";
+import ToggleSwitch from "@/Components/ToggleSwitch.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { router } from "@inertiajs/vue3";
@@ -190,7 +190,16 @@ const handleSubmit = async (stay = false) => {
         const newFormData = new FormData();
 
         for (const key in formData.value) {
-            newFormData.append(key, formData.value[key] || "");
+            let val = formData.value[key];
+            const fieldDef = fields.value.find(f => f.slug === key);
+            
+            if (fieldDef && fieldDef.type === 'boolean') {
+                if (val && typeof val === 'object' && val.value !== undefined) {
+                    val = val.value;
+                }
+                val = (val === true || val === 'true' || val === 1) ? 1 : 0;
+            }
+            newFormData.append(key, val ?? "");
         }
 
         newFormData.append("_method", "put");

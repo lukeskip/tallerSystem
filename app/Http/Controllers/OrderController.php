@@ -50,6 +50,10 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->has('has_iva')) {
+            $request->merge(['has_iva' => filter_var($request->has_iva, FILTER_VALIDATE_BOOLEAN)]);
+        }
+        
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 
@@ -74,8 +78,13 @@ class OrderController extends Controller
         return response()->json($fields);
     }
 
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $id)
     {
+        $order = Order::findOrFail($id);
+        if ($request->has('has_iva')) {
+            $request->merge(['has_iva' => filter_var($request->has_iva, FILTER_VALIDATE_BOOLEAN)]);
+        }
+
         $validatedData = new ValidateDataService($request->all(), $this->rules);
         $validatedData = $validatedData->getValidatedData();
 

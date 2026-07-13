@@ -99,6 +99,9 @@ class InvoiceService
             'incomes',
             'project',
             'outcomes',
+            'orders' => function ($query) {
+                $query->with(['provider', 'categories']);
+            },
             'invoiceItems' => function ($query) {
                 $query
                     ->with('files')
@@ -201,6 +204,20 @@ class InvoiceService
                 ];
             });
 
+            $orders = $invoice->orders->map(function ($item) use ($invoice) {
+                $item->setRelation('invoice', $invoice);
+                return [
+                    "id" => $item->id,
+                    "description" => $item->description,
+                    "provider" => $item->provider->name ?? '',
+                    "unit_cost" => Utils::publishMoney($item->unit_cost),
+                    "units" => $item->units,
+                    "has_iva" => $item->has_iva ? 'Sí' : 'No',
+                    "categories" => $item->categories->pluck('name')->join(', '),
+                    "total" => Utils::publishMoney($item->total),
+                ];
+            });
+
             $comissions = $invoice->invoiceItems
                 ->groupBy('user_id')
                 ->map(function ($items, $userId) use ($invoice) {
@@ -233,6 +250,7 @@ class InvoiceService
                 'outcomes_total' => Utils::publishMoney($outcomes->sum('amount_raw')),
                 'comissions' => $comissions,
                 'debts' => $debtsByProvider,
+                'orders' => $orders,
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal" => Utils::publishMoney($invoice->subtotal),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),

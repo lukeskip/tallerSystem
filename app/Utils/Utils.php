@@ -73,7 +73,7 @@ class Utils
                     $InvoiceService = new InvoiceService();
                     $users = User::all();
                     $fieldsEnd[] = ['slug' => "user_id", 'type' => 'select', 'options' => $users];
-                } elseif ($field === 'hasIva' && $table === 'invoices') {
+                } elseif ($field === 'hasIva' || $field === 'has_iva') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];

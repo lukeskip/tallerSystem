@@ -25,6 +25,7 @@ class OrderService
         $order = $this->getById($id);
 
         $orderFormatted = [
+            'invoice_id' => ['value' => $order['invoice_id'], 'type' => 'hidden'],
             'description' => ['value' => $order['description'], 'type' => 'string'],
             'unit_cost' => ['value' => $order['unit_cost'], 'type' => 'money'],
             'units' => ['value' => $order['units'], 'type' => 'integer'],
@@ -78,7 +79,7 @@ class OrderService
 
     public function getAll($request = null)
     {
-        $orders = Order::with(['provider', 'categories'])->orderBy('created_at', 'desc');
+        $orders = Order::with(['provider', 'categories', 'invoice'])->orderBy('created_at', 'desc');
 
         if ($request && $request->input('search')) {
             $orders->where('description', 'like', '%' . $request->input('search') . '%');

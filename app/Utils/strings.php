@@ -26,4 +26,6 @@ return [
     'pending' => 'Pendiente',
     'completed' => 'Completada',
     'rejected' => 'Rechazada',
+    'has_iva' => 'Incluir IVA?',
+    'hasIva' => 'Incluir IVA?',
 ];

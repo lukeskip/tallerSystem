@@ -39,6 +39,13 @@ class Order extends Model
 
     public function getTotalAttribute()
     {
-        return $this->unit_cost * $this->units;
+        $baseTotal = $this->unit_cost * $this->units;
+        
+        if ($this->has_iva && $this->invoice) {
+            $ivaPercentage = $this->invoice->iva / 100;
+            return $baseTotal * (1 + $ivaPercentage);
+        }
+        
+        return $baseTotal;
     }
 }

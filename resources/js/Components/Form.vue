@@ -52,7 +52,7 @@
                             :options="field.options"
                         />
 
-                        <Checkbox
+                        <ToggleSwitch
                             v-else-if="field.type === 'boolean'"
                             v-model:checked="formData[field.slug]"
                         />
@@ -92,7 +92,7 @@ import FileInput from "@/Components/FileInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import Select from "@/Components/Select.vue";
-import Checkbox from "@/Components/Checkbox.vue";
+import ToggleSwitch from "@/Components/ToggleSwitch.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { router } from "@inertiajs/vue3";
@@ -121,7 +121,7 @@ const errors = ref([]);
 
 const fields = ref([]);
 const loader = ref(true);
-const formData = ref([]);
+const formData = ref({});
 
 onBeforeMount(() => {
     loader.value = true;
@@ -193,7 +193,17 @@ const handleSubmit = async (stay = false) => {
         const newFormData = new FormData();
 
         for (const key in formData.value) {
-            newFormData.append(key, formData.value[key] ?? "");
+            let val = formData.value[key];
+            const fieldDef = fields.value.find(f => f.slug === key);
+            
+            if (fieldDef && fieldDef.type === 'boolean') {
+                // Handle Ref unwrapping just in case, and boolean conversion
+                if (val && typeof val === 'object' && val.value !== undefined) {
+                    val = val.value;
+                }
+                val = (val === true || val === 'true' || val === 1) ? 1 : 0;
+            }
+            newFormData.append(key, val ?? "");
         }
 
         const response = await axios.post(`/${props.route}`, newFormData);

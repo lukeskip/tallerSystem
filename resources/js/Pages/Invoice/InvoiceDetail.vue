@@ -18,6 +18,16 @@
                         <a
                             href="#"
                             class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
+                            @click="toggleModalOrder"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Orden
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="#"
+                            class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
                             @click="toggleModalIncome"
                         >
                             <i class="fa-solid fa-plus"></i>
@@ -150,6 +160,17 @@
                         </button>
                         <button
                             :class="{
+                                'bg-main-color text-white': activeTab === 8,
+                                'bg-gray-100 text-gray-800 hover:bg-gray-200':
+                                    activeTab !== 8,
+                            }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(8)"
+                        >
+                            Órdenes
+                        </button>
+                        <button
+                            :class="{
                                 'bg-main-color text-white': activeTab === 2,
                                 'bg-gray-100 text-gray-800 hover:bg-gray-200':
                                     activeTab !== 2,
@@ -231,6 +252,18 @@
                             />
                         </div>
 
+                        <!-- Tab 8 (Órdenes) -->
+                        <Container v-if="activeTab === 8">
+                            <TableComponent
+                                :items="invoice.orders"
+                                :inner="true"
+                                :root="'ordenes'"
+                                :searchField="'description'"
+                                :actions="['edit', 'delete']"
+                                parentId="invoice_id"
+                            />
+                        </Container>
+
                         <!-- Tab 2 -->
                         <Container v-if="activeTab === 2">
                             <TableComponent
@@ -306,6 +339,13 @@
                         @close="toggleModalIncome()"
                     />
                 </Modal>
+                <Modal :show="showModalOrder" @close="showModalOrder = false">
+                    <Form
+                        :default="{ invoice_id: invoice.id }"
+                        :route="'ordenes'"
+                        @close="toggleModalOrder()"
+                    />
+                </Modal>
                 <Modal
                     :show="showModalOutcome"
                     @close="showModalOutcome = false"
@@ -368,6 +408,11 @@ const toggleModal = () => {
 };
 const toggleTab = (tab) => {
     activeTab.value = tab;
+};
+
+const showModalOrder = ref(false);
+const toggleModalOrder = () => {
+    showModalOrder.value = !showModalOrder.value;
 };
 
 const showModalIncome = ref(false);

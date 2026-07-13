@@ -62,5 +62,6 @@ const strings = {
         agent:"Agente de ventas",
         agent_comission_percentage:"Porcentaje de comisión de agente",
         hasIva:"Incluir IVA?",
+        has_iva:"Incluir IVA?",
 };
 export default strings;
