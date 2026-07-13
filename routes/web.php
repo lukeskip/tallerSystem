@@ -14,6 +14,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cotizaciones/duplicate/{id}', [InvoiceController::class, 'duplicateInvoice'])->name("cotizaciones.duplicate");
     Route::resource('/proveedores', ProviderController::class);
     Route::resource('/conceptos', InvoiceItemController::class);
+    Route::resource('/ordenes', OrderController::class);
     Route::resource('/ingresos', IncomeController::class);
     Route::resource('/egresos', OutcomeController::class);
     Route::resource('/archivos', FileController::class);
