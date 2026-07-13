@@ -148,4 +148,37 @@ class PDFController extends Controller
         $pdf->loadView('pdf.order', $data);
         return $pdf->stream($fileName);
     }
+    public function publishFabrics(Request $request, $invoiceId)
+    {
+        $invoice = \App\Models\Invoice::with(['project', 'fabrics.provider'])->find($invoiceId);
+
+        if (!$invoice) {
+            return abort(404, 'El recurso no fue encontrado.');
+        }
+
+        $fabrics = [];
+        foreach ($invoice->fabrics as $fabricModel) {
+            $fabric = $fabricModel->toArray();
+            $fabric['provider_name'] = $fabricModel->provider ? $fabricModel->provider->name : null;
+            $fabrics[] = $fabric;
+        }
+
+        $data = [
+            'invoice' => $invoice,
+            'fabrics' => $fabrics,
+        ];
+
+        $font_data = array(
+            'Figtree' => [
+                'R' => 'Figtree-VariableFont_wght.ttf',
+            ]
+        );
+
+        $fileName = 'telas_cotizacion_' . $invoice->id . '.pdf';
+        $pdf = PDF::Make();
+        $pdf->addCustomFont($font_data);
+        $pdf->showImageErrors = true;
+        $pdf->loadView('pdf.fabric', $data);
+        return $pdf->stream($fileName);
+    }
 }

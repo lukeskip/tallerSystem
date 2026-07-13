@@ -68,6 +68,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'read category','guard_name' => 'web']);
         Permission::create(['name' => 'edit category','guard_name' => 'web']);
         Permission::create(['name' => 'delete category','guard_name' => 'web']);
+
+        Permission::create(['name' => 'create fabric','guard_name' => 'web']);
+        Permission::create(['name' => 'read fabric','guard_name' => 'web']);
+        Permission::create(['name' => 'edit fabric','guard_name' => 'web']);
+        Permission::create(['name' => 'delete fabric','guard_name' => 'web']);
         
     }
 }

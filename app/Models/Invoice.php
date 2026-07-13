@@ -128,6 +128,16 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function fabrics()
+    {
+        return $this->hasMany(Fabric::class);
+    }
+
     public function orders()
     {
         return $this->hasMany(Order::class);

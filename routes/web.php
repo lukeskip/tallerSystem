@@ -15,6 +15,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\FabricController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/archivos', FileController::class);
     Route::resource('/notas', NoteController::class);
     Route::resource('/usuarios', UserController::class);
+    Route::resource('/telas', FabricController::class);
     Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
     Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
     Route::put('/categorias-order/', [CategoryController::class, 'categoriesOrder'])->name("categories-order");
@@ -60,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/download/invoice/{invoice}', [PDFController::class, 'publish'])->name('publish')->middleware('auth');
 Route::get('/download/order/{order}', [PDFController::class, 'publishOrder'])->name('publish-order')->middleware('auth');
+Route::get('/download/invoice/{invoice}/fabrics', [PDFController::class, 'publishFabrics'])->name('publish-fabrics')->middleware('auth');
 // Route::get('/test/invoice/{invoice}', [PDFController::class, 'test'])->name('publish')->middleware('auth');
 
 Route::middleware('auth')->group(function () {

@@ -102,6 +102,9 @@ class InvoiceService
             'orders' => function ($query) {
                 $query->with(['provider', 'categories', 'files']);
             },
+            'fabrics' => function ($query) {
+                $query->with(['provider']);
+            },
             'invoiceItems' => function ($query) {
                 $query
                     ->with('files')
@@ -219,6 +222,17 @@ class InvoiceService
                 ];
             });
 
+            $fabrics = $invoice->fabrics->map(function ($item) {
+                return [
+                    "id" => $item->id,
+                    "brand" => $item->brand,
+                    "pattern" => $item->pattern,
+                    "color" => $item->color,
+                    "units" => $item->units,
+                    "provider" => $item->provider->name ?? '',
+                ];
+            });
+
             $comissions = $invoice->invoiceItems
                 ->groupBy('user_id')
                 ->map(function ($items, $userId) use ($invoice) {
@@ -252,6 +266,7 @@ class InvoiceService
                 'comissions' => $comissions,
                 'debts' => $debtsByProvider,
                 'orders' => $orders,
+                'fabrics' => $fabrics,
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal" => Utils::publishMoney($invoice->subtotal),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),
