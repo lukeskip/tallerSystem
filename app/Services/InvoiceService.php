@@ -99,6 +99,12 @@ class InvoiceService
             'incomes',
             'project',
             'outcomes',
+            'orders' => function ($query) {
+                $query->with(['provider', 'categories', 'files']);
+            },
+            'fabrics' => function ($query) {
+                $query->with(['provider']);
+            },
             'invoiceItems' => function ($query) {
                 $query
                     ->with('files')
@@ -201,6 +207,32 @@ class InvoiceService
                 ];
             });
 
+            $orders = $invoice->orders->map(function ($item) use ($invoice) {
+                $item->setRelation('invoice', $invoice);
+                return [
+                    "id" => $item->id,
+                    "image" => $item->files->first()?->url ?? null,
+                    "description" => $item->description,
+                    "provider" => $item->provider->name ?? '',
+                    "unit_cost" => Utils::publishMoney($item->unit_cost),
+                    "units" => $item->units,
+                    "has_iva" => $item->has_iva ? 'Sí' : 'No',
+                    "categories" => $item->categories->pluck('name')->join(', '),
+                    "total" => Utils::publishMoney($item->total),
+                ];
+            });
+
+            $fabrics = $invoice->fabrics->map(function ($item) {
+                return [
+                    "id" => $item->id,
+                    "brand" => $item->brand,
+                    "pattern" => $item->pattern,
+                    "color" => $item->color,
+                    "units" => $item->units,
+                    "provider" => $item->provider->name ?? '',
+                ];
+            });
+
             $comissions = $invoice->invoiceItems
                 ->groupBy('user_id')
                 ->map(function ($items, $userId) use ($invoice) {
@@ -233,6 +265,8 @@ class InvoiceService
                 'outcomes_total' => Utils::publishMoney($outcomes->sum('amount_raw')),
                 'comissions' => $comissions,
                 'debts' => $debtsByProvider,
+                'orders' => $orders,
+                'fabrics' => $fabrics,
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal" => Utils::publishMoney($invoice->subtotal),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),

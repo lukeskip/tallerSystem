@@ -8,6 +8,7 @@ use App\Services\InvoiceService;
 use App\Services\ClientService;
 use App\Models\Invoice;
 use App\Models\User;
+use App\Models\Category;
 use App\Services\ProviderService;
 use Spatie\Permission\Models\Role;
 
@@ -73,7 +74,7 @@ class Utils
                     $InvoiceService = new InvoiceService();
                     $users = User::all();
                     $fieldsEnd[] = ['slug' => "user_id", 'type' => 'select', 'options' => $users];
-                } elseif ($field === 'hasIva' && $table === 'invoices') {
+                } elseif ($field === 'hasIva' || $field === 'has_iva') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];
@@ -97,6 +98,16 @@ class Utils
 
         if ($table === 'invoice_items') {
             $fieldsEnd[] = ['slug' => 'image', 'type' => 'file'];
+        }
+
+        if ($table === 'orders') {
+            $InvoiceService = new InvoiceService();
+            // Pass $id or wait, does getFields receive $id for orders? Yes, it's the invoice_id or order_id? 
+            // The signature is getFields($table, $id = false). If we need categories, we can just fetch all categories for the invoice? Or just let the frontend send strings.
+            // Let's pass all categories for this invoice if possible, or all categories.
+            $categories = Category::all();
+            $fieldsEnd[] = ['slug' => 'image', 'type' => 'file'];
+            $fieldsEnd[] = ['slug' => 'categories', 'type' => 'categories', 'options' => $categories];
         }
 
 

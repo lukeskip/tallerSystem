@@ -3,7 +3,7 @@ return [
     'label' => 'Etiqueta',
     'description' => 'Descripción',
     'unit_price' => 'Precio Unitario',
-    'units' => 'Cantidad de unidades',
+    'units' => 'Unidades',
     'comission' => 'Comisión',
     'unit_type' => 'Tipo de unidad',
     'provider_id' => 'Proveedor',
@@ -26,4 +26,6 @@ return [
     'pending' => 'Pendiente',
     'completed' => 'Completada',
     'rejected' => 'Rechazada',
+    'has_iva' => 'Incluir IVA?',
+    'hasIva' => 'Incluir IVA?',
 ];

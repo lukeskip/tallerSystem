@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('fabrics', function (Blueprint $table) {
+            $table->id();
+            $table->string('invoice_id');
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreignId('provider_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('brand')->nullable();
+            $table->string('pattern')->nullable();
+            $table->string('color')->nullable();
+            $table->integer('units')->default(1);
+            $table->decimal('meters', 8, 2)->default(0);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('fabrics');
+    }
+};

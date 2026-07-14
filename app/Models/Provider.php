@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Utils\Utils;
 use App\Models\InvoiceItem;
 use App\Models\Outcome;
+use App\Models\Order;
 
 class Provider extends Model
 {
@@ -22,6 +23,10 @@ class Provider extends Model
     
     public function invoiceItems (){
         return $this->hasMany(InvoiceItem::class);
+    }
+    
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
     public function outcomes (){
         return $this->hasMany(Outcome::class);

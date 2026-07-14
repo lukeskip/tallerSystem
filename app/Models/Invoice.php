@@ -9,6 +9,7 @@ use App\Models\Income;
 use App\Models\Outcome;
 use App\Models\InvoiceItem;
 use App\Models\Category;
+use App\Models\Order;
 use Carbon\Carbon;
 use App\Utils\Utils;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -125,6 +126,21 @@ class Invoice extends Model
     public function invoiceItems()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function fabrics()
+    {
+        return $this->hasMany(Fabric::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
     public function incomes()
     {

@@ -1,0 +1,145 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Order;
+use Illuminate\Http\Request;
+use App\Services\OrderService;
+use App\Services\ValidateDataService;
+use Inertia\Inertia;
+use App\Utils\Utils;
+
+class OrderController extends Controller
+{
+    protected $service;
+    protected $rules;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->middleware('can:read order', ['only' => ['index', 'show']]);
+        $this->middleware('can:create order', ['only' => ['create', 'store']]);
+        $this->middleware('can:edit order', ['only' => ['edit', 'update']]);
+        $this->middleware('can:delete order', ['only' => ['destroy']]);
+
+        $this->service = $orderService;
+        $this->rules = [
+            'invoice_id' => 'required|string|exists:invoices,id',
+            'provider_id' => 'nullable|integer|exists:providers,id',
+            'description' => 'nullable|string',
+            'unit_cost' => 'required|numeric',
+            'units' => 'required|integer|min:1',
+            'has_iva' => 'boolean',
+            'categories' => 'nullable|array',
+        ];
+    }
+
+    public function index(Request $request)
+    {
+        $orders = $this->service->getAll($request);
+        return Inertia::render('Order/Orders', [
+            'orders' => $orders,
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        $fields = Utils::getFields('orders');
+        if ($request->has('parentId')) {
+            $categories = \App\Models\Category::where('invoice_id', $request->parentId)->get()->toArray();
+            foreach ($fields as &$field) {
+                if (isset($field['slug']) && $field['slug'] === 'categories') {
+                    $field['options'] = $categories;
+                    break;
+                }
+            }
+        }
+        return response()->json($fields);
+    }
+
+    public function store(Request $request)
+    {
+        if ($request->has('has_iva')) {
+            $request->merge(['has_iva' => filter_var($request->has_iva, FILTER_VALIDATE_BOOLEAN)]);
+        }
+        
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if ($validatedData['status']) {
+            $order = $this->service->create($validatedData['data']);
+            
+            if ($request->hasFile('file')) {
+                $request->merge(['order_id' => $order->id]);
+                $fileService = app(\App\Services\FileService::class);
+                $fileService->create($request);
+            }
+
+            return $order;
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
+    }
+
+    public function show($id)
+    {
+        $order = $this->service->getById($id);
+        return Inertia::render('Order/OrderDetail', [
+            'order' => $order,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $fields = $this->service->edit($id);
+        return response()->json($fields);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        if ($request->has('has_iva')) {
+            $request->merge(['has_iva' => filter_var($request->has_iva, FILTER_VALIDATE_BOOLEAN)]);
+        }
+
+        $validatedData = new ValidateDataService($request->all(), $this->rules);
+        $validatedData = $validatedData->getValidatedData();
+
+        if ($validatedData['status']) {
+            $order = $this->service->update($order, $validatedData['data']);
+            
+            if ($request->has('remove_file') && $request->remove_file == 'true') {
+                $fileService = app(\App\Services\FileService::class);
+                if ($order->files) {
+                    foreach ($order->files as $oldFile) {
+                        $order->files()->detach($oldFile->id);
+                        $fileService->delete($oldFile->id);
+                    }
+                }
+            }
+
+            if ($request->hasFile('file')) {
+                $fileService = app(\App\Services\FileService::class);
+                
+                if ($order->files) {
+                    foreach ($order->files as $oldFile) {
+                        $order->files()->detach($oldFile->id);
+                        $fileService->delete($oldFile->id);
+                    }
+                }
+
+                $request->merge(['order_id' => $order->id]);
+                $fileService->create($request);
+            }
+            
+            return $order;
+        } else {
+            return response()->json(['errors' => $validatedData['errors']], 422);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $this->service->delete($id);
+        return response()->json(['status' => 'success']);
+    }
+}

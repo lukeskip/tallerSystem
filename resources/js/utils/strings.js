@@ -18,7 +18,10 @@ const strings = {
         address:"Dirección",
         phone:"Teléfono",
         contact_name:"Nombre de Contacto",
-        units:"Unidades",
+        units:"Metros",
+        brand:"Marca",
+        pattern:"Dibujo",
+        color:"Color",
         unit_price:"Valor Unitario",
         unit_cost:"Costo Unitario",
         total_comission:"Total con comisión",
@@ -62,5 +65,6 @@ const strings = {
         agent:"Agente de ventas",
         agent_comission_percentage:"Porcentaje de comisión de agente",
         hasIva:"Incluir IVA?",
+        has_iva:"Incluir IVA?",
 };
 export default strings;

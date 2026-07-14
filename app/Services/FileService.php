@@ -68,6 +68,13 @@ class FileService
                 $InvoiceItem->files()->attach($file->id);
             }
 
+            if(!empty($validatedData['data']['order_id'])){
+                $order = \App\Models\Order::find($validatedData['data']['order_id']);
+                if ($order) {
+                    $order->files()->attach($file->id);
+                }
+            }
+
             return $file;
         }else{
             return response()->json(['errors'=>$validatedData['errors']], 422);
@@ -133,6 +140,7 @@ class FileService
             'public_id' => 'required|string',
             'project_id' => 'nullable',
             'invoice_item_id' => 'nullable',
+            'order_id' => 'nullable',
         ]);
     
         if ($validator->fails()) {

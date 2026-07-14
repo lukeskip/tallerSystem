@@ -18,6 +18,16 @@
                         <a
                             href="#"
                             class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
+                            @click="toggleModalOrder"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                            Orden
+                        </a>
+                    </div>
+                    <div>
+                        <a
+                            href="#"
+                            class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
                             @click="toggleModalIncome"
                         >
                             <i class="fa-solid fa-plus"></i>
@@ -150,6 +160,28 @@
                         </button>
                         <button
                             :class="{
+                                'bg-main-color text-white': activeTab === 8,
+                                'bg-gray-100 text-gray-800 hover:bg-gray-200':
+                                    activeTab !== 8,
+                            }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(8)"
+                        >
+                            Órdenes
+                        </button>
+                        <button
+                            :class="{
+                                'bg-main-color text-white': activeTab === 9,
+                                'bg-gray-100 text-gray-800 hover:bg-gray-200':
+                                    activeTab !== 9,
+                            }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(9)"
+                        >
+                            Telas
+                        </button>
+                        <button
+                            :class="{
                                 'bg-main-color text-white': activeTab === 2,
                                 'bg-gray-100 text-gray-800 hover:bg-gray-200':
                                     activeTab !== 2,
@@ -231,6 +263,48 @@
                             />
                         </div>
 
+                        <!-- Tab 8 (Órdenes) -->
+                        <Container v-if="activeTab === 8">
+                            <TableComponent
+                                :items="invoice.orders"
+                                :inner="true"
+                                :root="'ordenes'"
+                                :searchField="['description', 'categories']"
+                                :actions="['edit', 'delete', 'download']"
+                                parentId="invoice_id"
+                            />
+                        </Container>
+
+                        <!-- Tab 9 (Telas) -->
+                        <Container v-if="activeTab === 9">
+                            <div class="mb-4 flex space-x-2">
+                                <a
+                                    href="#"
+                                    class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
+                                    @click="toggleModalFabric"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    Agregar Tela
+                                </a>
+                                <a
+                                    :href="`/download/invoice/${invoice.id}/fabrics`"
+                                    target="_blank"
+                                    class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800"
+                                >
+                                    <i class="fa-solid fa-download"></i>
+                                    Descargar Telas
+                                </a>
+                            </div>
+                            <TableComponent
+                                :items="invoice.fabrics"
+                                :inner="true"
+                                :root="'telas'"
+                                :searchField="['brand', 'pattern', 'color']"
+                                :actions="['edit', 'delete']"
+                                parentId="invoice_id"
+                            />
+                        </Container>
+
                         <!-- Tab 2 -->
                         <Container v-if="activeTab === 2">
                             <TableComponent
@@ -306,6 +380,20 @@
                         @close="toggleModalIncome()"
                     />
                 </Modal>
+                <Modal :show="showModalOrder" @close="showModalOrder = false">
+                    <Form
+                        :default="{ invoice_id: invoice.id }"
+                        :route="'ordenes'"
+                        @close="toggleModalOrder()"
+                    />
+                </Modal>
+                <Modal :show="showModalFabric" @close="showModalFabric = false">
+                    <Form
+                        :default="{ invoice_id: invoice.id }"
+                        :route="'telas'"
+                        @close="toggleModalFabric()"
+                    />
+                </Modal>
                 <Modal
                     :show="showModalOutcome"
                     @close="showModalOutcome = false"
@@ -368,6 +456,16 @@ const toggleModal = () => {
 };
 const toggleTab = (tab) => {
     activeTab.value = tab;
+};
+
+const showModalOrder = ref(false);
+const toggleModalOrder = () => {
+    showModalOrder.value = !showModalOrder.value;
+};
+
+const showModalFabric = ref(false);
+const toggleModalFabric = () => {
+    showModalFabric.value = !showModalFabric.value;
 };
 
 const showModalIncome = ref(false);
