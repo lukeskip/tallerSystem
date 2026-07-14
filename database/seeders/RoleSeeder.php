@@ -14,21 +14,21 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::create(['name' => 'superadmin','guard_name' => 'web']);
+        $role = Role::firstOrCreate(['name' => 'superadmin','guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());
         
-        $role = Role::create(['name' => 'admin','guard_name' => 'web']);
+        $role = Role::firstOrCreate(['name' => 'admin','guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());
         $role->revokePermissionTo(['edit user','create user','delete user']);
      
-        $role = Role::create(['name' => 'collaborator','guard_name' => 'web']);
+        $role = Role::firstOrCreate(['name' => 'collaborator','guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());
         $role->revokePermissionTo(['edit user','create user','delete user']);
         $role->revokePermissionTo(['delete project']);
         $role->revokePermissionTo(['delete invoice']);
         $role->revokePermissionTo(['delete provider']);
 
-        $role = Role::create(['name' => 'client','guard_name' => 'web']);
+        $role = Role::firstOrCreate(['name' => 'client','guard_name' => 'web']);
         
     }
 }
