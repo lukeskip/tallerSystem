@@ -139,6 +139,12 @@
                                 {{ invoice.outcomes_total }}
                             </td>
                         </tr>
+                        <tr class="bg-secondary-color border p-4">
+                            <td class="p-2">Utilidad Total:</td>
+                            <td class="p-2">
+                                {{ invoice.total_profit }}
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </template>
