@@ -228,8 +228,8 @@ class InvoiceService
                     "brand" => $item->brand,
                     "pattern" => $item->pattern,
                     "color" => $item->color,
-                    "units" => $item->units,
-                    "provider" => $item->provider->name ?? '',
+                    "metros" => $item->units,
+                    "provider" => $item->provider ? $item->provider->name : '',
                 ];
             });
 
