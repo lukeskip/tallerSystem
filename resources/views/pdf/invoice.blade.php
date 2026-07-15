@@ -9,6 +9,8 @@
             font-family: 'Figtree', sans-serif;
         }
 
+
+
         .totals {
             margin: 20px 0;
             margin-left: 50%;
@@ -33,6 +35,14 @@
 </head>
 
 <body class="font-sans antialiased">
+    
+    <htmlpagefooter name="myFooter" style="display:none">
+        <div style="text-align: center; font-size: 10pt; padding-bottom: 20px;">
+            {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Page' : 'Página' }} {PAGENO} {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'of' : 'de' }} {nbpg}
+        </div>
+    </htmlpagefooter>
+
+    <sethtmlpagefooter name="myFooter" value="on" show-this-page="1" />
 
     <div style="display:flex;flex-wrap:wrap;justify-content: space-between; align-items: center;">
         <div>
