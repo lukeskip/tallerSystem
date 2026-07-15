@@ -201,6 +201,7 @@ const columnsToHide = [
     "description",
     "comission",
     "total_raw",
+    "total_profit_raw",
     "agent_comission_raw",
 ];
 
