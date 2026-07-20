@@ -14,9 +14,9 @@ class ExtraController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('can:create extra', ['only' => ['create', 'store']]);
-        $this->middleware('can:edit extra', ['only' => ['edit', 'update']]);
-        $this->middleware('can:delete extra', ['only' => ['destroy']]);
+        // $this->middleware('can:create extra', ['only' => ['create', 'store']]);
+        // $this->middleware('can:edit extra', ['only' => ['edit', 'update']]);
+        // $this->middleware('can:delete extra', ['only' => ['destroy']]);
 
         $this->rules = [
             'invoice_id' => 'required|string',
