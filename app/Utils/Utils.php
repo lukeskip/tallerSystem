@@ -76,6 +76,10 @@ class Utils
                     $fieldsEnd[] = ['slug' => "user_id", 'type' => 'select', 'options' => $users];
                 } elseif ($field === 'hasIva' || $field === 'has_iva') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
+                } elseif ($field === 'type' && $table === 'invoice_extras') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'percentage', 'name' => 'Porcentaje'], ['id' => 'fixed', 'name' => 'Monto Fijo']]];
+                } elseif ($field === 'calculation_basis' && $table === 'invoice_extras') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'before_commission', 'name' => 'Antes de la comisión'], ['id' => 'after_commission', 'name' => 'Después de la comisión']]];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];
                 } else {

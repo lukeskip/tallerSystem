@@ -35,10 +35,12 @@
 </head>
 
 <body class="font-sans antialiased">
-    
+
     <htmlpagefooter name="myFooter" style="display:none">
         <div style="text-align: center; font-size: 10pt; padding-bottom: 20px;">
-            {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Page' : 'Página' }} {PAGENO} {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'of' : 'de' }} {nbpg}
+            {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Page' : 'Página' }}
+            {PAGENO} {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'of' : 'de' }}
+            {nbpg}
         </div>
     </htmlpagefooter>
 
@@ -80,13 +82,15 @@
             </h2>
             <h2 style="margin:0;font-size:1em;">{{$title}}</h2>
             <h3 style="margin:0;color:gray;font-size:.8em;">
-                {{ date('d/m/Y', strtotime($publishOptions['date'] ?? date('Y-m-d'))) }}</h3>
+                {{ date('d/m/Y', strtotime($publishOptions['date'] ?? date('Y-m-d'))) }}
+            </h3>
             <h2 style="margin:0;color:black;font-size:1em;margin-top:10px;">{{$invoice['project']['name']}}</h2>
             <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">{{$invoice['client']}}</h3>
             @if($invoice['executive'])
                 <h3 style="margin:0;color:black;font-size:.7em;margin-bottom:20px">
                     {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Executive' : 'Ejecutivo' }}
-                    {{$invoice['executive']}}</h3>
+                    {{$invoice['executive']}}
+                </h3>
             @endif
         </div>
     </div>
@@ -191,30 +195,34 @@
     <div style="page-break-inside: avoid;">
         <div>
             <table style="font-size:12px;border-collapse: collapse; width:100%" class="totals">
-            <tr style="background:#f3f4f6;">
-                <td style="width:60%">
-                    Subtotal:
-                </td>
-                <td style="width:40%">
-                    {{$invoice['subtotal']}}
-                </td>
-            </tr>
-            <tr style="background:white">
-                <td style="width:60%">
-                    Fee ({{$invoice['fee']}}):
-                </td>
-                <td style="width:40%">
-                    {{$invoice['fee_amount']}}
-                </td>
-            </tr>
-            <tr style="background:#f3f4f6">
-                <td style="width:60%">
-                    Subtotal:
-                </td>
-                <td style="width:40%">
-                    {{$invoice['subtotal_fee']}}
-                </td>
-            </tr>
+                <tr style="background:#f3f4f6;">
+                    <td style="width:60%">
+                        Subtotal:
+                    </td>
+                    <td style="width:40%">
+                        {{$invoice['subtotal']}}
+                    </td>
+                </tr>
+                <tr style="background:white">
+                    <td style="width:60%">
+                        Fee ({{$invoice['fee']}}):
+                    </td>
+                    <td style="width:40%">
+                        {{$invoice['fee_amount']}}
+                    </td>
+                </tr>
+            @if(isset($invoice['extras']) && count($invoice['extras']) > 0)
+                @foreach($invoice['extras'] as $extra)
+                    <tr>
+                        <td style="width:60%">
+                            {{ $extra['label'] }} ({{ $extra['value'] }}):
+                        </td>
+                        <td style="width:40%">
+                            {{ $extra['amount'] }}
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
             @if($invoice['hasIva'])
                 <tr>
                     <td style="width:60%">
@@ -225,70 +233,71 @@
                     </td>
                 </tr>
             @endif
-            <tr style="background-color:#af984e;">
-                <td style="width:60%;color:white">
-                    Total:
-                </td>
-                <td style="width:40%;color:white">
-                    {{$invoice['total']}}
-                </td>
-            </tr>
-            <tr>
-                <td style="width:60%">
-                    {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Paid' : 'Pagado' }}:
-                </td>
-                <td style="width:40%">
-                    {{$invoice['amount_paid']}}
-                </td>
-            </tr>
-            <tr style="background:#f3f4f6">
-                <td style="width:60%">
-                    {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Balance Due' : 'Balance' }}:
-                </td>
-                <td style="width:40%">
-                    {{$invoice['balance']}}
-                </td>
-            </tr>
+                <tr style="background-color:#af984e;">
+                    <td style="width:60%;color:white">
+                        Total:
+                    </td>
+                    <td style="width:40%;color:white">
+                        {{$invoice['total']}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:60%">
+                        {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Paid' : 'Pagado' }}:
+                    </td>
+                    <td style="width:40%">
+                        {{$invoice['amount_paid']}}
+                    </td>
+                </tr>
+                <tr style="background:#f3f4f6">
+                    <td style="width:60%">
+                        {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Balance Due' : 'Balance' }}:
+                    </td>
+                    <td style="width:40%">
+                        {{$invoice['balance']}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <table style="font-size:12px;border-collapse: collapse; width:100%">
+            <tbody>
+                @if(isset($publishOptions['language']) && $publishOptions['language'] !== 'es')
+                    <tr>
+                        <td>* Quote valid for 8 days</td>
+                    </tr>
+                    <tr>
+                        <td>* 70% advance payment required for the total order</td>
+                    </tr>
+                    <tr>
+                        <td>* Notify when paying the advance if you will require an invoice</td>
+                    </tr>
+                    <tr>
+                        <td>* Any changes to this quote made by the client must be paid immediately for execution</td>
+                    </tr>
+                    <tr>
+                        <td>* Delivery times subject to supplier confirmation</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>* Cotización válida por 8 días</td>
+                    </tr>
+                    <tr>
+                        <td>* Se requiere anticipo de 70% del total del pedido</td>
+                    </tr>
+                    <tr>
+                        <td>* Notificar al pagar el anticipo si va a requerir factura</td>
+                    </tr>
+                    <tr>
+                        <td>* Cualquier cambio ajeno a esta cotización realizado por el cliente, el pago deberá ser cubierto
+                            por
+                            él al momento, para su ejecución</td>
+                    </tr>
+                    <tr>
+                        <td>* Tiempos de entrega sujetos a confirmación de proveedores</td>
+                    </tr>
+                @endif
+            </tbody>
         </table>
-    </div>
-    <table style="font-size:12px;border-collapse: collapse; width:100%">
-        <tbody>
-            @if(isset($publishOptions['language']) && $publishOptions['language'] !== 'es')
-                <tr>
-                    <td>* Quote valid for 8 days</td>
-                </tr>
-                <tr>
-                    <td>* 70% advance payment required for the total order</td>
-                </tr>
-                <tr>
-                    <td>* Notify when paying the advance if you will require an invoice</td>
-                </tr>
-                <tr>
-                    <td>* Any changes to this quote made by the client must be paid immediately for execution</td>
-                </tr>
-                <tr>
-                    <td>* Delivery times subject to supplier confirmation</td>
-                </tr>
-            @else
-                <tr>
-                    <td>* Cotización válida por 8 días</td>
-                </tr>
-                <tr>
-                    <td>* Se requiere anticipo de 70% del total del pedido</td>
-                </tr>
-                <tr>
-                    <td>* Notificar al pagar el anticipo si va a requerir factura</td>
-                </tr>
-                <tr>
-                    <td>* Cualquier cambio ajeno a esta cotización realizado por el cliente, el pago deberá ser cubierto por
-                        él al momento, para su ejecución</td>
-                </tr>
-                <tr>
-                    <td>* Tiempos de entrega sujetos a confirmación de proveedores</td>
-                </tr>
-            @endif
-        </tbody>
-    </table>
     </div>
 </body>
 

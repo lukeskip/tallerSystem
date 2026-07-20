@@ -16,6 +16,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FabricController;
+use App\Http\Controllers\ExtraController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -54,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/notas', NoteController::class);
     Route::resource('/usuarios', UserController::class);
     Route::resource('/telas', FabricController::class);
+    Route::resource('/extras', ExtraController::class);
     Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
     Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
     Route::put('/categorias-order/', [CategoryController::class, 'categoriesOrder'])->name("categories-order");
