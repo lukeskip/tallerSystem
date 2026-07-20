@@ -79,5 +79,9 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'edit fabric','guard_name' => 'web']);
         Permission::firstOrCreate(['name' => 'delete fabric','guard_name' => 'web']);
         
+        Permission::firstOrCreate(['name' => 'create extra','guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'read extra','guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'edit extra','guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'delete extra','guard_name' => 'web']);
     }
 }
