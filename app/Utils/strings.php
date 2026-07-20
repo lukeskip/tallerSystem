@@ -28,4 +28,8 @@ return [
     'rejected' => 'Rechazada',
     'has_iva' => 'Incluir IVA?',
     'hasIva' => 'Incluir IVA?',
+    'value' => 'Valor',
+    'calculation_basis' => 'Base de Cálculo',
+    'before_commission' => 'Antes de la comisión',
+    'after_commission' => 'Después de la comisión',
 ];

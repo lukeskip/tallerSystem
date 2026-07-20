@@ -115,6 +115,14 @@
                                 {{ invoice.iva_amount }}
                             </td>
                         </tr>
+                        <template v-if="invoice.extras && invoice.extras.length">
+                            <tr v-for="extra in invoice.extras" :key="extra.id" class="bg-secondary-color border p-4">
+                                <td class="p-2">{{ extra.label }} ({{ extra.value }} - {{ extra.calculation_basis === 'before_commission' ? 'Antes' : 'Después' }}):</td>
+                                <td class="p-2">
+                                    {{ extra.amount }}
+                                </td>
+                            </tr>
+                        </template>
                         <tr class="bg-secondary-color">
                             <td class="p-2">Total:</td>
                             <td class="p-2">
@@ -252,6 +260,17 @@
                         >
                             Comisiones
                         </button>
+                        <button
+                            :class="{
+                                'bg-main-color text-white': activeTab === 10,
+                                'bg-gray-100 text-gray-800 hover:bg-gray-200':
+                                    activeTab !== 10,
+                            }"
+                            class="py-2 px-4 focus:outline-none"
+                            @click="toggleTab(10)"
+                        >
+                            Extras
+                        </button>
                     </div>
 
                     <!-- Tabs content -->
@@ -365,6 +384,26 @@
                                 :root="`cotizaciones.comissionsByUser`"
                             />
                         </Container>
+                        <!-- Tab 10 (Extras) -->
+                        <Container v-if="activeTab === 10">
+                            <div class="mb-4">
+                                <a
+                                    href="#"
+                                    class="inline-block py-2 px-4 bg-black text-white font-semibold rounded-md shadow-md hover:bg-blue-600"
+                                    @click="toggleModalExtra"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    Agregar Extra
+                                </a>
+                            </div>
+                            <TableComponent
+                                :items="invoice.extras"
+                                :inner="true"
+                                :root="'extras'"
+                                :actions="['edit', 'delete']"
+                                parentId="invoice_id"
+                            />
+                        </Container>
                     </div>
                 </div>
 
@@ -421,6 +460,13 @@
                     @close="showModalPublish = false"
                 >
                     <FormPublish :invoiceId="invoice.id" @close="toggleModalPublish" />
+                </Modal>
+                <Modal :show="showModalExtra" @close="showModalExtra = false">
+                    <Form
+                        :default="{ invoice_id: invoice.id }"
+                        :route="'extras'"
+                        @close="toggleModalExtra()"
+                    />
                 </Modal>
             </template>
         </AuthenticatedLayout>
@@ -490,6 +536,11 @@ const toggleModalCategories = () => {
 const showModalPublish = ref(false);
 const toggleModalPublish = () => {
     showModalPublish.value = !showModalPublish.value;
+};
+
+const showModalExtra = ref(false);
+const toggleModalExtra = () => {
+    showModalExtra.value = !showModalExtra.value;
 };
 
 const deleteHandle = () => {

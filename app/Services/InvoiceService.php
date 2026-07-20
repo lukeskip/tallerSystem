@@ -99,6 +99,7 @@ class InvoiceService
             'incomes',
             'project',
             'outcomes',
+            'extras',
             'orders' => function ($query) {
                 $query->with(['provider', 'categories', 'files']);
             },
@@ -252,6 +253,25 @@ class InvoiceService
                 ->filter()
                 ->values();
 
+            $extras = $invoice->extras->map(function ($item) use ($invoice) {
+                $calcValue = 0;
+                if ($item->type === 'percentage') {
+                    $calcValue = $invoice->subtotal * ($item->value / 100);
+                } else {
+                    $calcValue = $item->value;
+                }
+                return [
+                    "id" => $item->id,
+                    "label" => $item->label,
+                    "type" => $item->type,
+                    "calculation_basis" => $item->calculation_basis,
+                    "value" => $item->type === 'percentage' ? Utils::publishPercentage($item->value) : Utils::publishMoney($item->value),
+                    "value_raw" => $item->value,
+                    "amount" => Utils::publishMoney($calcValue),
+                    "amount_raw" => $calcValue,
+                ];
+            });
+
             return [
                 'id' => $invoice->id,
                 'project' => $invoice->project,
@@ -268,6 +288,7 @@ class InvoiceService
                 'debts' => $debtsByProvider,
                 'orders' => $orders,
                 'fabrics' => $fabrics,
+                'extras' => $extras,
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal" => Utils::publishMoney($invoice->subtotal),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),

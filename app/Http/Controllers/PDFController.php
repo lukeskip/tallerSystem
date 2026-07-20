@@ -92,6 +92,18 @@ class PDFController extends Controller
         $invoice['amount_paid'] = $formatMoney($invoice['amount_paid'] ?? 0);
         $invoice['balance'] = $formatMoney($invoice['balance'] ?? 0);
 
+        if (isset($invoice['extras'])) {
+            $invoice['extras'] = collect($invoice['extras'])->map(function($extra) use ($formatMoney) {
+                return [
+                    'id' => $extra['id'],
+                    'label' => $extra['label'],
+                    'value' => $extra['value'],
+                    'calculation_basis' => $extra['calculation_basis'],
+                    'amount' => $formatMoney($extra['amount_raw'] ?? 0),
+                ];
+            })->toArray();
+        }
+
         $data = [
             'invoice' => $invoice,
             'title' => $publishOptions['title'],

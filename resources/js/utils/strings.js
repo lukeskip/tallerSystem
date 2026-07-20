@@ -64,8 +64,13 @@ const strings = {
         total_profit:"Utilidad",
         agent_comission:"Comisión de Agente",
         agent:"Agente de ventas",
-        agent_comission_percentage:"Porcentaje de comisión de agente",
         hasIva:"Incluir IVA?",
         has_iva:"Incluir IVA?",
+        value:"Valor / Porcentaje",
+        calculation_basis:"Momento de Aplicación",
+        before_commission:"Antes de Comisión",
+        after_commission:"Después de Comisión",
+        fixed:"Monto Fijo",
+        percentage:"Porcentaje",
 };
 export default strings;

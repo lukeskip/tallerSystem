@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Order;
 use Carbon\Carbon;
 use App\Utils\Utils;
+use App\Models\Extra;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
@@ -61,48 +62,71 @@ class Invoice extends Model
         }
     }
 
-    public function getTotalAttribute()
+    public function getSubtotalWithExtrasBeforeCommissionAttribute()
     {
         $subtotal = $this->getSubtotalAttribute();
+        $extras = $this->extras;
+        foreach ($extras as $extra) {
+            if ($extra->type === 'percentage') {
+                $subtotal += ($this->getSubtotalAttribute() * ($extra->value / 100));
+            } else {
+                $subtotal += $extra->value;
+            }
+        }
+        return $subtotal;
+    }
+
+    public function getTotalAttribute()
+    {
+        $subtotalFeeAndExtras = $this->getSubtotalFeeAttribute();
         $ivaAmount = $this->hasIva ? $this->getIvaAmountAttribute() : 0;
-        $feeAmount = $this->getFeeAmountAttribute();
 
-
-        return $subtotal + $ivaAmount + $feeAmount;
+        return $subtotalFeeAndExtras + $ivaAmount;
     }
 
     public function getBalanceAttribute()
     {
-
         $total = $this->getTotalAttribute();
         $totalIncomes = $this->getAmountPaidAttribute();
 
-        return $balance = $total - $totalIncomes;
+        return $total - $totalIncomes;
     }
+
     public function getFeeAmountAttribute()
     {
-
         if ($this->fee > 0) {
             $fee = $this->fee / 100;
+            // Fee is computed over subtotal base ONLY
             $amountFee = $this->getSubtotalAttribute() * $fee;
-
             return $amountFee;
         } else {
             return 0;
         }
     }
+
     public function getSubtotalFeeAttribute()
     {
+        // Subtotal + Fee + Extras
         $subtotal = $this->getSubtotalAttribute();
         $fee = $this->getFeeAmountAttribute();
-        return $subtotal + $fee;
+        
+        $extrasVal = 0;
+        foreach ($this->extras as $extra) {
+            if ($extra->type === 'percentage') {
+                $extrasVal += ($this->getSubtotalAttribute() * ($extra->value / 100));
+            } else {
+                $extrasVal += $extra->value;
+            }
+        }
+        
+        return $subtotal + $fee + $extrasVal;
     }
 
     public function getIvaAmountAttribute()
     {
-
         if ($this->iva > 0) {
             $iva = $this->iva / 100;
+            // IVA is calculated over (Subtotal base + Fee + Extras)
             $amountIVA = $this->getSubtotalFeeAttribute() * $iva;
             return $amountIVA;
         } else {
@@ -149,5 +173,9 @@ class Invoice extends Model
     public function outcomes()
     {
         return $this->hasMany(Outcome::class);
+    }
+    public function extras()
+    {
+        return $this->hasMany(Extra::class);
     }
 }
