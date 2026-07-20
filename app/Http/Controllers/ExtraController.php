@@ -50,13 +50,14 @@ class ExtraController extends Controller
     {
         $extra = Extra::find($id);
         $extraData = [
+            'invoice_id' => ['value' => $extra->invoice_id, 'type' => 'hidden'],
             'label' => ['value' => $extra->label, 'type' => 'string'],
             'value' => ['value' => $extra->value, 'type' => 'number'],
             'type' => ['value' => $extra->type, 'type' => 'select'],
             'calculation_basis' => ['value' => $extra->calculation_basis, 'type' => 'select'],
         ];
 
-        $fields = Utils::getFields('invoice_extras');
+        $fields = Utils::getFields('invoice_extras', $extra->invoice_id);
         return response()->json(['item' => $extraData, 'fields' => $fields]);
     }
 

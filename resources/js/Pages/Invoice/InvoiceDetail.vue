@@ -466,6 +466,7 @@
                         :default="{ invoice_id: invoice.id }"
                         :route="'extras'"
                         @close="toggleModalExtra()"
+                        :parentId="invoice.id"
                     />
                 </Modal>
             </template>

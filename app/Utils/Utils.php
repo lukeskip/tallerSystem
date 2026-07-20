@@ -76,6 +76,8 @@ class Utils
                     $fieldsEnd[] = ['slug' => "user_id", 'type' => 'select', 'options' => $users];
                 } elseif ($field === 'hasIva' || $field === 'has_iva') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
+                } elseif ($field === 'value' && $table === 'invoice_extras') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'money'];
                 } elseif ($field === 'type' && $table === 'invoice_extras') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'percentage', 'name' => 'Porcentaje'], ['id' => 'fixed', 'name' => 'Monto Fijo']]];
                 } elseif ($field === 'calculation_basis' && $table === 'invoice_extras') {
