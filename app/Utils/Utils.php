@@ -58,6 +58,8 @@ class Utils
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'cash', 'name' => Utils::getLabel('cash')], ['id' => 'card', 'name' => Utils::getLabel('card')], ['id' => 'transfer', 'name' => Utils::getLabel('transfer')], ['id' => 'check', 'name' => Utils::getLabel('check')]]];
                 } elseif ($field === 'url' && $table === 'files') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'file'];
+                } elseif ($field === 'currency' && $table === 'invoices') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'MXN', 'name' => 'MXN'], ['id' => 'USD', 'name' => 'USD'], ['id' => 'EUR', 'name' => 'EUR']]];
                 } elseif ($field === 'status') {
                     if ($table === 'incomes' || $table === 'outcomes') {
                         $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'pending', 'name' => Utils::getLabel('pending')], ['id' => 'completed', 'name' => Utils::getLabel('completed')]]];

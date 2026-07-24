@@ -52,6 +52,10 @@ const props = defineProps({
     invoiceId: {
         type: [String, Number],
         required: true,
+    },
+    invoiceCurrency: {
+        type: String,
+        default: 'MXN',
     }
 });
 
@@ -59,7 +63,7 @@ defineEmits(['close']);
 
 const publishForm = ref({
     title: '',
-    currency: 'MXN',
+    currency: props.invoiceCurrency,
     exchange_rate: 1,
     language: 'es',
     date: new Date().toISOString().split('T')[0]
@@ -72,19 +76,19 @@ const currencyOptions = [
 ];
 
 watch(() => publishForm.value.currency, async (newCurrency) => {
-    if (newCurrency === 'USD' || newCurrency === 'EUR') {
-        try {
-            const res = await fetch(`https://open.er-api.com/v6/latest/${newCurrency}`);
-            const data = await res.json();
-            if (data && data.rates && data.rates.MXN) {
-                // Round to 2 decimals to make it user-friendly in the input
-                publishForm.value.exchange_rate = Math.round(data.rates.MXN * 100) / 100;
-            }
-        } catch (e) {
-            console.error("Error obteniendo el tipo de cambio:", e);
-        }
-    } else {
+    if (newCurrency === props.invoiceCurrency) {
         publishForm.value.exchange_rate = 1;
+        return;
+    }
+    try {
+        const res = await fetch(`https://open.er-api.com/v6/latest/${newCurrency}`);
+        const data = await res.json();
+        if (data && data.rates && data.rates[props.invoiceCurrency]) {
+            // Round to 4 decimals to support precise exchange rates
+            publishForm.value.exchange_rate = Math.round(data.rates[props.invoiceCurrency] * 10000) / 10000;
+        }
+    } catch (e) {
+        console.error("Error obteniendo el tipo de cambio:", e);
     }
 });
 

@@ -27,6 +27,7 @@ class InvoiceController extends Controller
         $this->userService = $userService;
         $this->rules = [
             'status' => 'required|string',
+            'currency' => 'nullable|string|max:3',
             'iva' => 'nullable',
             'fee' => 'nullable',
             'hasIva' => 'nullable',

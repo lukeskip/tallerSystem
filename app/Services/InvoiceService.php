@@ -31,6 +31,7 @@ class InvoiceService
         $invoice = Invoice::find($id);
         $invoice = [
             'status' => ['value' => $invoice->status, 'type' => 'select'],
+            'currency' => ['value' => $invoice->currency, 'type' => 'select'],
             'iva' => ['value' => $invoice->iva, 'type' => 'number'],
             'fee' => ['value' => $invoice->fee, 'type' => 'number'],
             'hasIva' => ['value' => $invoice->hasIva, 'type' => 'boolean'],
@@ -52,6 +53,10 @@ class InvoiceService
 
         if (!isset($request['fee']) || !$request['fee']) {
             $request['fee'] = 0;
+        }
+
+        if (!isset($request['currency']) || !$request['currency']) {
+            $request['currency'] = 'MXN';
         }
 
         return $invoice = Invoice::create($request);
@@ -297,6 +302,7 @@ class InvoiceService
                 "iva_amount" => Utils::publishMoney($invoice->iva_amount),
                 "iva" => Utils::publishPercentage($invoice->iva),
                 "hasIva" => $invoice->hasIva,
+                "currency" => $invoice->currency ?? 'MXN',
                 "fee" => Utils::publishPercentage($invoice->fee),
                 "subtotal_fee" => Utils::publishMoney($invoice->subtotal_fee),
                 "amount_paid" => Utils::publishMoney($invoice->amount_paid),
