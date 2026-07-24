@@ -84,7 +84,7 @@
                     </h2>
                     <h3>
                         {{ invoice.format_date }} / Estatus:
-                        {{ showLabel(invoice.status) }}
+                        {{ showLabel(invoice.status) }} / Moneda: {{ invoice.currency }}
                     </h3>
                 </div>
             </template>
@@ -459,7 +459,7 @@
                     :show="showModalPublish"
                     @close="showModalPublish = false"
                 >
-                    <FormPublish :invoiceId="invoice.id" @close="toggleModalPublish" />
+                    <FormPublish :invoiceId="invoice.id" :invoiceCurrency="invoice.currency" @close="toggleModalPublish" />
                 </Modal>
                 <Modal :show="showModalExtra" @close="showModalExtra = false">
                     <Form

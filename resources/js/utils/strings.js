@@ -72,5 +72,6 @@ const strings = {
         after_commission:"Después de Comisión",
         fixed:"Monto Fijo",
         percentage:"Porcentaje",
+        currency:"Moneda",
 };
 export default strings;

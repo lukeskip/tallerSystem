@@ -32,4 +32,5 @@ return [
     'calculation_basis' => 'Base de Cálculo',
     'before_commission' => 'Antes de la comisión',
     'after_commission' => 'Después de la comisión',
+    'currency' => 'Moneda',
 ];

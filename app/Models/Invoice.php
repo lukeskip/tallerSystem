@@ -25,6 +25,7 @@ class Invoice extends Model
         'id',
         'project_id',
         'status',
+        'currency',
         'agent_comission',
         'iva',
         'fee',
