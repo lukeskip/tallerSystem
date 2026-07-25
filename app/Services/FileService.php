@@ -43,7 +43,7 @@ class FileService
                 $request['extension'] = $extension;
                 
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
         }

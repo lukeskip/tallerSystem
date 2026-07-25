@@ -69,6 +69,8 @@ class InvoiceItemController extends Controller
                 $request->merge(['invoice_item_id' => $item->id]);
                 $fileService = app(\App\Services\FileService::class);
                 $fileService->create($request);
+            } elseif ($request->filled('mobile_file_id')) {
+                $item->files()->sync([$request->input('mobile_file_id')]);
             }
 
             return $item;
@@ -129,6 +131,15 @@ class InvoiceItemController extends Controller
 
                 $request->merge(['invoice_item_id' => $item->id]);
                 $fileService->create($request);
+            } elseif ($request->filled('mobile_file_id')) {
+                $fileService = app(\App\Services\FileService::class);
+                if ($item->files) {
+                    foreach ($item->files as $oldFile) {
+                        $item->files()->detach($oldFile->id);
+                        $fileService->delete($oldFile->id);
+                    }
+                }
+                $item->files()->sync([$request->input('mobile_file_id')]);
             }
 
             return $item;
