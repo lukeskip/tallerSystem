@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FabricController;
 use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\MobileUploadController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -72,5 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/mobile-upload/init', [MobileUploadController::class, 'init'])->name('mobile.upload.init');
+Route::get('/mobile-upload/status/{token}', [MobileUploadController::class, 'status'])->name('mobile.upload.status');
+Route::get('/mobile-upload/{token}', [MobileUploadController::class, 'mobileShow'])->name('mobile.upload.show');
+Route::post('/mobile-upload/{token}', [MobileUploadController::class, 'mobileStore'])->name('mobile.upload.store');
 
 require __DIR__ . '/auth.php';

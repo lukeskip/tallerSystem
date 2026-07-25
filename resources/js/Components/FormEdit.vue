@@ -21,12 +21,45 @@
                         :autocomplete="field.autocomplete"
                     />
 
-                    <FileInput
-                        v-if="field.type === 'file'"
-                        :initialUrl="formData[field.slug]"
-                        v-on:file-selected="handleFileSelected"
-                        v-on:file-removed="handleFileRemoved"
-                    />
+                    <div v-if="field.type === 'file'">
+                        <FileInput
+                            :initialUrl="formData[field.slug]"
+                            v-on:file-selected="handleFileSelected"
+                            v-on:file-removed="handleFileRemoved"
+                        />
+
+                        <div class="mt-2 flex flex-col space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <button type="button" @click="startMobileUpload(field.slug)" class="px-3 py-1.5 bg-slate-800 text-slate-100 text-xs font-semibold rounded-lg hover:bg-slate-700 transition flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-qrcode text-amber-400"></i>
+                                    <span>Subir desde celular</span>
+                                </button>
+                                <span v-if="mobileUploadStatus === 'uploading'" class="text-xs text-amber-500 animate-pulse flex items-center space-x-1">
+                                    <i class="fa-solid fa-spinner animate-spin"></i>
+                                    <span>Esperando foto...</span>
+                                </span>
+                                <span v-else-if="mobileUploadStatus === 'completed'" class="text-xs text-green-600 flex items-center space-x-1">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Foto recibida</span>
+                                </span>
+                            </div>
+
+                            <!-- QR Modal / Section -->
+                            <div v-if="showQrCode" class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col items-center text-center">
+                                <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(mobileUploadUrl)}`" alt="Código QR" class="w-40 h-40 border border-slate-300 rounded-lg p-1 bg-white mb-2 shadow-sm">
+                                <p class="text-xs text-slate-600 font-medium">Escanea con tu celular para tomar/subir foto</p>
+                                <button type="button" @click="cancelMobileUpload" class="mt-2 text-xs text-red-500 hover:text-red-600 font-semibold underline">Cancelar</button>
+                            </div>
+
+                            <!-- Mobile image preview -->
+                            <div v-if="mobilePreviewUrl" class="mt-2 relative inline-block">
+                                <img :src="mobilePreviewUrl" class="h-24 w-auto rounded-lg border border-slate-300 object-cover">
+                                <button type="button" @click="clearMobileUpload(field.slug)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-1 text-xs hover:bg-red-600 transition shadow">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <NumberInput
                         v-else-if="
@@ -101,7 +134,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import VueMultiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.css';
 import { router } from "@inertiajs/vue3";
-import { ref, onBeforeMount, onMounted, defineEmits, watch } from "vue";
+import { ref, onBeforeMount, onMounted, defineEmits, watch, onBeforeUnmount } from "vue";
 import axios from "axios";
 import strings from "@/utils/strings.js";
 import showLabel from "@/helpers/showLabel";
@@ -283,4 +316,68 @@ const handleFileRemoved = () => {
     formData.value["file"] = null;
     formData.value["remove_file"] = true;
 };
+
+const showQrCode = ref(false);
+const mobileUploadUrl = ref("");
+const mobileUploadToken = ref("");
+const mobileUploadStatus = ref(""); // "uploading", "completed"
+const mobilePreviewUrl = ref("");
+let pollingInterval = null;
+
+const startMobileUpload = async (fieldSlug) => {
+    try {
+        const response = await axios.post('/mobile-upload/init', {
+            invoice_item_id: props.editId && props.route === 'conceptos' ? props.editId : null
+        });
+        mobileUploadUrl.value = response.data.url;
+        mobileUploadToken.value = response.data.token;
+        showQrCode.value = true;
+        mobileUploadStatus.value = "uploading";
+        
+        // Start polling
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(() => checkMobileUploadStatus(fieldSlug), 3000);
+    } catch (error) {
+        console.error("Error initiating mobile upload:", error);
+    }
+};
+
+const checkMobileUploadStatus = async (fieldSlug) => {
+    if (!mobileUploadToken.value) return;
+    try {
+        const response = await axios.get(`/mobile-upload/status/${mobileUploadToken.value}`);
+        if (response.data.status === 'completed' && response.data.file) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+            showQrCode.value = false;
+            mobileUploadStatus.value = "completed";
+            mobilePreviewUrl.value = response.data.file.url;
+            
+            // Set file data in form
+            formData.value['mobile_file_id'] = response.data.file.id;
+        }
+    } catch (error) {
+        console.error("Error checking mobile upload status:", error);
+    }
+};
+
+const cancelMobileUpload = () => {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+    }
+    showQrCode.value = false;
+    mobileUploadStatus.value = "";
+    mobileUploadToken.value = "";
+};
+
+const clearMobileUpload = (fieldSlug) => {
+    cancelMobileUpload();
+    mobilePreviewUrl.value = "";
+    delete formData.value['mobile_file_id'];
+};
+
+onBeforeUnmount(() => {
+    if (pollingInterval) clearInterval(pollingInterval);
+});
 </script>
