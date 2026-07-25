@@ -27,6 +27,7 @@ class PDFController extends Controller
             'exchange_rate' => $request->input('exchange_rate', 1),
             'language' => $request->input('language', 'es'),
             'date' => $request->input('date', date('Y-m-d')),
+            'include_images' => $request->boolean('include_images', false),
         ];
 
         $isEnglish = $publishOptions['language'] !== 'es';
