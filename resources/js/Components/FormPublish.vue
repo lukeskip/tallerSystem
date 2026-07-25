@@ -26,6 +26,11 @@
             <label class="block text-gray-700 text-sm font-bold mb-2">Idioma</label>
             <Select v-model="publishForm.language" :options="languageOptions" :default="'es'" />
         </div>
+
+        <div class="mb-4 flex items-center justify-between">
+            <label class="block text-gray-700 text-sm font-bold">Incluir fotos grandes al final</label>
+            <ToggleSwitch v-model:checked="publishForm.include_images" />
+        </div>
         
         <div class="mt-5 flex justify-end">
             <SecondaryButton @click="$emit('close')" class="mr-2">Cancelar</SecondaryButton>
@@ -47,6 +52,7 @@ import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import ToggleSwitch from "@/Components/ToggleSwitch.vue";
 
 const props = defineProps({
     invoiceId: {
@@ -66,7 +72,8 @@ const publishForm = ref({
     currency: props.invoiceCurrency,
     exchange_rate: 1,
     language: 'es',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    include_images: false
 });
 
 const currencyOptions = [
@@ -106,6 +113,7 @@ const publishUrl = computed(() => {
         exchange_rate: publishForm.value.exchange_rate,
         language: publishForm.value.language,
         date: publishForm.value.date,
+        include_images: publishForm.value.include_images ? '1' : '0',
     });
     return `${baseUrl}?${params.toString()}`;
 });

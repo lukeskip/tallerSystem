@@ -299,6 +299,64 @@
             </tbody>
         </table>
     </div>
+
+    @if(!empty($publishOptions['include_images']))
+        @php
+            $itemsWithImages = $invoiceItems->filter(function($item) {
+                return !empty($item['image']);
+            })->values();
+        @endphp
+
+        @if($itemsWithImages->count() > 0)
+            @foreach($itemsWithImages->chunk(2) as $chunkIndex => $chunk)
+                @php $chunk = $chunk->values(); @endphp
+                <pagebreak />
+                <div>
+                    <h2 style="font-size: 18px; color: #524627; border-bottom: 2px solid #af984e; padding-bottom: 5px; margin-bottom: 20px;">
+                        {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Images' : 'Imágenes' }}
+                    </h2>
+                    
+                    @if(isset($chunk[0]))
+                        @php $item1 = $chunk[0]; @endphp
+                        <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 65%; text-align: left; vertical-align: top; padding: 0;">
+                                    <img src="{{ $item1['image'] }}" style="width: 100%; max-height: 420px; border-radius: 8px;">
+                                </td>
+                                <td style="width: 35%; padding-left: 20px; vertical-align: top; text-align: left;">
+                                    <h4 style="margin: 0 0 10px 0; color: #524627; font-size: 15px; font-weight: bold;">
+                                        {{ $item1['Concepto'] ?? $item1['Item'] ?? '' }}
+                                    </h4>
+                                    <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
+                                        {{ $item1['Descripción'] ?? $item1['Description'] ?? '' }}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    @endif
+
+                    @if(isset($chunk[1]))
+                        @php $item2 = $chunk[1]; @endphp
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 35%; padding-right: 20px; vertical-align: top; text-align: right;">
+                                    <h4 style="margin: 0 0 10px 0; color: #524627; font-size: 15px; font-weight: bold;">
+                                        {{ $item2['Concepto'] ?? $item2['Item'] ?? '' }}
+                                    </h4>
+                                    <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
+                                        {{ $item2['Descripción'] ?? $item2['Description'] ?? '' }}
+                                    </p>
+                                </td>
+                                <td style="width: 65%; text-align: right; vertical-align: top; padding: 0;">
+                                    <img src="{{ $item2['image'] }}" style="width: 100%; max-height: 420px; border-radius: 8px;">
+                                </td>
+                            </tr>
+                        </table>
+                    @endif
+                </div>
+            @endforeach
+        @endif
+    @endif
 </body>
 
 </html>
