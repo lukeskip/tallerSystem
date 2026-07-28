@@ -26,6 +26,7 @@ class InvoiceItem extends Model
         'unit_price',
         'unit_cost',
         'unit_type',
+        'order',
     ];
     use HasFactory;
 

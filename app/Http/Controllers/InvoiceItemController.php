@@ -20,7 +20,7 @@ class InvoiceItemController extends Controller
     {
         $this->middleware('can:read invoice_item', ['only' => ['index', 'show']]);
         $this->middleware('can:create invoice_item', ['only' => ['create', 'store']]);
-        $this->middleware('can:edit invoice_item', ['only' => ['edit', 'update']]);
+        $this->middleware('can:edit invoice_item', ['only' => ['edit', 'update', 'invoiceItemsOrder']]);
         $this->middleware('can:delete invoice_item', ['only' => ['destroy']]);
 
         $this->service = $invoiceItemService;
@@ -159,5 +159,30 @@ class InvoiceItemController extends Controller
     public function importCSV(Request $request, $id)
     {
         return $this->service->importCSV($request, $id);
+    }
+
+    public function invoiceItemsOrder(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|numeric',
+            'items.*.order' => 'required|numeric',
+        ]);
+
+        $itemsRequest = collect($request->input('items'));
+        $itemsIds = $itemsRequest->pluck('id');
+
+        $items = InvoiceItem::whereIn('id', $itemsIds)->get();
+
+        $items->each(function ($item) use ($itemsRequest) {
+            $newOrder = $itemsRequest->firstWhere('id', $item->id)['order'] ?? null;
+            if (!is_null($newOrder)) {
+                $item->update(['order' => $newOrder]);
+            }
+        });
+
+        return response()->json([
+            'message' => 'Orden de items actualizado correctamente',
+        ]);
     }
 }

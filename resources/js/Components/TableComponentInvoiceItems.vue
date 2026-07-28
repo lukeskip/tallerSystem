@@ -30,6 +30,7 @@
         <table v-if="itemsRef.length">
             <thead>
                 <tr>
+                    <th class="w-10"></th>
                     <template v-for="(value, key) in itemsRef[0]" :key="key">
                         <th v-if="!columnsToHide.includes(key)">
                             {{ showLabel(key) }}
@@ -40,99 +41,102 @@
                     </template>
                 </tr>
             </thead>
-            <tbody>
-                <template v-for="(item, index) in itemsRef" :key="item.id">
-                    <tr
-                        class="category"
-                        v-if="
-                            itemsRef[1] &&
-                            labelCategory(item.category) &&
-                            lastCategory !== ''
-                        "
-                    >
-                        <td
-                            :id="lastCategory"
-                            :colspan="Object.keys(itemsRef[1]).length"
-                        >
-                            {{ lastCategory }}
-                            {{ getCategoryTotal(lastCategory) }}
+            <template v-for="group in groupedItems" :key="group.name">
+                <tbody>
+                    <tr class="category">
+                        <td :colspan="colspanCount">
+                            {{ group.name }}
+                            {{ getCategoryTotal(group.name) }}
                         </td>
                     </tr>
-                    <tr>
-                        <template v-for="(value, key) in item" :key="key">
-                            <td v-if="!columnsToHide.includes(key)">
-                                <template v-if="key === 'label'">
-                                    <div class="relative">
-                                        <div>
-                                            <Link
-                                                :href="
-                                                    route(
-                                                        `${root}.show`,
-                                                        item.id
-                                                    )
-                                                "
-                                                >{{ value }}</Link
-                                            >
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-else-if="key === 'total_comission'">
-                                    <div class="relative">
-                                        <div class="hasToolTip">
-                                            {{ publishMoney(value) }}
-                                            <div
-                                                class="toolTip !top-[-30px] !left-[50px]"
-                                            >
-                                                {{
-                                                    itemsRef[index]["comission"]
-                                                }}
-                                                {{ itemsRef[index]["user"] }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-else-if="key === 'unit_comission'">
-                                    <div class="relative">
-                                        <div class="hasToolTip">
-                                            {{ value }}
-                                            <div
-                                                class="toolTip !top-[-30px] !left-[50px]"
-                                            >
-                                                {{
-                                                    itemsRef[index]["comission"]
-                                                }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-else-if="key === 'image'">
-                                    <div v-if="value" @click="lightboxImage = value" class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 shadow-sm mx-auto cursor-pointer hover:opacity-80 transition-opacity">
-                                        <img :src="value" class="w-full h-full object-cover" alt="Avatar" />
-                                    </div>
-                                    <div v-else class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 shadow-sm mx-auto">
-                                        <i class="fa-solid fa-image text-gray-400"></i>
-                                    </div>
-                                </template>
-                                <template v-else>
-                                    <div class="relative">
-                                        {{ value }}
-                                    </div>
-                                </template>
+                </tbody>
+                <draggable
+                    v-model="group.items"
+                    tag="tbody"
+                    item-key="id"
+                    handle=".drag-handle"
+                    @end="onDragEnd(group)"
+                >
+                    <template #item="{ element: item, index }">
+                        <tr>
+                            <td class="drag-handle cursor-grab text-center w-10 text-gray-400 hover:text-black">
+                                <i class="fa-solid fa-grip-vertical"></i>
                             </td>
-                        </template>
-                        <td v-if="actions.length">
-                            <ActionButton
-                                v-for="(action, index) in actions"
-                                :key="index + action"
-                                :root="root"
-                                :action="action"
-                                :id="item.id"
-                                :parentId="[parentId, item[parentId]]"
-                            />
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
+                            <template v-for="(value, key) in item" :key="key">
+                                <td v-if="!columnsToHide.includes(key)">
+                                    <template v-if="key === 'label'">
+                                        <div class="relative">
+                                            <div>
+                                                <Link
+                                                    :href="
+                                                        route(
+                                                            `${root}.show`,
+                                                            item.id
+                                                        )
+                                                    "
+                                                    >{{ value }}</Link
+                                                >
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template v-else-if="key === 'total_comission'">
+                                        <div class="relative">
+                                            <div class="hasToolTip">
+                                                {{ publishMoney(value) }}
+                                                <div
+                                                    class="toolTip !top-[-30px] !left-[50px]"
+                                                >
+                                                    {{
+                                                        group.items[index]["comission"]
+                                                    }}
+                                                    {{ group.items[index]["user"] }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template v-else-if="key === 'unit_comission'">
+                                        <div class="relative">
+                                            <div class="hasToolTip">
+                                                {{ value }}
+                                                <div
+                                                    class="toolTip !top-[-30px] !left-[50px]"
+                                                >
+                                                    {{
+                                                        group.items[index]["comission"]
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template v-else-if="key === 'image'">
+                                        <div v-if="value" @click="lightboxImage = value" class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 shadow-sm mx-auto cursor-pointer hover:opacity-80 transition-opacity">
+                                            <img :src="value" class="w-full h-full object-cover" alt="Avatar" />
+                                        </div>
+                                        <div v-else class="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center bg-gray-100 shadow-sm mx-auto">
+                                            <i class="fa-solid fa-image text-gray-400"></i>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="relative">
+                                            {{ value }}
+                                        </div>
+                                    </template>
+                                </td>
+                            </template>
+                            <td v-if="actions.length">
+                                <ActionButton
+                                    v-for="(action, index) in actions"
+                                    :key="index + action"
+                                    :root="root"
+                                    :action="action"
+                                    :id="item.id"
+                                    :parentId="[parentId, item[parentId]]"
+                                />
+                            </td>
+                        </tr>
+                    </template>
+                </draggable>
+            </template>
         </table>
         <div v-else>
             <p class="text-xl">No hay información que mostrar</p>
@@ -153,7 +157,7 @@
 </template>
 
 <script setup>
-import { ref, onUpdated, watch, nextTick } from "vue";
+import { ref, onUpdated, watch, computed } from "vue";
 import showLabel from "@/helpers/showLabel.js";
 import { Link, router } from "@inertiajs/vue3";
 import Pagination from "@/Components/Pagination.vue";
@@ -163,6 +167,8 @@ import TextInput from "@/Components/TextInput.vue";
 import Multiselect from "@/Components/Multiselect.vue";
 import filter from "@/helpers/filter";
 import publishMoney from "@/helpers/publishMoney";
+import draggable from "vuedraggable";
+import axios from "axios";
 
 const props = defineProps({
     items: {
@@ -194,7 +200,6 @@ const selected = ref([]);
 const itemsRef = ref(getData(props.items));
 const searchTerm = ref("");
 const lightboxImage = ref(null);
-let lastCategory = "";
 const columnsToHide = [
     "id",
     "category",
@@ -205,10 +210,41 @@ const columnsToHide = [
     "agent_comission_raw",
 ];
 
+const groupedItems = ref([]);
+
+const updateGroupedItems = () => {
+    const itemsList = itemsRef.value;
+    const groups = [];
+    const categoriesSet = new Set();
+    itemsList.forEach(item => {
+        const catName = item.category || 'Sin Categoría';
+        categoriesSet.add(catName);
+    });
+    
+    for (const cat of categoriesSet) {
+        groups.push({
+            name: cat,
+            items: itemsList.filter(item => (item.category || 'Sin Categoría') === cat)
+        });
+    }
+    groupedItems.value = groups;
+};
+
+watch(itemsRef, () => {
+    updateGroupedItems();
+}, { deep: true, immediate: true });
+
+const colspanCount = computed(() => {
+    if (!itemsRef.value.length) return 0;
+    const visibleKeys = Object.keys(itemsRef.value[0]).filter(key => !columnsToHide.includes(key)).length;
+    let count = visibleKeys + 1; // +1 para el drag handle
+    if (props.actions.length) count++;
+    return count;
+});
+
 onUpdated(() => {
     if (searchTerm.value === "" && selected.value.length === 0) {
         itemsRef.value = getData(props.items);
-        lastCategory = "";
     }
 });
 
@@ -226,14 +262,6 @@ function getCategoryTotal(category) {
         .reduce((acc, item) => acc + item.total_raw, 0);
 
     return publishMoney(total);
-}
-
-function labelCategory(category) {
-    if (category !== lastCategory) {
-        lastCategory = category;
-        return true;
-    }
-    return false;
 }
 
 const submitSearch = (root) => {
@@ -256,7 +284,23 @@ watch(selected, () => {
         itemsRef.value = [...filteredData];
     }
 });
+
+const onDragEnd = (group) => {
+    const updatedItems = group.items.map((item, idx) => ({
+        id: item.id,
+        order: idx + 1
+    }));
+    
+    axios.put("/invoice-items-order", { items: updatedItems })
+        .then(() => {
+            router.reload({ preserveState: true });
+        })
+        .catch(err => {
+            console.error(err);
+        });
+};
 </script>
+
 <style>
 .hasToolTip {
     position: relative;
