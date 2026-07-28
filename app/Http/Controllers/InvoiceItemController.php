@@ -167,6 +167,7 @@ class InvoiceItemController extends Controller
             'items' => 'required|array',
             'items.*.id' => 'required|numeric',
             'items.*.order' => 'required|numeric',
+            'items.*.category_id' => 'nullable|numeric',
         ]);
 
         $itemsRequest = collect($request->input('items'));
@@ -175,9 +176,12 @@ class InvoiceItemController extends Controller
         $items = InvoiceItem::whereIn('id', $itemsIds)->get();
 
         $items->each(function ($item) use ($itemsRequest) {
-            $newOrder = $itemsRequest->firstWhere('id', $item->id)['order'] ?? null;
-            if (!is_null($newOrder)) {
-                $item->update(['order' => $newOrder]);
+            $itemData = $itemsRequest->firstWhere('id', $item->id);
+            if ($itemData) {
+                $item->update([
+                    'order' => $itemData['order'],
+                    'category_id' => $itemData['category_id']
+                ]);
             }
         });
 

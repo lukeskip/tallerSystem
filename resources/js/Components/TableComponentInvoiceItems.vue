@@ -55,7 +55,8 @@
                     tag="tbody"
                     item-key="id"
                     handle=".drag-handle"
-                    @end="onDragEnd(group)"
+                    :group="'invoice-items'"
+                    @end="onDragEnd"
                 >
                     <template #item="{ element: item, index }">
                         <tr>
@@ -215,18 +216,27 @@ const groupedItems = ref([]);
 const updateGroupedItems = () => {
     const itemsList = itemsRef.value;
     const groups = [];
-    const categoriesSet = new Set();
-    itemsList.forEach(item => {
-        const catName = item.category || 'Sin Categoría';
-        categoriesSet.add(catName);
-    });
     
-    for (const cat of categoriesSet) {
+    props.categories.forEach(cat => {
         groups.push({
-            name: cat,
-            items: itemsList.filter(item => (item.category || 'Sin Categoría') === cat)
+            id: cat.id,
+            name: cat.name,
+            items: itemsList.filter(item => item.category === cat.name)
+        });
+    });
+
+    // Agregar items que no tengan categoría en la lista
+    const uncategorizedItems = itemsList.filter(item => {
+        return !props.categories.some(cat => cat.name === item.category);
+    });
+    if (uncategorizedItems.length) {
+        groups.push({
+            id: null,
+            name: 'Sin Categoría',
+            items: uncategorizedItems
         });
     }
+    
     groupedItems.value = groups;
 };
 
@@ -285,13 +295,19 @@ watch(selected, () => {
     }
 });
 
-const onDragEnd = (group) => {
-    const updatedItems = group.items.map((item, idx) => ({
-        id: item.id,
-        order: idx + 1
-    }));
+const onDragEnd = () => {
+    const payload = [];
+    groupedItems.value.forEach(group => {
+        group.items.forEach((item, idx) => {
+            payload.push({
+                id: item.id,
+                category_id: group.id,
+                order: idx + 1
+            });
+        });
+    });
     
-    axios.put("/invoice-items-order", { items: updatedItems })
+    axios.put("/invoice-items-order", { items: payload })
         .then(() => {
             router.reload({ preserveState: true });
         })
