@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/import-csv/{invoiceId}', [InvoiceItemController::class, 'importCSV'])->name("import-csv");
     Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
     Route::put('/categorias-order/', [CategoryController::class, 'categoriesOrder'])->name("categories-order");
+    Route::put('/invoice-items-order/', [InvoiceItemController::class, 'invoiceItemsOrder'])->name("invoice-items-order");
 });
 
 

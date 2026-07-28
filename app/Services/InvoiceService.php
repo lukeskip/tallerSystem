@@ -117,6 +117,7 @@ class InvoiceService
                     ->leftJoin('categories', 'invoice_items.category_id', '=', 'categories.id')
                     ->orderBy('categories.order', 'asc')
                     ->orderBy('invoice_items.category_id', 'asc')
+                    ->orderBy('invoice_items.order', 'asc')
                     ->orderBy('invoice_items.created_at', 'desc')
                     ->select('invoice_items.*');
             }
