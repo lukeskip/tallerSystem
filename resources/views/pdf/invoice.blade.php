@@ -101,7 +101,7 @@
             <thead style="background-color:#524627; color:white;text-transform: uppercase;">
                 <tr style="background-color:#524627; ">
                     @foreach($invoiceItems->first() as $key => $value)
-                        @if($key !== 'id' && $key !== 'category')
+                        @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']))
                             <th style="border:0;padding:5px;text-align:center;font-size:12px;">
                                 <h3 style="color:white;margin:0;">
                                     {{ $key === 'image' ? (isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Image' : 'Imagen') : $key }}
@@ -114,6 +114,10 @@
             <tbody>
                 @php
                     $currentCategory = null;
+                    $showGlobalLabels = !empty($publishOptions['include_labels']);
+                    $visibleColsCount = collect($invoiceItems->first())->keys()->filter(function($k) {
+                        return !in_array($k, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']);
+                    })->count();
                 @endphp
                 @foreach($invoiceItems as $index => $item)
                     @if ($currentCategory !== $item['category'])
@@ -121,16 +125,20 @@
                             $currentCategory = $item['category'];
                         @endphp
                         <tr style="background-color: #af984e; color:white;border-top:solid white 5px;text-transform: uppercase;">
-                            <td colspan="{{ count($invoiceItems->first()) }}"
+                            <td colspan="{{ $visibleColsCount }}"
                                 style="text-align:center;font-size:12px;border-top:solid white 3px;">
                                 <h3 style="font-size:12px;color:white">{{ $currentCategory }}</strong>
                             </td>
                         </tr>
                     @endif
+                    @php
+                        $useLabelBg = $showGlobalLabels && !empty($item['label_color']);
+                        $bgColor = $useLabelBg ? $item['label_color'] : ($index % 2 == 0 ? '#ffffff' : '#f3f4f6');
+                    @endphp
                     <tr
-                        style="background-color: {{ $index % 2 == 0 ? '#ffffff' : '#f3f4f6' }}; border-bottom: 1px solid #d1d5db;">
+                        style="background-color: {{ $bgColor }}; border-bottom: 1px solid #d1d5db;">
                         @foreach($item as $key => $value)
-                            @if($key !== 'id' && $key !== 'category')
+                            @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']))
                                 @php
                                     $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades', 'image']);
                                 @endphp
@@ -142,6 +150,11 @@
                                         -
                                     @else
                                         {{ $value }}
+                                        @if(in_array($key, ['Concepto', 'Item']) && $showGlobalLabels && !empty($item['label_comment']))
+                                            <div style="font-size: 10px; font-style: italic; color: #374151; margin-top: 2px;">
+                                                ({{ $item['label_comment'] }})
+                                            </div>
+                                        @endif
                                     @endif
                                 </td>
                             @endif

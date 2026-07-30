@@ -59,7 +59,7 @@
                     @end="onDragEnd"
                 >
                     <template #item="{ element: item, index }">
-                        <tr>
+                        <tr :style="item.label_color ? { backgroundColor: item.label_color } : {}">
                             <td class="drag-handle cursor-grab text-center w-10 text-gray-400 hover:text-black">
                                 <i class="fa-solid fa-grip-vertical"></i>
                             </td>
@@ -77,6 +77,10 @@
                                                     "
                                                     >{{ value }}</Link
                                                 >
+                                                <div v-if="item.label_comment" class="text-xs italic text-gray-700 mt-0.5 flex items-center gap-1">
+                                                    <i class="fa-solid fa-tag text-gray-500"></i>
+                                                    <span>{{ item.label_comment }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
@@ -209,6 +213,10 @@ const columnsToHide = [
     "total_raw",
     "total_profit_raw",
     "agent_comission_raw",
+    "label_color",
+    "label_comment",
+    "show_label_in_pdf",
+    "item_label_id",
 ];
 
 const groupedItems = ref([]);

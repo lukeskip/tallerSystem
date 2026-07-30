@@ -28,6 +28,7 @@ class PDFController extends Controller
             'language' => $request->input('language', 'es'),
             'date' => $request->input('date', date('Y-m-d')),
             'include_images' => $request->boolean('include_images', false),
+            'include_labels' => $request->boolean('include_labels', false),
         ];
 
         $isEnglish = $publishOptions['language'] !== 'es';
@@ -50,6 +51,9 @@ class PDFController extends Controller
                 $isEnglish ? 'Unit Price' : 'V. Unitario' => $formatMoney($item['unit_price'] ?? 0, false),
                 'category' => $item['category'],
                 'Subtotal' => $formatMoney($item['total'] ?? 0, false),
+                'label_color' => $item['label_color'] ?? null,
+                'label_comment' => $item['label_comment'] ?? null,
+                'show_label_in_pdf' => $item['show_label_in_pdf'] ?? false,
             ];
         })->toArray();
 
