@@ -11,6 +11,8 @@ use App\Models\Note;
 use App\Models\Category;
 use App\Models\User;
 
+use App\Models\Label;
+
 class InvoiceItem extends Model
 {
     protected $fillable = [
@@ -27,8 +29,14 @@ class InvoiceItem extends Model
         'unit_cost',
         'unit_type',
         'order',
+        'item_label_id',
     ];
     use HasFactory;
+
+    public function itemLabel()
+    {
+        return $this->belongsTo(Label::class, 'item_label_id');
+    }
 
     public function provider()
     {

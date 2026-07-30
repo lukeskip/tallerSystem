@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\InvoiceItem;
 use App\Models\Invoice;
 use App\Models\Category;
+use App\Models\Label;
 use Illuminate\Support\Facades\Validator;
 use App\Utils\Utils;
 use League\Csv\Reader;
@@ -29,7 +30,10 @@ class InvoiceItemService
             'user_id' => 'nullable',
             'invoice_id' => 'string|nullable',
             'category'  => 'nullable',
-            'file' => 'nullable|file'
+            'file' => 'nullable|file',
+            'label_color' => 'nullable|string',
+            'label_comment' => 'nullable|string',
+            'show_label_in_pdf' => 'nullable',
         ];
     }
 
@@ -51,6 +55,19 @@ class InvoiceItemService
             $request['category_id'] = $category->id;
         }
 
+        $labelColor = $request['label_color'] ?? null;
+        $labelComment = $request['label_comment'] ?? null;
+        $showLabelInPdf = filter_var($request['show_label_in_pdf'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        if (!empty($labelColor) || !empty($labelComment) || isset($request['show_label_in_pdf'])) {
+            $label = Label::create([
+                'color' => $labelColor,
+                'comment' => $labelComment,
+                'show_in_pdf' => $showLabelInPdf,
+            ]);
+            $request['item_label_id'] = $label->id;
+        }
+
         return InvoiceItem::create($request);
     }
 
@@ -61,9 +78,9 @@ class InvoiceItemService
 
     public function edit($id)
     {
-        $invoiceItem =  InvoiceItem::find($id);
+        $invoiceItem =  InvoiceItem::with('itemLabel')->find($id);
         $invoice_id = $invoiceItem->invoice_id;
-        $invoiceItem =  [
+        $invoiceItemData =  [
             'label' => ['value' => $invoiceItem->label, 'type' => 'string'],
             'description' => ['value' => $invoiceItem->description, 'type' => 'string'],
             'unit_price' => ['value' => $invoiceItem->unit_price, 'type' => 'money'],
@@ -74,15 +91,18 @@ class InvoiceItemService
             'category' => ['value' => $invoiceItem->category?->name, 'type' => 'string'],
             'user_id' => ['value' => $invoiceItem->user_id, 'type' => 'number'],
             'image' => ['value' => $invoiceItem->files->first()?->url, 'type' => 'file'],
+            'label_color' => ['value' => $invoiceItem->itemLabel?->color ?? '', 'type' => 'color'],
+            'label_comment' => ['value' => $invoiceItem->itemLabel?->comment ?? '', 'type' => 'string'],
+            'show_label_in_pdf' => ['value' => (bool)($invoiceItem->itemLabel?->show_in_pdf ?? false), 'type' => 'boolean'],
         ];
 
         $fields = Utils::getFields('invoice_items', $invoice_id);
-        return ["item" => $invoiceItem, "fields" => $fields];
+        return ["item" => $invoiceItemData, "fields" => $fields];
     }
 
     public function update($id, $request)
     {
-        $invoiceItem = InvoiceItem::find($id);
+        $invoiceItem = InvoiceItem::with('itemLabel')->find($id);
 
         if (isset($request['category']) && $request['category']) {
 
@@ -98,6 +118,27 @@ class InvoiceItemService
             }
 
             $request['category_id'] = $category->id;
+        }
+
+        $labelColor = $request['label_color'] ?? null;
+        $labelComment = $request['label_comment'] ?? null;
+        $showLabelInPdf = filter_var($request['show_label_in_pdf'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        if (!empty($labelColor) || !empty($labelComment) || isset($request['show_label_in_pdf'])) {
+            if ($invoiceItem->itemLabel) {
+                $invoiceItem->itemLabel->update([
+                    'color' => $labelColor,
+                    'comment' => $labelComment,
+                    'show_in_pdf' => $showLabelInPdf,
+                ]);
+            } else {
+                $label = Label::create([
+                    'color' => $labelColor,
+                    'comment' => $labelComment,
+                    'show_in_pdf' => $showLabelInPdf,
+                ]);
+                $request['item_label_id'] = $label->id;
+            }
         }
 
         $invoiceItem->update($request);

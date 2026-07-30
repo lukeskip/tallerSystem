@@ -90,6 +90,29 @@
                             v-model:checked="formData[field.slug]"
                         />
 
+                        <div v-else-if="field.type === 'color'" class="flex items-center space-x-3">
+                            <input
+                                type="color"
+                                v-model="formData[field.slug]"
+                                class="h-10 w-12 p-1 rounded border border-gray-300 cursor-pointer bg-white"
+                            />
+                            <TextInput
+                                v-model="formData[field.slug]"
+                                placeholder="#FFFFFF"
+                                class="!w-32"
+                            />
+                            <div class="flex space-x-1 items-center">
+                                <button
+                                    v-for="preset in ['#fef08a', '#bbf7d0', '#bfdbfe', '#fbcfe8', '#fed7aa', '#e9d5ff', '#ffffff']"
+                                    :key="preset"
+                                    type="button"
+                                    :style="{ backgroundColor: preset }"
+                                    class="w-6 h-6 rounded-full border border-gray-300 hover:scale-110 transition-transform"
+                                    @click="formData[field.slug] = preset"
+                                ></button>
+                            </div>
+                        </div>
+
                         <div v-else-if="field.type === 'categories'">
                             <VueMultiselect
                                 v-model="formData[field.slug]"

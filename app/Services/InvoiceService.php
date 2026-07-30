@@ -113,7 +113,7 @@ class InvoiceService
             },
             'invoiceItems' => function ($query) {
                 $query
-                    ->with('files')
+                    ->with(['files', 'itemLabel'])
                     ->leftJoin('categories', 'invoice_items.category_id', '=', 'categories.id')
                     ->orderBy('categories.order', 'asc')
                     ->orderBy('invoice_items.category_id', 'asc')
@@ -144,6 +144,9 @@ class InvoiceService
                         "total_raw" => $item->total,
                         "provider" => $item->provider->name ?? '',
                         "agent" => $item->user->name ?? '',
+                        "label_color" => $item->itemLabel?->color ?? null,
+                        "label_comment" => $item->itemLabel?->comment ?? null,
+                        "show_label_in_pdf" => (bool) ($item->itemLabel?->show_in_pdf ?? false),
                     ];
                 });
 

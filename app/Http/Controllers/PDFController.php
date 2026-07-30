@@ -50,6 +50,9 @@ class PDFController extends Controller
                 $isEnglish ? 'Unit Price' : 'V. Unitario' => $formatMoney($item['unit_price'] ?? 0, false),
                 'category' => $item['category'],
                 'Subtotal' => $formatMoney($item['total'] ?? 0, false),
+                'label_color' => $item['label_color'] ?? null,
+                'label_comment' => $item['label_comment'] ?? null,
+                'show_label_in_pdf' => $item['show_label_in_pdf'] ?? false,
             ];
         })->toArray();
 

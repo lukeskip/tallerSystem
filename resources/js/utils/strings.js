@@ -73,5 +73,8 @@ const strings = {
         fixed:"Monto Fijo",
         percentage:"Porcentaje",
         currency:"Moneda",
+        label_color:"Color de Etiqueta",
+        label_comment:"Comentario de Etiqueta",
+        show_label_in_pdf:"Mostrar Etiqueta en PDF",
 };
 export default strings;
