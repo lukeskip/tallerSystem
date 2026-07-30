@@ -28,6 +28,7 @@ class PDFController extends Controller
             'language' => $request->input('language', 'es'),
             'date' => $request->input('date', date('Y-m-d')),
             'include_images' => $request->boolean('include_images', false),
+            'include_labels' => $request->boolean('include_labels', false),
         ];
 
         $isEnglish = $publishOptions['language'] !== 'es';

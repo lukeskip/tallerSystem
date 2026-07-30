@@ -31,6 +31,11 @@
             <label class="block text-gray-700 text-sm font-bold">Incluir fotos grandes al final</label>
             <ToggleSwitch v-model:checked="publishForm.include_images" />
         </div>
+
+        <div class="mb-4 flex items-center justify-between">
+            <label class="block text-gray-700 text-sm font-bold">Incluir etiquetas de conceptos</label>
+            <ToggleSwitch v-model:checked="publishForm.include_labels" />
+        </div>
         
         <div class="mt-5 flex justify-end">
             <SecondaryButton @click="$emit('close')" class="mr-2">Cancelar</SecondaryButton>
@@ -73,7 +78,8 @@ const publishForm = ref({
     exchange_rate: 1,
     language: 'es',
     date: new Date().toISOString().split('T')[0],
-    include_images: false
+    include_images: false,
+    include_labels: false
 });
 
 const currencyOptions = [
@@ -114,6 +120,7 @@ const publishUrl = computed(() => {
         language: publishForm.value.language,
         date: publishForm.value.date,
         include_images: publishForm.value.include_images ? '1' : '0',
+        include_labels: publishForm.value.include_labels ? '1' : '0',
     });
     return `${baseUrl}?${params.toString()}`;
 });

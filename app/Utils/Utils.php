@@ -108,7 +108,6 @@ class Utils
             $fieldsEnd[] = ['slug' => 'image', 'type' => 'file'];
             $fieldsEnd[] = ['slug' => 'label_color', 'type' => 'color'];
             $fieldsEnd[] = ['slug' => 'label_comment', 'type' => 'varchar'];
-            $fieldsEnd[] = ['slug' => 'show_label_in_pdf', 'type' => 'boolean'];
         }
 
         if ($table === 'orders') {

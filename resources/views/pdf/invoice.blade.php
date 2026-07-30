@@ -114,6 +114,7 @@
             <tbody>
                 @php
                     $currentCategory = null;
+                    $showGlobalLabels = !empty($publishOptions['include_labels']);
                     $visibleColsCount = collect($invoiceItems->first())->keys()->filter(function($k) {
                         return !in_array($k, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']);
                     })->count();
@@ -131,7 +132,7 @@
                         </tr>
                     @endif
                     @php
-                        $useLabelBg = !empty($item['show_label_in_pdf']) && !empty($item['label_color']);
+                        $useLabelBg = $showGlobalLabels && !empty($item['label_color']);
                         $bgColor = $useLabelBg ? $item['label_color'] : ($index % 2 == 0 ? '#ffffff' : '#f3f4f6');
                     @endphp
                     <tr
@@ -149,7 +150,7 @@
                                         -
                                     @else
                                         {{ $value }}
-                                        @if(in_array($key, ['Concepto', 'Item']) && !empty($item['show_label_in_pdf']) && !empty($item['label_comment']))
+                                        @if(in_array($key, ['Concepto', 'Item']) && $showGlobalLabels && !empty($item['label_comment']))
                                             <div style="font-size: 10px; font-style: italic; color: #374151; margin-top: 2px;">
                                                 ({{ $item['label_comment'] }})
                                             </div>

@@ -33,7 +33,6 @@ class InvoiceItemService
             'file' => 'nullable|file',
             'label_color' => 'nullable|string',
             'label_comment' => 'nullable|string',
-            'show_label_in_pdf' => 'nullable',
         ];
     }
 
@@ -57,13 +56,11 @@ class InvoiceItemService
 
         $labelColor = $request['label_color'] ?? null;
         $labelComment = $request['label_comment'] ?? null;
-        $showLabelInPdf = filter_var($request['show_label_in_pdf'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        if (!empty($labelColor) || !empty($labelComment) || isset($request['show_label_in_pdf'])) {
+        if (!empty($labelColor) || !empty($labelComment)) {
             $label = Label::create([
                 'color' => $labelColor,
                 'comment' => $labelComment,
-                'show_in_pdf' => $showLabelInPdf,
             ]);
             $request['item_label_id'] = $label->id;
         }
@@ -93,7 +90,6 @@ class InvoiceItemService
             'image' => ['value' => $invoiceItem->files->first()?->url, 'type' => 'file'],
             'label_color' => ['value' => $invoiceItem->itemLabel?->color ?? '', 'type' => 'color'],
             'label_comment' => ['value' => $invoiceItem->itemLabel?->comment ?? '', 'type' => 'string'],
-            'show_label_in_pdf' => ['value' => (bool)($invoiceItem->itemLabel?->show_in_pdf ?? false), 'type' => 'boolean'],
         ];
 
         $fields = Utils::getFields('invoice_items', $invoice_id);
@@ -122,22 +118,26 @@ class InvoiceItemService
 
         $labelColor = $request['label_color'] ?? null;
         $labelComment = $request['label_comment'] ?? null;
-        $showLabelInPdf = filter_var($request['show_label_in_pdf'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        if (!empty($labelColor) || !empty($labelComment) || isset($request['show_label_in_pdf'])) {
+        if (!empty($labelColor) || !empty($labelComment)) {
             if ($invoiceItem->itemLabel) {
                 $invoiceItem->itemLabel->update([
                     'color' => $labelColor,
                     'comment' => $labelComment,
-                    'show_in_pdf' => $showLabelInPdf,
                 ]);
             } else {
                 $label = Label::create([
                     'color' => $labelColor,
                     'comment' => $labelComment,
-                    'show_in_pdf' => $showLabelInPdf,
                 ]);
                 $request['item_label_id'] = $label->id;
+            }
+        } else {
+            if ($invoiceItem->itemLabel) {
+                $oldLabel = $invoiceItem->itemLabel;
+                $request['item_label_id'] = null;
+                $invoiceItem->update(['item_label_id' => null]);
+                $oldLabel->delete();
             }
         }
 
