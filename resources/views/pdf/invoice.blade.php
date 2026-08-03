@@ -113,6 +113,16 @@
             </thead>
             <tbody>
                 @php
+                    $categoryTotals = [];
+                    foreach ($invoiceItems as $item) {
+                        $cat = $item['category'] ?? '';
+                        $subtotalStr = $item['Subtotal'] ?? $item['subtotal'] ?? '0';
+                        $numericVal = (float) preg_replace('/[^\d.-]/', '', str_replace(',', '', (string)$subtotalStr));
+                        if (!isset($categoryTotals[$cat])) {
+                            $categoryTotals[$cat] = 0;
+                        }
+                        $categoryTotals[$cat] += $numericVal;
+                    }
                     $currentCategory = null;
                     $showGlobalLabels = !empty($publishOptions['include_labels']);
                     $visibleColsCount = collect($invoiceItems->first())->keys()->filter(function($k) {
@@ -123,11 +133,12 @@
                     @if ($currentCategory !== $item['category'])
                         @php
                             $currentCategory = $item['category'];
+                            $catTotalFormatted = '$' . number_format($categoryTotals[$currentCategory] ?? 0, 2);
                         @endphp
                         <tr style="background-color: #af984e; color:white;border-top:solid white 5px;text-transform: uppercase;">
                             <td colspan="{{ $visibleColsCount }}"
                                 style="text-align:center;font-size:12px;border-top:solid white 3px;">
-                                <h3 style="font-size:12px;color:white">{{ $currentCategory }}</strong>
+                                <h3 style="font-size:12px;color:white;margin:0;">{{ $currentCategory }} - {{ $catTotalFormatted }}</h3>
                             </td>
                         </tr>
                     @endif
