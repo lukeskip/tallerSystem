@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+use App\Http\Controllers\Api\ProjectController as ApiProjectController;
+use App\Http\Controllers\Api\InvoiceController as ApiInvoiceController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::prefix('v1')->group(function () {
+        Route::apiResource('proyectos', ApiProjectController::class)->only(['index', 'show']);
+        Route::apiResource('cotizaciones', ApiInvoiceController::class)->only(['index', 'show']);
+    });
 });
+
