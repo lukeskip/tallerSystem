@@ -97,6 +97,21 @@
                                 {{ invoice.subtotal }}
                             </td>
                         </tr>
+                        <template v-if="invoice.extras_before_fee && invoice.extras_before_fee.length">
+                            <tr v-for="extra in invoice.extras_before_fee" :key="extra.id"
+                                class="bg-secondary-color border p-4">
+                                <td class="p-2">{{ extra.label }} ({{ extra.value }}):</td>
+                                <td class="p-2">
+                                    {{ extra.amount }}
+                                </td>
+                            </tr>
+                            <tr class="bg-terciary-color border p-4 font-semibold">
+                                <td class="p-2">Subtotal:</td>
+                                <td class="p-2">
+                                    {{ invoice.subtotal_after_extras_before_fee }}
+                                </td>
+                            </tr>
+                        </template>
                         <tr class="bg-terciary-color border p-4">
                             <td class="p-2">Fee ({{ invoice.fee }}):</td>
                             <td class="p-2">
@@ -109,20 +124,21 @@
                                 {{ invoice.subtotal_fee }}
                             </td>
                         </tr>
+                        <template v-if="invoice.extras_after_fee && invoice.extras_after_fee.length">
+                            <tr v-for="extra in invoice.extras_after_fee" :key="extra.id"
+                                class="bg-secondary-color border p-4">
+                                <td class="p-2">{{ extra.label }} ({{ extra.value }}):</td>
+                                <td class="p-2">
+                                    {{ extra.amount }}
+                                </td>
+                            </tr>
+                        </template>
                         <tr class="bg-terciary-color border p-4">
                             <td class="p-2">IVA ({{ invoice.iva }}):</td>
                             <td class="p-2">
                                 {{ invoice.iva_amount }}
                             </td>
                         </tr>
-                        <template v-if="invoice.extras && invoice.extras.length">
-                            <tr v-for="extra in invoice.extras" :key="extra.id" class="bg-secondary-color border p-4">
-                                <td class="p-2">{{ extra.label }} ({{ extra.value }} - {{ extra.calculation_basis === 'before_commission' ? 'Antes' : 'Después' }}):</td>
-                                <td class="p-2">
-                                    {{ extra.amount }}
-                                </td>
-                            </tr>
-                        </template>
                         <tr class="bg-secondary-color">
                             <td class="p-2">Total:</td>
                             <td class="p-2">
@@ -401,6 +417,7 @@
                                 :inner="true"
                                 :root="'extras'"
                                 :actions="['edit', 'delete']"
+                                :columnsToHide="['label_color', 'value_raw', 'amount_raw']"
                                 parentId="invoice_id"
                             />
                         </Container>

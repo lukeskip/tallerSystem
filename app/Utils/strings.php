@@ -36,4 +36,5 @@ return [
     'label_color' => 'Color de Etiqueta',
     'label_comment' => 'Comentario de Etiqueta',
     'show_label_in_pdf' => 'Mostrar Etiqueta en PDF',
+    'is_discount' => 'Es Descuento',
 ];

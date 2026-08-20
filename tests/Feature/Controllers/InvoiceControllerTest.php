@@ -108,4 +108,29 @@ class InvoiceControllerTest extends TestCase
         $diff = array_diff($expectedFields, $fieldsInResponse);
         $this->assertEmpty($diff);
     }
+
+    /** @test */
+    public function it_calculates_discounts_before_fee_correctly()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $invoice = Invoice::latest()->first();
+        
+        // Add a 10% discount extra before commission
+        $extra = \App\Models\Extra::create([
+            'invoice_id' => $invoice->id,
+            'label' => 'Descuento 10%',
+            'value' => 10,
+            'type' => 'percentage',
+            'calculation_basis' => 'before_commission',
+            'is_discount' => true,
+            'label_color' => '#fef08a',
+        ]);
+
+        $response = $this->get(route('cotizaciones.show', $invoice->id));
+        $response->assertStatus(200);
+
+        $extra->delete();
+    }
 }

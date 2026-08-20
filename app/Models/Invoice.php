@@ -63,23 +63,81 @@ class Invoice extends Model
         }
     }
 
-    public function getSubtotalWithExtrasBeforeCommissionAttribute()
+    public function getExtrasBeforeFeeAmountAttribute()
     {
         $subtotal = $this->getSubtotalAttribute();
-        $extras = $this->extras;
-        foreach ($extras as $extra) {
-            if ($extra->type === 'percentage') {
-                $subtotal += ($this->getSubtotalAttribute() * ($extra->value / 100));
-            } else {
-                $subtotal += $extra->value;
+        $totalExtras = 0;
+        if ($this->extras) {
+            foreach ($this->extras as $extra) {
+                if ($extra->calculation_basis === 'before_commission') {
+                    $val = $extra->type === 'percentage' ? ($subtotal * ($extra->value / 100)) : $extra->value;
+                    $calcVal = ($extra->is_discount || $extra->value < 0) ? -abs($val) : abs($val);
+                    $totalExtras += $calcVal;
+                }
             }
         }
-        return $subtotal;
+        return $totalExtras;
+    }
+
+    public function getSubtotalAfterExtrasBeforeFeeAttribute()
+    {
+        return $this->getSubtotalAttribute() + $this->getExtrasBeforeFeeAmountAttribute();
+    }
+
+    public function getSubtotalWithExtrasBeforeCommissionAttribute()
+    {
+        return $this->getSubtotalAfterExtrasBeforeFeeAttribute();
+    }
+
+    public function getFeeAmountAttribute()
+    {
+        if ($this->fee > 0) {
+            $fee = $this->fee / 100;
+            return $this->getSubtotalAfterExtrasBeforeFeeAttribute() * $fee;
+        } else {
+            return 0;
+        }
+    }
+
+    public function getSubtotalFeeAttribute()
+    {
+        return $this->getSubtotalAfterExtrasBeforeFeeAttribute() + $this->getFeeAmountAttribute();
+    }
+
+    public function getExtrasAfterFeeAmountAttribute()
+    {
+        $subtotal = $this->getSubtotalAttribute();
+        $totalExtras = 0;
+        if ($this->extras) {
+            foreach ($this->extras as $extra) {
+                if ($extra->calculation_basis !== 'before_commission') {
+                    $val = $extra->type === 'percentage' ? ($subtotal * ($extra->value / 100)) : $extra->value;
+                    $calcVal = ($extra->is_discount || $extra->value < 0) ? -abs($val) : abs($val);
+                    $totalExtras += $calcVal;
+                }
+            }
+        }
+        return $totalExtras;
+    }
+
+    public function getSubtotalFeeAndExtrasAttribute()
+    {
+        return $this->getSubtotalFeeAttribute() + $this->getExtrasAfterFeeAmountAttribute();
+    }
+
+    public function getIvaAmountAttribute()
+    {
+        if ($this->iva > 0) {
+            $iva = $this->iva / 100;
+            return $this->getSubtotalFeeAndExtrasAttribute() * $iva;
+        } else {
+            return 0;
+        }
     }
 
     public function getTotalAttribute()
     {
-        $subtotalFeeAndExtras = $this->getSubtotalFeeAttribute();
+        $subtotalFeeAndExtras = $this->getSubtotalFeeAndExtrasAttribute();
         $ivaAmount = $this->hasIva ? $this->getIvaAmountAttribute() : 0;
 
         return $subtotalFeeAndExtras + $ivaAmount;
@@ -91,48 +149,6 @@ class Invoice extends Model
         $totalIncomes = $this->getAmountPaidAttribute();
 
         return $total - $totalIncomes;
-    }
-
-    public function getFeeAmountAttribute()
-    {
-        if ($this->fee > 0) {
-            $fee = $this->fee / 100;
-            // Fee is computed over subtotal base ONLY
-            $amountFee = $this->getSubtotalAttribute() * $fee;
-            return $amountFee;
-        } else {
-            return 0;
-        }
-    }
-
-    public function getSubtotalFeeAttribute()
-    {
-        // Subtotal + Fee + Extras
-        $subtotal = $this->getSubtotalAttribute();
-        $fee = $this->getFeeAmountAttribute();
-        
-        $extrasVal = 0;
-        foreach ($this->extras as $extra) {
-            if ($extra->type === 'percentage') {
-                $extrasVal += ($this->getSubtotalAttribute() * ($extra->value / 100));
-            } else {
-                $extrasVal += $extra->value;
-            }
-        }
-        
-        return $subtotal + $fee + $extrasVal;
-    }
-
-    public function getIvaAmountAttribute()
-    {
-        if ($this->iva > 0) {
-            $iva = $this->iva / 100;
-            // IVA is calculated over (Subtotal base + Fee + Extras)
-            $amountIVA = $this->getSubtotalFeeAttribute() * $iva;
-            return $amountIVA;
-        } else {
-            return 0;
-        }
     }
 
     public function getAmountPaidAttribute()

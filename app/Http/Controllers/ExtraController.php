@@ -24,6 +24,8 @@ class ExtraController extends Controller
             'value' => 'required|numeric',
             'type' => 'required|string|in:percentage,fixed',
             'calculation_basis' => 'required|string|in:before_commission,after_commission',
+            'is_discount' => 'nullable|boolean',
+            'label_color' => 'nullable|string',
         ];
     }
 
@@ -55,6 +57,8 @@ class ExtraController extends Controller
             'value' => ['value' => $extra->value, 'type' => 'number'],
             'type' => ['value' => $extra->type, 'type' => 'select'],
             'calculation_basis' => ['value' => $extra->calculation_basis, 'type' => 'select'],
+            'is_discount' => ['value' => (bool)$extra->is_discount, 'type' => 'boolean'],
+            'label_color' => ['value' => $extra->label_color ?? '', 'type' => 'color'],
         ];
 
         $fields = Utils::getFields('invoice_extras', $extra->invoice_id);

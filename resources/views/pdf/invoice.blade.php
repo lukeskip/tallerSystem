@@ -227,6 +227,22 @@
                         {{$invoice['subtotal']}}
                     </td>
                 </tr>
+            @if(isset($invoice['extras_before_fee']) && count($invoice['extras_before_fee']) > 0)
+                @foreach($invoice['extras_before_fee'] as $extra)
+                    @php
+                        $useLabelBg = !empty($publishOptions['include_labels']) && !empty($extra['label_color']);
+                        $bgColor = $useLabelBg ? $extra['label_color'] : 'transparent';
+                    @endphp
+                    <tr style="background-color: {{ $bgColor }};">
+                        <td style="width:60%">
+                            {{ $extra['label'] }} ({{ $extra['value'] }}):
+                        </td>
+                        <td style="width:40%">
+                            {{ $extra['amount'] }}
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
                 <tr style="background:white">
                     <td style="width:60%">
                         Fee ({{$invoice['fee']}}):
@@ -235,9 +251,13 @@
                         {{$invoice['fee_amount']}}
                     </td>
                 </tr>
-            @if(isset($invoice['extras']) && count($invoice['extras']) > 0)
-                @foreach($invoice['extras'] as $extra)
-                    <tr>
+            @if(isset($invoice['extras_after_fee']) && count($invoice['extras_after_fee']) > 0)
+                @foreach($invoice['extras_after_fee'] as $extra)
+                    @php
+                        $useLabelBg = !empty($publishOptions['include_labels']) && !empty($extra['label_color']);
+                        $bgColor = $useLabelBg ? $extra['label_color'] : 'transparent';
+                    @endphp
+                    <tr style="background-color: {{ $bgColor }};">
                         <td style="width:60%">
                             {{ $extra['label'] }} ({{ $extra['value'] }}):
                         </td>

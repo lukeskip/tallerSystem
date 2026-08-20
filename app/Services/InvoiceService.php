@@ -269,11 +269,20 @@ class InvoiceService
                 } else {
                     $calcValue = $item->value;
                 }
+                
+                if ($item->is_discount || $item->value < 0) {
+                    $calcValue = -abs($calcValue);
+                } else {
+                    $calcValue = abs($calcValue);
+                }
+
                 return [
                     "id" => $item->id,
                     "label" => $item->label,
                     "type" => $item->type,
                     "calculation_basis" => $item->calculation_basis,
+                    "is_discount" => (bool) $item->is_discount,
+                    "label_color" => $item->label_color,
                     "value" => $item->type === 'percentage' ? Utils::publishPercentage($item->value) : Utils::publishMoney($item->value),
                     "value_raw" => $item->value,
                     "amount" => Utils::publishMoney($calcValue),
@@ -298,8 +307,11 @@ class InvoiceService
                 'orders' => $orders,
                 'fabrics' => $fabrics,
                 'extras' => $extras,
+                'extras_before_fee' => $extras->where('calculation_basis', 'before_commission')->values(),
+                'extras_after_fee' => $extras->where('calculation_basis', '!=', 'before_commission')->values(),
                 'balance' => Utils::publishMoney($invoice->balance),
                 "subtotal" => Utils::publishMoney($invoice->subtotal),
+                "subtotal_after_extras_before_fee" => Utils::publishMoney($invoice->subtotal_after_extras_before_fee),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),
                 "total" => Utils::publishMoney($invoice->total),
                 "total_profit" => Utils::publishMoney($invoiceItems->sum('total_profit_raw')),
