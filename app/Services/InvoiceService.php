@@ -137,7 +137,7 @@ class InvoiceService
                         "category" => $item->category->name ?? '',
                         "unit_cost" => Utils::publishMoney($item->unit_cost),
                         "unit_price" => Utils::publishMoney($item->unit_price),
-                        "discount" => $item->discount > 0 ? ($item->discount_type === 'percentage' ? Utils::publishPercentage($item->discount) : Utils::publishMoney($item->discount)) : null,
+                        "discount" => $item->discount > 0 ? ($item->discount_type === 'percentage' ? Utils::publishPercentage($item->discount) : Utils::publishMoney($item->discount)) : '-',
                         "discount_raw" => $item->discount,
                         "discount_type" => $item->discount_type,
                         "discount_amount" => $item->discount_amount > 0 ? Utils::publishMoney($item->discount_amount) : null,
