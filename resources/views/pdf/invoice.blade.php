@@ -242,6 +242,14 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr style="background:#f3f4f6;">
+                    <td style="width:60%">
+                        Subtotal:
+                    </td>
+                    <td style="width:40%">
+                        {{ $invoice['subtotal_after_extras_before_fee'] }}
+                    </td>
+                </tr>
             @endif
                 <tr style="background:white">
                     <td style="width:60%">

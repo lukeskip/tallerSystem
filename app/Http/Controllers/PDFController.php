@@ -94,6 +94,7 @@ class PDFController extends Controller
         $incomes = collect($incomes);
 
         $invoice['subtotal'] = $formatMoney($invoice['subtotal'] ?? 0);
+        $invoice['subtotal_after_extras_before_fee'] = $formatMoney($invoice['subtotal_after_extras_before_fee'] ?? 0);
         $invoice['fee_amount'] = $formatMoney($invoice['fee_amount'] ?? 0);
         $invoice['total'] = $formatMoney($invoice['total'] ?? 0);
         $invoice['iva_amount'] = $formatMoney($invoice['iva_amount'] ?? 0);
