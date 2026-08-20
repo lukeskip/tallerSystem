@@ -112,9 +112,9 @@
                                 ></button>
                             </div>
                             <button
-                                v-if="formData['label_color'] || formData['label_comment']"
+                                v-if="formData[field.slug] || formData['label_comment']"
                                 type="button"
-                                @click="formData['label_color'] = ''; formData['label_comment'] = ''"
+                                @click="formData[field.slug] = ''; if (formData['label_comment']) formData['label_comment'] = ''"
                                 class="px-2 py-1 text-xs bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 transition flex items-center gap-1 font-medium ml-2"
                             >
                                 <i class="fa-solid fa-trash-can"></i>

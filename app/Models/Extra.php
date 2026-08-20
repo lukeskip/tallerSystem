@@ -18,6 +18,12 @@ class Extra extends Model
         'value',
         'type',
         'calculation_basis',
+        'is_discount',
+        'label_color',
+    ];
+
+    protected $casts = [
+        'is_discount' => 'boolean',
     ];
 
     public function invoice()

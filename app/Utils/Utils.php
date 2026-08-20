@@ -84,6 +84,10 @@ class Utils
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'percentage', 'name' => 'Porcentaje'], ['id' => 'fixed', 'name' => 'Monto Fijo']]];
                 } elseif ($field === 'calculation_basis' && $table === 'invoice_extras') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'before_commission', 'name' => 'Antes de la comisión'], ['id' => 'after_commission', 'name' => 'Después de la comisión']]];
+                } elseif ($field === 'is_discount' && $table === 'invoice_extras') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
+                } elseif ($field === 'label_color' && $table === 'invoice_extras') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'color'];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];
                 } else {
