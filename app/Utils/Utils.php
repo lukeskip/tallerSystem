@@ -88,6 +88,8 @@ class Utils
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'boolean'];
                 } elseif ($field === 'label_color' && $table === 'invoice_extras') {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'color'];
+                } elseif ($field === 'discount_type' && $table === 'invoice_items') {
+                    $fieldsEnd[] = ['slug' => $field, 'type' => 'select', 'options' => [['id' => 'percentage', 'name' => 'Porcentaje'], ['id' => 'fixed', 'name' => 'Monto Fijo']]];
                 } elseif (in_array($field, $fieldsToHide)) {
                     $fieldsEnd[] = ['slug' => $field, 'type' => 'hidden', 'label' => null];
                 } else {

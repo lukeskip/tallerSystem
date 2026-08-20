@@ -58,6 +58,7 @@ class PDFController extends Controller
                 'label_color' => $item['label_color'] ?? null,
                 'label_comment' => $item['label_comment'] ?? null,
                 'show_label_in_pdf' => $item['show_label_in_pdf'] ?? false,
+                'discount_str' => !empty($item['discount']) ? ($item['discount'] . ($item['discount_type'] === 'percentage' ? '%' : '') . ' (-' . $formatMoney($item['discount_amount'] ?? 0, false) . ')') : null,
             ];
         })->toArray();
 

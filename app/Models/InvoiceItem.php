@@ -28,8 +28,14 @@ class InvoiceItem extends Model
         'unit_price',
         'unit_cost',
         'unit_type',
+        'discount',
+        'discount_type',
         'order',
         'item_label_id',
+    ];
+
+    protected $casts = [
+        'discount' => 'float',
     ];
     use HasFactory;
 
@@ -73,25 +79,44 @@ class InvoiceItem extends Model
         $this->attributes['unit_cost'] = is_numeric($value) ? $value : 0.00;
     }
 
+    public function setDiscountAttribute($value)
+    {
+        $this->attributes['discount'] = is_numeric($value) ? $value : 0.00;
+    }
+
+    public function setDiscountTypeAttribute($value)
+    {
+        $this->attributes['discount_type'] = !empty($value) ? $value : 'percentage';
+    }
+
+    public function getDiscountAmountAttribute()
+    {
+        $gross = $this->unit_price * $this->units;
+        if ($this->discount > 0) {
+            if ($this->discount_type === 'fixed') {
+                return min($this->discount, $gross);
+            } else {
+                return $gross * ($this->discount / 100);
+            }
+        }
+        return 0;
+    }
+
     public function getTotalProfitAttribute()
     {
-        $unitCost = $this->unit_cost;
-        $unitPrice = $this->unit_price;
-        $units = $this->units;
-        $total = ($unitPrice - $unitCost) * $units;
-        return $total;
+        $totalCost = $this->unit_cost * $this->units;
+        $totalRevenue = $this->getTotalAttribute();
+        return $totalRevenue - $totalCost;
     }
 
     public function getPercentageProfitAttribute()
     {
-        if ($this->unit_cost == 0) {
+        $totalCost = $this->unit_cost * $this->units;
+        if ($totalCost == 0) {
             return 0;
         }
-        $unitCost = $this->unit_cost;
-        $unitPrice = $this->unit_price;
-        $total = $unitPrice - $unitCost;
-        $percentage = ($total / $unitCost) * 100;
-        return $percentage;
+        $profit = $this->getTotalProfitAttribute();
+        return ($profit / $totalCost) * 100;
     }
 
     public function getAgentComissionAttribute()
@@ -110,9 +135,10 @@ class InvoiceItem extends Model
 
     public function getTotalAttribute()
     {
-        $total = ($this->unit_price * $this->units);
-        return $total;
+        $gross = ($this->unit_price * $this->units);
+        return max(0, $gross - $this->getDiscountAmountAttribute());
     }
+
     public function getCategoryNameAttribute()
     {
         return $this->category->name;
@@ -120,8 +146,7 @@ class InvoiceItem extends Model
 
     public function getAmountAttribute()
     {
-        $total = ($this->unit_price * $this->units);
-        return $total;
+        return $this->getTotalAttribute();
     }
 
     public function getFormatDateAttribute()

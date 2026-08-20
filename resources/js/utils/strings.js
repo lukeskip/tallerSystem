@@ -77,5 +77,7 @@ const strings = {
         label_comment:"Comentario de Etiqueta",
         show_label_in_pdf:"Mostrar Etiqueta en PDF",
         is_discount:"Es Descuento",
+        discount:"Descuento",
+        discount_type:"Tipo de Descuento",
 };
 export default strings;

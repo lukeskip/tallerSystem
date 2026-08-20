@@ -26,6 +26,18 @@
         </div>
         <div class="">
             <label class="block text-gray-700 text-sm font-bold mb-2">
+                Descuento:
+            </label>
+            <NumberInput v-model="discount"/>
+        </div>
+        <div class="">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+                Tipo de Descuento:
+            </label>
+            <Select v-model="discount_type" :options="[{id: 'percentage', name: 'Porcentaje'}, {id: 'fixed', name: 'Monto Fijo'}]"/>
+        </div>
+        <div class="">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
                 Tipo de unidad:
             </label>
             <TextInput v-model="unit_type"/>
@@ -89,6 +101,8 @@
     const provider = ref("");
     const units = ref(0);
     const unit_price = ref(0);
+    const discount = ref(0);
+    const discount_type = ref("percentage");
     const unit_type= ref("");
     const file = ref(null);
     const _token = window.csrf_token;
@@ -109,6 +123,8 @@
             unit_type:unit_type.value,
             unit_price:unit_price.value,
             units:units.value,
+            discount:discount.value,
+            discount_type:discount_type.value,
             provider_id:provider.value,
             invoice_id: props.invoiceId,
             file: file.value,

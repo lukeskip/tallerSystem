@@ -133,4 +133,30 @@ class InvoiceControllerTest extends TestCase
 
         $extra->delete();
     }
+
+    /** @test */
+    public function it_calculates_item_discounts_correctly()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $invoice = Invoice::latest()->first();
+        
+        $item = \App\Models\InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'label' => 'Item de Prueba',
+            'unit_price' => 100,
+            'units' => 10,
+            'discount' => 10,
+            'discount_type' => 'percentage',
+        ]);
+
+        $this->assertEquals(100, $item->discount_amount);
+        $this->assertEquals(900, $item->total);
+
+        $response = $this->get(route('cotizaciones.show', $invoice->id));
+        $response->assertStatus(200);
+
+        $item->delete();
+    }
 }

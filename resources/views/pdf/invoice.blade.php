@@ -101,7 +101,7 @@
             <thead style="background-color:#524627; color:white;text-transform: uppercase;">
                 <tr style="background-color:#524627; ">
                     @foreach($invoiceItems->first() as $key => $value)
-                        @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']))
+                        @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf', 'discount_str']))
                             <th style="border:0;padding:5px;text-align:center;font-size:12px;">
                                 <h3 style="color:white;margin:0;">
                                     {{ $key === 'image' ? (isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Image' : 'Imagen') : $key }}
@@ -126,7 +126,7 @@
                     $currentCategory = null;
                     $showGlobalLabels = !empty($publishOptions['include_labels']);
                     $visibleColsCount = collect($invoiceItems->first())->keys()->filter(function($k) {
-                        return !in_array($k, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']);
+                        return !in_array($k, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf', 'discount_str']);
                     })->count();
                 @endphp
                 @foreach($invoiceItems as $index => $item)
@@ -149,7 +149,7 @@
                     <tr
                         style="background-color: {{ $bgColor }}; border-bottom: 1px solid #d1d5db;">
                         @foreach($item as $key => $value)
-                            @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf']))
+                            @if(!in_array($key, ['id', 'category', 'label_color', 'label_comment', 'show_label_in_pdf', 'discount_str']))
                                 @php
                                     $isCenteredColumn = in_array(strtolower(trim($key)), ['v. unitario', 'subtotal', 'unit price', 'qty', 'unidades', 'image']);
                                 @endphp
@@ -160,10 +160,15 @@
                                     @elseif($key === 'image')
                                         -
                                     @else
-                                        {{ $value }}
+                                        {!! nl2br(e($value)) !!}
                                         @if(in_array($key, ['Concepto', 'Item']) && $showGlobalLabels && !empty($item['label_comment']))
                                             <div style="font-size: 10px; font-style: italic; color: #374151; margin-top: 2px;">
                                                 ({{ $item['label_comment'] }})
+                                            </div>
+                                        @endif
+                                        @if(in_array($key, ['Concepto', 'Item']) && !empty($item['discount_str']))
+                                            <div style="font-size: 10px; color: #047857; font-weight: bold; margin-top: 2px;">
+                                                Desc: {{ $item['discount_str'] }}
                                             </div>
                                         @endif
                                     @endif
@@ -380,7 +385,7 @@
                                         {{ $item1['Concepto'] ?? $item1['Item'] ?? '' }}
                                     </h4>
                                     <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
-                                        {{ $item1['Descripción'] ?? $item1['Description'] ?? '' }}
+                                        {!! nl2br(e($item1['Descripción'] ?? $item1['Description'] ?? '')) !!}
                                     </p>
                                 </td>
                             </tr>
@@ -396,7 +401,7 @@
                                         {{ $item2['Concepto'] ?? $item2['Item'] ?? '' }}
                                     </h4>
                                     <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
-                                        {{ $item2['Descripción'] ?? $item2['Description'] ?? '' }}
+                                        {!! nl2br(e($item2['Descripción'] ?? $item2['Description'] ?? '')) !!}
                                     </p>
                                 </td>
                                 <td style="width: 65%; text-align: right; vertical-align: top; padding: 0;">

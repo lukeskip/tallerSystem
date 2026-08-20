@@ -217,6 +217,11 @@ const columnsToHide = [
     "label_comment",
     "show_label_in_pdf",
     "item_label_id",
+    "discount_raw",
+    "discount_type",
+    "discount_amount",
+    "provider",
+    "agent",
 ];
 
 const groupedItems = ref([]);
