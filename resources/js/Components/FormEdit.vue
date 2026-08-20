@@ -12,16 +12,12 @@
                         {{ showLabel(field.slug) }}
                     </label>
                     <TextInput
-                        v-if="
-                            field.type === 'varchar' ||
-                            field.type === 'longtext' ||
-                            field.type === 'text'
-                        "
+                        v-if="field.type === 'varchar'"
                         v-model="formData[field.slug]"
                         :autocomplete="field.autocomplete"
                     />
 
-                    <div v-if="field.type === 'file'">
+                    <div v-else-if="field.type === 'file'">
                         <FileInput
                             :initialUrl="formData[field.slug]"
                             v-on:file-selected="handleFileSelected"
@@ -60,6 +56,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <TextArea
+                        v-else-if="
+                            field.type === 'text' ||
+                            field.type === 'longtext'
+                        "
+                        v-model="formData[field.slug]"
+                    />
 
                     <NumberInput
                         v-else-if="
@@ -157,6 +161,7 @@
 </template>
 <script setup>
 import TextInput from "@/Components/TextInput.vue";
+import TextArea from "@/Components/TextArea.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import FileInput from "@/Components/FileInput.vue";
 import Select from "@/Components/Select.vue";

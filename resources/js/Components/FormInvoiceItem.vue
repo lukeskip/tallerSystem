@@ -10,7 +10,7 @@
             <label class="block text-gray-700 text-sm font-bold mb-2">
                 Descripción:
             </label>
-            <TextInput v-model="description"/>
+            <TextArea v-model="description"/>
         </div>
         <div class="">
             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -76,6 +76,7 @@
 </template>
 <script setup>
     import TextInput from '@/Components/TextInput.vue';
+    import TextArea from '@/Components/TextArea.vue';
     import NumberInput from '@/Components/NumberInput.vue';
     import Select from '@/Components/Select.vue';
     import PrimaryButton from '@/Components/PrimaryButton.vue';
