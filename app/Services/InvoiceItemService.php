@@ -67,6 +67,13 @@ class InvoiceItemService
             $request['item_label_id'] = $label->id;
         }
 
+        if (empty($request['discount_type'])) {
+            $request['discount_type'] = 'percentage';
+        }
+        if (!isset($request['discount']) || $request['discount'] === null || $request['discount'] === '') {
+            $request['discount'] = 0;
+        }
+
         return InvoiceItem::create($request);
     }
 
@@ -143,6 +150,13 @@ class InvoiceItemService
                 $invoiceItem->update(['item_label_id' => null]);
                 $oldLabel->delete();
             }
+        }
+
+        if (empty($request['discount_type'])) {
+            $request['discount_type'] = 'percentage';
+        }
+        if (!isset($request['discount']) || $request['discount'] === null || $request['discount'] === '') {
+            $request['discount'] = 0;
         }
 
         $invoiceItem->update($request);

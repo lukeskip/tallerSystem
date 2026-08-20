@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('invoice_items', function (Blueprint $table) {
             $table->decimal('discount', 15, 2)->default(0)->after('unit_price');
-            $table->string('discount_type')->default('percentage')->after('discount');
+            $table->string('discount_type')->nullable()->default('percentage')->after('discount');
         });
     }
 

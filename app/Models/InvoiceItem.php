@@ -79,6 +79,16 @@ class InvoiceItem extends Model
         $this->attributes['unit_cost'] = is_numeric($value) ? $value : 0.00;
     }
 
+    public function setDiscountAttribute($value)
+    {
+        $this->attributes['discount'] = is_numeric($value) ? $value : 0.00;
+    }
+
+    public function setDiscountTypeAttribute($value)
+    {
+        $this->attributes['discount_type'] = !empty($value) ? $value : 'percentage';
+    }
+
     public function getDiscountAmountAttribute()
     {
         $gross = $this->unit_price * $this->units;
