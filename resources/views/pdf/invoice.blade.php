@@ -160,7 +160,7 @@
                                     @elseif($key === 'image')
                                         -
                                     @else
-                                        {{ $value }}
+                                        {!! nl2br(e($value)) !!}
                                         @if(in_array($key, ['Concepto', 'Item']) && $showGlobalLabels && !empty($item['label_comment']))
                                             <div style="font-size: 10px; font-style: italic; color: #374151; margin-top: 2px;">
                                                 ({{ $item['label_comment'] }})
@@ -385,7 +385,7 @@
                                         {{ $item1['Concepto'] ?? $item1['Item'] ?? '' }}
                                     </h4>
                                     <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
-                                        {{ $item1['Descripción'] ?? $item1['Description'] ?? '' }}
+                                        {!! nl2br(e($item1['Descripción'] ?? $item1['Description'] ?? '')) !!}
                                     </p>
                                 </td>
                             </tr>
@@ -401,7 +401,7 @@
                                         {{ $item2['Concepto'] ?? $item2['Item'] ?? '' }}
                                     </h4>
                                     <p style="margin: 0; color: #4b5563; font-size: 13px; line-height: 1.5;">
-                                        {{ $item2['Descripción'] ?? $item2['Description'] ?? '' }}
+                                        {!! nl2br(e($item2['Descripción'] ?? $item2['Description'] ?? '')) !!}
                                     </p>
                                 </td>
                                 <td style="width: 65%; text-align: right; vertical-align: top; padding: 0;">
