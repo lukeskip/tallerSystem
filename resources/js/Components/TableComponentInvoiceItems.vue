@@ -81,6 +81,10 @@
                                                     <i class="fa-solid fa-tag text-gray-500"></i>
                                                     <span>{{ item.label_comment }}</span>
                                                 </div>
+                                                <div v-if="item.discount" class="text-xs font-semibold text-emerald-700 mt-0.5 flex items-center gap-1">
+                                                    <i class="fa-solid fa-percent text-emerald-600"></i>
+                                                    <span>Desc: {{ item.discount }} (-{{ item.discount_amount }})</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
@@ -217,6 +221,10 @@ const columnsToHide = [
     "label_comment",
     "show_label_in_pdf",
     "item_label_id",
+    "discount",
+    "discount_raw",
+    "discount_type",
+    "discount_amount",
 ];
 
 const groupedItems = ref([]);

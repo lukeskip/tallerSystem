@@ -31,6 +31,8 @@ class InvoiceItemService
             'invoice_id' => 'string|nullable',
             'category'  => 'nullable',
             'file' => 'nullable|file',
+            'discount' => 'nullable|numeric|gte:0',
+            'discount_type' => 'nullable|string|in:percentage,fixed',
             'label_color' => 'nullable|string',
             'label_comment' => 'nullable|string',
         ];
@@ -84,6 +86,8 @@ class InvoiceItemService
             'unit_cost' => ['value' => $invoiceItem->unit_cost, 'type' => 'money'],
             'unit_type' => ['value' => $invoiceItem->unit_type, 'type' => 'string'],
             'units' => ['value' => $invoiceItem->units, 'type' => 'number'],
+            'discount' => ['value' => $invoiceItem->discount ?? 0, 'type' => 'number'],
+            'discount_type' => ['value' => $invoiceItem->discount_type ?? 'percentage', 'type' => 'select'],
             'provider_id' => ['value' => $invoiceItem->provider_id, 'type' => 'number'],
             'category' => ['value' => $invoiceItem->category?->name, 'type' => 'string'],
             'user_id' => ['value' => $invoiceItem->user_id, 'type' => 'number'],
