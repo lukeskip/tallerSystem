@@ -47,6 +47,17 @@ class PDFController extends Controller
         };
 
         $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish, $formatMoney) {
+            $hasDiscount = !empty($item['discount_raw']) && floatval($item['discount_raw']) > 0;
+            $discountStr = null;
+            if ($hasDiscount) {
+                $discountVal = floatval($item['discount_raw']);
+                $discountDisplay = ($item['discount_type'] ?? 'percentage') === 'percentage'
+                    ? rtrim(rtrim(number_format($discountVal, 2), '0'), '.') . '%'
+                    : $formatMoney($discountVal, false);
+                $discountAmountVal = $item['discount_amount'] ?? 0;
+                $discountStr = $discountDisplay . ' (-' . $formatMoney($discountAmountVal, false) . ')';
+            }
+
             return [
                 'image' => $item['image'],
                 $isEnglish ? 'Item' : 'Concepto' => $item['label'],
@@ -58,7 +69,7 @@ class PDFController extends Controller
                 'label_color' => $item['label_color'] ?? null,
                 'label_comment' => $item['label_comment'] ?? null,
                 'show_label_in_pdf' => $item['show_label_in_pdf'] ?? false,
-                'discount_str' => !empty($item['discount']) ? ($item['discount'] . ($item['discount_type'] === 'percentage' ? '%' : '') . ' (-' . $formatMoney($item['discount_amount'] ?? 0, false) . ')') : null,
+                'discount_str' => $discountStr,
             ];
         })->toArray();
 
