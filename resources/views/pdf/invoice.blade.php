@@ -168,7 +168,7 @@
                                         @endif
                                         @if(in_array($key, ['Concepto', 'Item']) && !empty($item['discount_str']))
                                             <div style="font-size: 10px; color: #047857; font-weight: bold; margin-top: 2px;">
-                                                Desc: {{ $item['discount_str'] }}
+                                                {{ isset($publishOptions['language']) && $publishOptions['language'] !== 'es' ? 'Disc' : 'Desc' }}: {{ $item['discount_str'] }}
                                             </div>
                                         @endif
                                     @endif
