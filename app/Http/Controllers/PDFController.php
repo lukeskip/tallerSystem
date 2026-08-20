@@ -38,7 +38,11 @@ class PDFController extends Controller
         $formatMoney = function($amount, $includeCurrency = true) use ($exchangeRate, $currencyCode) {
             $cleanAmount = is_string($amount) ? (float) str_replace(['$', ','], '', $amount) : floatval($amount);
             $converted = $cleanAmount / floatval($exchangeRate);
-            $formatted = '$' . number_format($converted, 2);
+            if ($converted < 0) {
+                $formatted = '-$' . number_format(abs($converted), 2);
+            } else {
+                $formatted = '$' . number_format($converted, 2);
+            }
             return $includeCurrency ? $formatted . ' ' . $currencyCode : $formatted;
         };
 
@@ -97,16 +101,26 @@ class PDFController extends Controller
         $invoice['amount_paid'] = $formatMoney($invoice['amount_paid'] ?? 0);
         $invoice['balance'] = $formatMoney($invoice['balance'] ?? 0);
 
+        $mapExtra = function($extra) use ($formatMoney) {
+            return [
+                'id' => $extra['id'],
+                'label' => $extra['label'],
+                'value' => $extra['value'],
+                'calculation_basis' => $extra['calculation_basis'],
+                'is_discount' => $extra['is_discount'] ?? false,
+                'label_color' => $extra['label_color'] ?? null,
+                'amount' => $formatMoney($extra['amount_raw'] ?? 0),
+            ];
+        };
+
         if (isset($invoice['extras'])) {
-            $invoice['extras'] = collect($invoice['extras'])->map(function($extra) use ($formatMoney) {
-                return [
-                    'id' => $extra['id'],
-                    'label' => $extra['label'],
-                    'value' => $extra['value'],
-                    'calculation_basis' => $extra['calculation_basis'],
-                    'amount' => $formatMoney($extra['amount_raw'] ?? 0),
-                ];
-            })->toArray();
+            $invoice['extras'] = collect($invoice['extras'])->map($mapExtra)->toArray();
+        }
+        if (isset($invoice['extras_before_fee'])) {
+            $invoice['extras_before_fee'] = collect($invoice['extras_before_fee'])->map($mapExtra)->toArray();
+        }
+        if (isset($invoice['extras_after_fee'])) {
+            $invoice['extras_after_fee'] = collect($invoice['extras_after_fee'])->map($mapExtra)->toArray();
         }
 
         $data = [
