@@ -23,6 +23,7 @@ class Invoice extends Model
 
     protected $fillable = [
         'id',
+        'label',
         'project_id',
         'status',
         'currency',

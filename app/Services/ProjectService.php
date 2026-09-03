@@ -74,6 +74,7 @@ class ProjectService
                 'invoices' => $project->invoices->transform(function ($invoice) {
                     return [
                         "id" => $invoice->id,
+                        "label" => $invoice->label,
                         "file" => $invoice->id,
                         "amount" => $invoice->amount,
                         'status' => $invoice->status,
