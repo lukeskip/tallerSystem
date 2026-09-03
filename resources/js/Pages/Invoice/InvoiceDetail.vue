@@ -78,6 +78,7 @@
                 <div>
                     <h1 class="text-3xl font-bold text-main-color uppercase">
                         Cotización {{ invoice.id }}
+                        <span v-if="invoice.label" class="text-2xl font-semibold text-gray-700 normal-case"> - {{ invoice.label }}</span>
                     </h1>
                     <h2 class="text-xl font-bold uppercase">
                         {{ invoice.project.name }} / {{ invoice.client }}

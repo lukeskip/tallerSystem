@@ -30,6 +30,7 @@ class InvoiceService
     {
         $invoice = Invoice::find($id);
         $invoice = [
+            'label' => ['value' => $invoice->label, 'type' => 'string'],
             'status' => ['value' => $invoice->status, 'type' => 'select'],
             'currency' => ['value' => $invoice->currency, 'type' => 'select'],
             'iva' => ['value' => $invoice->iva, 'type' => 'number'],
@@ -296,6 +297,7 @@ class InvoiceService
 
             return [
                 'id' => $invoice->id,
+                'label' => $invoice->label,
                 'project' => $invoice->project,
                 'categories' => $invoice->categories,
                 'status' => $invoice->status,
@@ -336,13 +338,17 @@ class InvoiceService
     public function getAll($request)
     {
 
-        $invoices = Invoice::with('project')->orderBy('id', 'desc');
+        $invoices = Invoice::with('project.client')->orderBy('id', 'desc');
 
         if ($request && $request->input('search')) {
-            $invoices->where('id', 'like', '%' . $request->input('search') . '%')
-                ->orWhereHas('project', function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->input('search') . '%');
-                });
+            $search = $request->input('search');
+            $invoices->where(function ($q) use ($search) {
+                $q->where('id', 'like', '%' . $search . '%')
+                    ->orWhere('label', 'like', '%' . $search . '%')
+                    ->orWhereHas('project', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            });
         }
 
         $invoices = $invoices->paginate();
@@ -350,6 +356,7 @@ class InvoiceService
         $invoices->getCollection()->transform(function ($invoice) {
             return [
                 'id' => $invoice->id,
+                'label' => $invoice->label,
                 'file' => $invoice->id,
                 'project' => $invoice->project->name,
                 'client' => $invoice->project->client->name,
@@ -390,12 +397,16 @@ class InvoiceService
 
     public function getInvoices()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::with('project.client')->get();
 
         $invoices->transform(function ($invoice) {
+            $name = $invoice->project->name . " " . $invoice->project->client->name;
+            if ($invoice->label) {
+                $name .= " (" . $invoice->label . ")";
+            }
             return [
                 'id' => $invoice->id,
-                'name' => $invoice->project->name . " " . $invoice->project->client->name,
+                'name' => $name,
             ];
         });
 

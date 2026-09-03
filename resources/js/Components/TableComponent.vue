@@ -47,18 +47,22 @@
                                 </div>
                             </template>
                             <template
-                                v-else-if="index === 1 && showLink(root) && !ownerId"
+                                v-else-if="(index === 1 || key === 'file') && showLink(root) && !ownerId"
                             >
-                                <Link :href="route(`${root}.show`, item.id)">{{
+                                <Link v-if="value" :href="route(`${root}.show`, item.id)">{{
                                     value
                                 }}</Link>
+                                <span v-else>-</span>
                             </template>
                             <template
                                 v-else-if="
-                                    index === 1 && showLink(root) && ownerId
+                                    (index === 1 || key === 'file') &&
+                                    showLink(root) &&
+                                    ownerId
                                 "
                             >
                                 <Link
+                                    v-if="value"
                                     :href="
                                         route(`${root}.show`, [
                                             ownerId,
@@ -67,6 +71,7 @@
                                     "
                                     >{{ value }}</Link
                                 >
+                                <span v-else>-</span>
                             </template>
                             <template v-else-if="key !== 'id'"
                                 ><span v-html="showLabel(value)"></span

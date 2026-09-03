@@ -12,7 +12,7 @@
                         </label>
 
                         <TextInput
-                            v-if="field.type === 'varchar'"
+                            v-if="field.type === 'varchar' || field.type === 'string'"
                             v-model="formData[field.slug]"
                             :autocomplete="field.autocomplete"
                         />
@@ -256,6 +256,7 @@ const clearFormData = () => {
     fields.value.map((field) => {
         if (
             field.type === "varchar" ||
+            field.type === "string" ||
             field.type === "longtext" ||
             field.type === "text"
         ) {

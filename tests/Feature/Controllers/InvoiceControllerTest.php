@@ -100,13 +100,57 @@ class InvoiceControllerTest extends TestCase
 
         $this->assertNotEmpty($responseData['fields']);
         $this->assertNotEmpty($responseData['item']);
-        $expectedFields = ['_token', 'status', 'iva','fee']; 
+        $expectedFields = ['_token', 'label', 'status', 'iva','fee']; 
         $fieldsInResponse = [];
         foreach ($responseData['fields'] as $field) {
             array_push($fieldsInResponse, $field['slug']);
         }
         $diff = array_diff($expectedFields, $fieldsInResponse);
         $this->assertEmpty($diff);
+    }
+
+    /** @test */
+    public function it_can_create_an_invoice_with_label()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $data = [
+            'project_id' => 1,
+            'status' => 'pending',
+            'label' => 'Sala Principal',
+        ];
+
+        $response = $this->post(route('cotizaciones.store'), $data);
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('invoices', [
+            'project_id' => 1,
+            'label' => 'Sala Principal',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_update_an_invoice_label()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $invoice = Invoice::latest()->first();
+
+        $data = [
+            'project_id' => $invoice->project_id,
+            'status' => $invoice->status,
+            'label' => 'Comedor y Terraza',
+        ];
+
+        $response = $this->put(route('cotizaciones.update', $invoice->id), $data);
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('invoices', [
+            'id' => $invoice->id,
+            'label' => 'Comedor y Terraza',
+        ]);
     }
 
     /** @test */
