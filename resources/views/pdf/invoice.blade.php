@@ -240,7 +240,7 @@
                     @endphp
                     <tr style="background-color: {{ $bgColor }};">
                         <td style="width:60%">
-                            {{ $extra['label'] }} ({{ $extra['value'] }}):
+                            {{ $extra['label'] }}:
                         </td>
                         <td style="width:40%">
                             {{ $extra['amount'] }}
@@ -272,7 +272,7 @@
                     @endphp
                     <tr style="background-color: {{ $bgColor }};">
                         <td style="width:60%">
-                            {{ $extra['label'] }} ({{ $extra['value'] }}):
+                            {{ $extra['label'] }}:
                         </td>
                         <td style="width:40%">
                             {{ $extra['amount'] }}
