@@ -329,8 +329,8 @@
                                     Agregar Tela
                                 </a>
                                 <a
-                                    :href="`/download/invoice/${invoice.id}/fabrics`"
-                                    target="_blank"
+                                    href="#"
+                                    @click.prevent="toggleModalExportFabrics"
                                     class="inline-block py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-800"
                                 >
                                     <i class="fa-solid fa-download"></i>
@@ -479,6 +479,12 @@
                 >
                     <FormPublish :invoiceId="invoice.id" :invoiceCurrency="invoice.currency" @close="toggleModalPublish" />
                 </Modal>
+                <Modal
+                    :show="showModalExportFabrics"
+                    @close="showModalExportFabrics = false"
+                >
+                    <FormExportFabrics :invoiceId="invoice.id" :fabrics="invoice.fabrics" @close="toggleModalExportFabrics" />
+                </Modal>
                 <Modal :show="showModalExtra" @close="showModalExtra = false">
                     <Form
                         :default="{ invoice_id: invoice.id }"
@@ -512,6 +518,7 @@ import showLabel from "@/helpers/showLabel";
 import strings from "@/utils/strings";
 import CategoryOrder from "@/Components/CategoryOrder.vue";
 import FormPublish from "@/Components/FormPublish.vue";
+import FormExportFabrics from "@/Components/FormExportFabrics.vue";
 
 const props = defineProps({
     invoice: { type: [Object, Array], default: {} },
@@ -555,6 +562,11 @@ const toggleModalCategories = () => {
 const showModalPublish = ref(false);
 const toggleModalPublish = () => {
     showModalPublish.value = !showModalPublish.value;
+};
+
+const showModalExportFabrics = ref(false);
+const toggleModalExportFabrics = () => {
+    showModalExportFabrics.value = !showModalExportFabrics.value;
 };
 
 const showModalExtra = ref(false);
