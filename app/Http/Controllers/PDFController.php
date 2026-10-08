@@ -200,8 +200,14 @@ class PDFController extends Controller
             return abort(404, 'El recurso no fue encontrado.');
         }
 
+        $selectedFabricIds = $request->input('fabric_ids');
+        $selectedFabricIdsArray = $selectedFabricIds ? explode(',', $selectedFabricIds) : null;
+
         $fabrics = [];
         foreach ($invoice->fabrics as $fabricModel) {
+            if ($selectedFabricIdsArray !== null && !in_array($fabricModel->id, $selectedFabricIdsArray)) {
+                continue;
+            }
             $fabric = $fabricModel->toArray();
             $fabric['provider_name'] = $fabricModel->provider ? $fabricModel->provider->name : null;
             $fabrics[] = $fabric;
