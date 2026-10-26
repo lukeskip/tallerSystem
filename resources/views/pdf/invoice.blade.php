@@ -353,6 +353,15 @@
                         <td>* Tiempos de entrega sujetos a confirmación de proveedores</td>
                     </tr>
                 @endif
+                <tr>
+                    <td style="padding-top: 15px;">Jeannette Marie Gutierrez Ahrensburg</td>
+                </tr>
+                <tr>
+                    <td>Bancomer Cta. 0460012874</td>
+                </tr>
+                <tr>
+                    <td>Clabe: 012180004600128746</td>
+                </tr>
             </tbody>
         </table>
     </div>
