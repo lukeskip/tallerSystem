@@ -46,7 +46,11 @@ class PDFController extends Controller
             return $includeCurrency ? $formatted . ' ' . $currencyCode : $formatted;
         };
 
-        $invoiceItems = $invoice['invoiceItems']->map(function ($item) use ($isEnglish, $formatMoney) {
+        $invoiceItems = $invoice['invoiceItems']
+            ->filter(function ($item) {
+                return !isset($item['is_active']) || $item['is_active'] === true;
+            })
+            ->map(function ($item) use ($isEnglish, $formatMoney) {
             $hasDiscount = !empty($item['discount_raw']) && floatval($item['discount_raw']) > 0;
             $discountStr = null;
             if ($hasDiscount) {

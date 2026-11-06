@@ -152,11 +152,13 @@ class InvoiceService
                         "label_color" => $item->itemLabel?->color ?? null,
                         "label_comment" => $item->itemLabel?->comment ?? null,
                         "show_label_in_pdf" => (bool) ($item->itemLabel?->show_in_pdf ?? false),
+                        "is_active" => (bool) ($item->is_active ?? true),
                     ];
                 });
 
             $debtsByProvider = $invoice->invoiceItems()
                 ->with('provider')
+                ->where('is_active', true)
                 ->selectRaw('provider_id, providers.name as provider_name, SUM(units * unit_price) as total_amount')
                 ->join('providers', 'providers.id', '=', 'invoice_items.provider_id')
                 ->whereNotNull('providers.id')
@@ -250,6 +252,7 @@ class InvoiceService
             });
 
             $comissions = $invoice->invoiceItems
+                ->where('is_active', true)
                 ->groupBy('user_id')
                 ->map(function ($items, $userId) use ($invoice) {
                     $user = $items->first()->user ?? null;
@@ -320,7 +323,7 @@ class InvoiceService
                 "subtotal_after_extras_before_fee" => Utils::publishMoney($invoice->subtotal_after_extras_before_fee),
                 "fee_amount" => Utils::publishMoney($invoice->fee_amount),
                 "total" => Utils::publishMoney($invoice->total),
-                "total_profit" => Utils::publishMoney($invoiceItems->sum('total_profit_raw')),
+                "total_profit" => Utils::publishMoney($invoiceItems->where('is_active', true)->sum('total_profit_raw')),
                 "iva_amount" => Utils::publishMoney($invoice->iva_amount),
                 "iva" => Utils::publishPercentage($invoice->iva),
                 "hasIva" => $invoice->hasIva,

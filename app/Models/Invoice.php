@@ -58,7 +58,7 @@ class Invoice extends Model
     public function getSubtotalAttribute()
     {
         if ($this->invoiceItems) {
-            return $this->invoiceItems->sum('total');
+            return $this->invoiceItems->where('is_active', true)->sum('total');
         } else {
             return 0;
         }

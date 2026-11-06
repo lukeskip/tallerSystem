@@ -20,7 +20,7 @@ class InvoiceItemController extends Controller
     {
         $this->middleware('can:read invoice_item', ['only' => ['index', 'show']]);
         $this->middleware('can:create invoice_item', ['only' => ['create', 'store']]);
-        $this->middleware('can:edit invoice_item', ['only' => ['edit', 'update', 'invoiceItemsOrder']]);
+        $this->middleware('can:edit invoice_item', ['only' => ['edit', 'update', 'invoiceItemsOrder', 'toggleActive']]);
         $this->middleware('can:delete invoice_item', ['only' => ['destroy']]);
 
         $this->service = $invoiceItemService;
@@ -187,6 +187,18 @@ class InvoiceItemController extends Controller
 
         return response()->json([
             'message' => 'Orden de items actualizado correctamente',
+        ]);
+    }
+
+    public function toggleActive($id)
+    {
+        $item = InvoiceItem::findOrFail($id);
+        $item->is_active = !$item->is_active;
+        $item->save();
+
+        return response()->json([
+            'message' => 'Estado del concepto actualizado correctamente',
+            'is_active' => $item->is_active,
         ]);
     }
 }

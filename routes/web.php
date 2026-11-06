@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notas-status/{id}', [NoteController::class, 'toggleStatus'])->name("note-toggle-status");
     Route::put('/categorias-order/', [CategoryController::class, 'categoriesOrder'])->name("categories-order");
     Route::put('/invoice-items-order/', [InvoiceItemController::class, 'invoiceItemsOrder'])->name("invoice-items-order");
+    Route::post('/conceptos/{id}/toggle-active', [InvoiceItemController::class, 'toggleActive'])->name("invoice-items.toggle-active");
 });
 
 
