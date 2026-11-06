@@ -32,7 +32,7 @@ class Utils
         $fields = Schema::getColumnListing($table);
         $token = csrf_token();
         $fieldsEnd = [['slug' => '_token', 'type' => 'hidden', 'value' => $token]];
-        $fieldsToExclude = ['created_at', 'public_id', 'updated_at', 'id', 'invoice_id', 'deleted_at', 'password', 'email_verified_at', 'remember_token', 'item_label_id'];
+        $fieldsToExclude = ['created_at', 'public_id', 'updated_at', 'id', 'invoice_id', 'deleted_at', 'password', 'email_verified_at', 'remember_token', 'item_label_id', 'is_active', 'order'];
         $fieldsToHide = ['project_id', 'user_id'];
 
 

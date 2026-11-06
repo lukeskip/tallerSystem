@@ -31,6 +31,7 @@
             <thead>
                 <tr>
                     <th class="w-10"></th>
+                    <th class="w-10 text-center"></th>
                     <template v-for="(value, key) in itemsRef[0]" :key="key">
                         <th v-if="!columnsToHide.includes(key)">
                             {{ showLabel(key) }}
@@ -59,15 +60,31 @@
                     @end="onDragEnd"
                 >
                     <template #item="{ element: item, index }">
-                        <tr :style="item.label_color ? { backgroundColor: item.label_color } : {}">
+                        <tr
+                            :style="item.label_color ? { backgroundColor: item.label_color } : {}"
+                            :class="{ 'opacity-50 bg-gray-100': !item.is_active }"
+                        >
                             <td class="drag-handle cursor-grab text-center w-10 text-gray-400 hover:text-black">
                                 <i class="fa-solid fa-grip-vertical"></i>
+                            </td>
+                            <td class="text-center w-10 px-1">
+                                <button
+                                    type="button"
+                                    @click="toggleItemActive(item)"
+                                    class="focus:outline-none transition-colors p-1"
+                                    :title="item.is_active ? 'Desactivar concepto' : 'Activar concepto'"
+                                >
+                                    <i
+                                        class="text-base"
+                                        :class="item.is_active ? 'fa-solid fa-eye text-gray-700 hover:text-black' : 'fa-solid fa-eye-slash text-gray-400 hover:text-gray-600'"
+                                    ></i>
+                                </button>
                             </td>
                             <template v-for="(value, key) in item" :key="key">
                                 <td v-if="!columnsToHide.includes(key)">
                                     <template v-if="key === 'label'">
                                         <div class="relative">
-                                            <div>
+                                            <div :class="{ 'line-through text-gray-500': !item.is_active }">
                                                 <Link
                                                     :href="
                                                         route(
@@ -222,6 +239,7 @@ const columnsToHide = [
     "discount_amount",
     "provider",
     "agent",
+    "is_active",
 ];
 
 const groupedItems = ref([]);
@@ -260,10 +278,16 @@ watch(itemsRef, () => {
 const colspanCount = computed(() => {
     if (!itemsRef.value.length) return 0;
     const visibleKeys = Object.keys(itemsRef.value[0]).filter(key => !columnsToHide.includes(key)).length;
-    let count = visibleKeys + 1; // +1 para el drag handle
+    let count = visibleKeys + 2; // +1 para el drag handle, +1 para el estado
     if (props.actions.length) count++;
     return count;
 });
+
+watch(() => props.items, (newVal) => {
+    if (searchTerm.value === "" && selected.value.length === 0) {
+        itemsRef.value = getData(newVal);
+    }
+}, { deep: true });
 
 onUpdated(() => {
     if (searchTerm.value === "" && selected.value.length === 0) {
@@ -281,11 +305,33 @@ function getData(data) {
 
 function getCategoryTotal(category) {
     const total = itemsRef.value
-        .filter((item) => item.category === category)
+        .filter((item) => item.category === category && (item.is_active || typeof item.is_active === 'undefined'))
         .reduce((acc, item) => acc + item.total_raw, 0);
 
     return publishMoney(total);
 }
+
+const isToggling = ref({});
+const toggleItemActive = async (item) => {
+    if (isToggling.value[item.id]) return;
+    isToggling.value[item.id] = true;
+
+    const previousState = item.is_active;
+    item.is_active = !previousState;
+
+    try {
+        const response = await axios.post(`/conceptos/${item.id}/toggle-active`);
+        if (response.data && typeof response.data.is_active !== "undefined") {
+            item.is_active = Boolean(response.data.is_active);
+        }
+        router.reload({ preserveState: true });
+    } catch (error) {
+        item.is_active = previousState;
+        console.error("Error al cambiar estado del concepto:", error);
+    } finally {
+        isToggling.value[item.id] = false;
+    }
+};
 
 const submitSearch = (root) => {
     router.get(root, { search: searchTerm.value });

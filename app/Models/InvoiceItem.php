@@ -32,10 +32,12 @@ class InvoiceItem extends Model
         'discount_type',
         'order',
         'item_label_id',
+        'is_active',
     ];
 
     protected $casts = [
         'discount' => 'float',
+        'is_active' => 'boolean',
     ];
     use HasFactory;
 

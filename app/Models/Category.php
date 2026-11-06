@@ -33,6 +33,6 @@ class Category extends Model
     }
     public function getTotalAttribute()
     {
-        return $this->invoiceItems->sum('total');
+        return $this->invoiceItems->where('is_active', true)->sum('total');
     }
 }

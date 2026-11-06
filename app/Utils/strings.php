@@ -39,4 +39,5 @@ return [
     'is_discount' => 'Es Descuento',
     'discount' => 'Descuento',
     'discount_type' => 'Tipo de Descuento',
+    'is_active' => 'Activo',
 ];

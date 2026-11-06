@@ -203,4 +203,81 @@ class InvoiceControllerTest extends TestCase
 
         $item->delete();
     }
+
+    /** @test */
+    public function it_can_toggle_invoice_item_active_status()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $invoice = Invoice::latest()->first();
+        $item = \App\Models\InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'label' => 'Item Toggle Test',
+            'unit_price' => 200,
+            'units' => 2,
+            'is_active' => true,
+        ]);
+
+        $this->assertTrue($item->is_active);
+
+        // Deactivate
+        $response = $this->post(route('invoice-items.toggle-active', $item->id));
+        $response->assertStatus(200);
+        $response->assertJson(['is_active' => false]);
+        $this->assertFalse($item->fresh()->is_active);
+
+        // Reactivate
+        $response = $this->post(route('invoice-items.toggle-active', $item->id));
+        $response->assertStatus(200);
+        $response->assertJson(['is_active' => true]);
+        $this->assertTrue($item->fresh()->is_active);
+
+        $item->delete();
+    }
+
+    /** @test */
+    public function it_excludes_inactive_items_from_invoice_totals()
+    {
+        $user = User::find(1);
+        $this->actingAs($user);
+
+        $invoice = Invoice::latest()->first();
+
+        $activeItem = \App\Models\InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'label' => 'Active Item',
+            'unit_price' => 500,
+            'units' => 2,
+            'is_active' => true,
+        ]);
+
+        $inactiveItem = \App\Models\InvoiceItem::create([
+            'invoice_id' => $invoice->id,
+            'label' => 'Inactive Item',
+            'unit_price' => 300,
+            'units' => 1,
+            'is_active' => false,
+        ]);
+
+        $freshInvoice = Invoice::with('invoiceItems')->find($invoice->id);
+        $subtotal = $freshInvoice->subtotal;
+
+        // Inactive item (300) should NOT be in the subtotal
+        // The active item contributes 1000
+        $this->assertTrue($freshInvoice->invoiceItems->where('is_active', true)->sum('total') == $subtotal);
+
+        // Check InvoiceService getById
+        $invoiceService = new \App\Services\InvoiceService();
+        $invoiceData = $invoiceService->getById($invoice->id);
+
+        $itemInService = collect($invoiceData['invoiceItems'])->firstWhere('id', $inactiveItem->id);
+        $this->assertFalse($itemInService['is_active']);
+
+        $activeItemInService = collect($invoiceData['invoiceItems'])->firstWhere('id', $activeItem->id);
+        $this->assertTrue($activeItemInService['is_active']);
+
+        $activeItem->delete();
+        $inactiveItem->delete();
+    }
 }
