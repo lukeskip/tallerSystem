@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
+        run: composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
       - name: Build Front End
         run: npm install && NODE_ENV=CI npm run build
